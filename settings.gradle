@@ -1,0 +1,7 @@
+rootProject.name = 'Equilator'
+include 'domain'
+include 'web-app'
+include 'entity'
+include 'main'
+include 'startApp'
+
