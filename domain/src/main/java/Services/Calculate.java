@@ -47,8 +47,8 @@ public class Calculate {
                 break;
         }
 
-        calculatorMainTable.setEquityPlayer1(new DecimalFormat("#0.0000").format(wonTimes[0] / countOfBoards));
-        calculatorMainTable.setEquityPlayer2(new DecimalFormat("#0.0000").format(wonTimes[1] / countOfBoards));
+        calculatorMainTable.setEquityPlayer1(new DecimalFormat("#0.0000").format((wonTimes[0] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)) );
+        calculatorMainTable.setEquityPlayer2(new DecimalFormat("#0.0000").format((wonTimes[1] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)) );
         calculatorMainTable.setDeal(new DecimalFormat("#0.0000").format(wonTimes[2] / countOfBoards));
 
         defaultData.getCalculatorMainTables().add(0, calculatorMainTable);
