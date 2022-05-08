@@ -1,7 +1,7 @@
 package DAO;
 
 
-import models.CalculatorMainTable;
+import models.calculator.CalculatorMainTable;
 
 import java.util.HashMap;
 import java.util.LinkedList;

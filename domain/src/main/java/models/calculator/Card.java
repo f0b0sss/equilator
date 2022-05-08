@@ -1,4 +1,4 @@
-package models;
+package models.calculator;
 
 import java.util.Objects;
 

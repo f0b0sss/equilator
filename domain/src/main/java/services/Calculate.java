@@ -1,7 +1,7 @@
-package Services;
+package services;
 
 import DAO.DefaultData;
-import models.CalculatorMainTable;
+import models.calculator.CalculatorMainTable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.DecimalFormat;

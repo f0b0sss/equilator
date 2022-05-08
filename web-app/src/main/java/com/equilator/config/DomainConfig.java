@@ -1,13 +1,14 @@
 package com.equilator.config;
 
 import DAO.DefaultData;
-import Services.Calculate;
-import models.CalculatorMainTable;
+import models.calculator.CalculatorMainTable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import services.Calculate;
 
 @Configuration
 public class DomainConfig {
+
     @Bean
     public DefaultData defaultData(){
         return new DefaultData();
@@ -24,6 +25,5 @@ public class DomainConfig {
     public Calculate calculate(){
         return new Calculate(defaultData());
     }
-
 
 }

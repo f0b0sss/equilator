@@ -1,4 +1,4 @@
-package models;
+package models.calculator;
 
 public class GameInfo {
 
