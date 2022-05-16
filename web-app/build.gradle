@@ -16,18 +16,15 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.flywaydb:flyway-core'
-    implementation 'org.postgresql:postgresql:42.3.3'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.1.0.M1'
+    implementation 'org.thymeleaf:thymeleaf-spring5:3.1.0.M1'
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.hibernate.validator:hibernate-validator:7.0.4.Final'
+    implementation 'javax.persistence:javax.persistence-api:2.2'
 
-    implementation 'org.springframework:spring-tx:5.3.19'
-    implementation 'jakarta.validation:jakarta.validation-api:3.0.1'
 
     implementation project(':domain')
 

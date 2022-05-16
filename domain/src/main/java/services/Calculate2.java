@@ -1,19 +1,17 @@
 package services;
 
 import DAO.DefaultData;
-import models.calculator.CalculatorMainTable;
+import models.calculator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class Calculate {
-
+public class Calculate2 {
     private final DefaultData defaultData;
-
-    private final String[] cards = {"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"};
-    private final String[] suit = {"h", "d", "c", "s"};
 
     private final Map<String, Integer> playersPoints = new HashMap<>(2);
     private Map<String, Integer> madeHandWithRank = new HashMap<>(7);
@@ -21,29 +19,48 @@ public class Calculate {
     private boolean wasFindCombination = false;
     private int countOfBoards;
     private int sumOfPoints;
-    private List<String> allCards = new LinkedList<>();
+    private static boolean isFlush;
 
-
-    private Map<String, Double> mapRange1 = new LinkedHashMap<>();
-    private Map<String, Double> mapRange2 = new LinkedHashMap<>();
+    private final String[] suit = {"h", "d", "c", "s"};
 
     @Autowired
-    public Calculate(DefaultData defaultData) {
+    public Calculate2(DefaultData defaultData) {
         this.defaultData = defaultData;
     }
 
 
-    public List<String> buildAllGroupHands(String groupHand, String board) {
-        List<String> hands = new ArrayList<>();
+    public List<Hand> buildAllGroupHands(String groupHand) {
+        List<Hand> hands = new ArrayList<>();
 
-        for (int b = 0; b + 1 < board.length(); b++) {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                String hand = groupHand.charAt(0) + suit[i] + groupHand.charAt(1) + suit[j];
+                hands.add(new Hand().buildHand(hand));
+            }
+        }
+
+        return hands;
+    }
+
+    public List<Hand> buildSuitedGroupHands(String groupHand) {
+        List<Hand> hands = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            String hand = groupHand.charAt(0) + suit[i] + groupHand.charAt(1) + suit[i];
+            hands.add(new Hand().buildHand(hand));
+        }
+
+        return hands;
+    }
+
+    public List<Hand> buildOffsuitedGroupHands(String groupHand) {
+        List<Hand> hands = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (suit[i] != suit[j]) {
                     String hand = groupHand.charAt(0) + suit[i] + groupHand.charAt(1) + suit[j];
-                    if (board.charAt(b) + board.charAt(b + 1) != hand.charAt(0) + hand.charAt(1) &&
-                            board.charAt(b) + board.charAt(b + 1) != hand.charAt(2) + hand.charAt(3)) {
-                        hands.add(hand);
-                    }
+                    hands.add(new Hand().buildHand(hand));
                 }
             }
         }
@@ -51,237 +68,392 @@ public class Calculate {
         return hands;
     }
 
-    public List<String> buildSuitedGroupHands(String groupHand, String board) {
-        List<String> hands = new ArrayList<>();
+    public List<Hand> buildPocketPairGroupHands(String groupHand) {
+        List<Hand> hands = new ArrayList<>();
 
-        for (int b = 0; b + 1 < board.length(); b++) {
-            for (int i = 0; i < 4; i++) {
-                String hand = groupHand.charAt(0) + suit[i] + groupHand.charAt(1) + suit[i];
-                if (board.charAt(b) + board.charAt(b + 1) != hand.charAt(0) + hand.charAt(1) &&
-                        board.charAt(b) + board.charAt(b + 1) != hand.charAt(2) + hand.charAt(3)) {
-                    hands.add(hand);
-                }
+        for (int i = 0; i < 4; i++) {
+            for (int j = i + 1; j < 4; j++) {
+                String hand = groupHand.charAt(0) + suit[i] + groupHand.charAt(1) + suit[j];
+                hands.add(new Hand().buildHand(hand));
             }
         }
 
         return hands;
     }
 
-    public List<String> buildOffsuitedGroupHands(String groupHand, String board) {
-        List<String> hands = new ArrayList<>();
-
-        for (int b = 0; b + 1 < board.length(); b++) {
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (suit[i] != suit[j]) {
-                        String hand = groupHand.charAt(0) + suit[i] + groupHand.charAt(1) + suit[j];
-                        if (board.charAt(b) + board.charAt(b + 1) != hand.charAt(0) + hand.charAt(1) &&
-                                board.charAt(b) + board.charAt(b + 1) != hand.charAt(2) + hand.charAt(3)) {
-                            hands.add(hand);
-                        }
-                    }
-                }
-            }
-        }
-
-        return hands;
+    public Hand buildHand(String groupHand) {
+        return new Hand().buildHand(groupHand);
     }
 
-    public List<String> buildPocketPairGroupHands(String groupHand, String board) {
-        List<String> hands = new ArrayList<>();
+    public Group buildGroup(String groupHand) {
+        Group group = new Group();
+        List<Hand> hands = new ArrayList<>();
 
-        for (int b = 0; b + 1 < board.length(); b++) {
-            for (int i = 0; i < 4; i++) {
-                for (int j = i + 1; j < 4; j++) {
-                    String hand = groupHand.charAt(0) + suit[i] + groupHand.charAt(1) + suit[j];
-                    if (board.charAt(b) + board.charAt(b + 1) != hand.charAt(0) + hand.charAt(1) &&
-                            board.charAt(b) + board.charAt(b + 1) != hand.charAt(2) + hand.charAt(3)) {
-                        hands.add(hand);
-                    }
-                }
-            }
+        if (groupHand.length() == 4) {
+            hands.add(buildHand(groupHand));
+            group.setGroupName(String.valueOf(groupHand.charAt(0)) + groupHand.charAt(2));
+        }
+        if (groupHand.length() == 2 && groupHand.charAt(0) == groupHand.charAt(1)) {
+            hands.addAll(buildPocketPairGroupHands(groupHand));
+            group.setGroupName(String.valueOf(groupHand.charAt(0)) + groupHand.charAt(1));
+        }
+        if (groupHand.length() == 2 && groupHand.charAt(0) != groupHand.charAt(1)) {
+            hands.addAll(buildAllGroupHands(groupHand));
+            group.setGroupName(String.valueOf(groupHand.charAt(0)) + groupHand.charAt(1));
+        }
+        if (groupHand.length() == 3 && groupHand.charAt(2) == 'o' && groupHand.charAt(0) != groupHand.charAt(1)) {
+            hands.addAll(buildOffsuitedGroupHands(groupHand));
+            group.setGroupName(String.valueOf(groupHand.charAt(0)) + groupHand.charAt(1));
+        }
+        if (groupHand.length() == 3 && groupHand.charAt(2) == 's' && groupHand.charAt(0) != groupHand.charAt(1)) {
+            hands.addAll(buildSuitedGroupHands(groupHand));
+            group.setGroupName(String.valueOf(groupHand.charAt(0)) + groupHand.charAt(1));
         }
 
+        group.setGroupHands(hands);
 
-        return hands;
+        return group;
     }
 
-    public List<String> buildGroup(String[] rangeArr, String board) {
-        List<String> hands = new ArrayList<>();
-
-        for (int i = 0; i < rangeArr.length; i++) {
-            if (rangeArr[i].length() == 4) {
-                hands.add(rangeArr[i]);
-            }
-            if (rangeArr[i].length() == 2 && rangeArr[i].charAt(0) == rangeArr[i].charAt(1)) {
-                hands.addAll(buildPocketPairGroupHands(rangeArr[i], board));
-            }
-            if (rangeArr[i].length() == 2 && rangeArr[i].charAt(0) != rangeArr[i].charAt(1)) {
-                hands.addAll(buildAllGroupHands(rangeArr[i], board));
-            }
-            if (rangeArr[i].length() == 3 && rangeArr[i].charAt(2) == 'o' &&
-                    rangeArr[i].charAt(0) != rangeArr[i].charAt(1)) {
-                hands.addAll(buildOffsuitedGroupHands(rangeArr[i], board));
-            }
-            if (rangeArr[i].length() == 3 && rangeArr[i].charAt(2) == 'o' &&
-                    rangeArr[i].charAt(0) != rangeArr[i].charAt(1)) {
-                hands.addAll(buildOffsuitedGroupHands(rangeArr[i], board));
-            }
-            if (rangeArr[i].length() == 3 && rangeArr[i].charAt(2) == 's' &&
-                    rangeArr[i].charAt(0) != rangeArr[i].charAt(1)) {
-                hands.addAll(buildSuitedGroupHands(rangeArr[i], board));
-            }
-        }
-
-        return hands;
-    }
-
-    public List<String> buildRange(String input, String board) {
-        List<String> groups = new ArrayList<>();
+    public Range buildRange(String input) {
+        Range range = new Range();
+        List<Group> groups = new ArrayList<>();
 
         String[] rangeArr = input.split(",");
 
-        groups.addAll(buildGroup(rangeArr, board));
+        for (int i = 0; i < rangeArr.length; i++) {
+            Group group = buildGroup(rangeArr[i]);
+            groups.add(group);
+        }
 
-        return groups.stream().distinct().collect(Collectors.toList());
+        range.setRangeGroups(groups);
+
+        return range;
     }
 
     public void calculate(CalculatorMainTable calculatorMainTable) {
-        String board = calculatorMainTable.getBoard();
 
-        List<String> range1 = buildRange(calculatorMainTable.getRangePlayer1(), board);
-        List<String> range2 = buildRange(calculatorMainTable.getRangePlayer2(), board);
+        String cardsPlayer1 = calculatorMainTable.getRangePlayer1();
+        String cardsPlayer2 = calculatorMainTable.getRangePlayer2();
 
-        for (int i = 0; i < range1.size(); i++) {
-            mapRange1.put(range1.get(i), 0.0);
-        }
-        for (int i = 0; i < range2.size(); i++) {
-            mapRange2.put(range2.get(i), 0.0);
-        }
+        Range rangeP1 = buildRange(cardsPlayer1);
+        Range rangeP2 = buildRange(cardsPlayer2);
 
-        double[] wonTimes = new double[]{0, 0, 0};
+        Range[] playersRanges = new Range[]{rangeP1, rangeP2};
+        double[] wonTimes = new double[]{0, 0};
+
+        playersPoints.put(cardsPlayer1, 0);
+        playersPoints.put(cardsPlayer2, 0);
 
         switch (calculatorMainTable.getBoard().length()) {
+            case (0):
+                //      calculateWithoutFlop(defaultData, playersRanges, wonTimes);
+                break;
             case (6):
-                calculateWithoutTurn(defaultData, range1, range2, board);
+                calculateWithoutTurn(calculatorMainTable, defaultData, playersRanges, wonTimes);
                 break;
             case (8):
-                calculateWithoutRiver(defaultData, range1, range2, board);
+                calculateWithoutRiver(calculatorMainTable, defaultData, playersRanges, wonTimes);
                 break;
         }
 
-        double sum1 = mapRange1.values().stream().mapToDouble(Double::doubleValue).sum();
-        double sum2 = mapRange2.values().stream().mapToDouble(Double::doubleValue).sum();
-        int count = range1.size() * range2.size();
-
-        double equityP1 = sum1 / (countOfBoards * count);
-        double equityP2 = sum2 / (countOfBoards * count);
-        double deal = 1 - ((sum1 + sum2) / (countOfBoards * count));
-
-        calculatorMainTable.setEquityPlayer1(new DecimalFormat("#0.0000").format(equityP1 + deal / 2));
-        calculatorMainTable.setEquityPlayer2(new DecimalFormat("#0.0000").format(equityP2 + deal / 2));
+        calculatorMainTable.setEquityPlayer1(new DecimalFormat("#0.0000").format((wonTimes[0] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
+        calculatorMainTable.setEquityPlayer2(new DecimalFormat("#0.0000").format((wonTimes[1] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
+        calculatorMainTable.setDeal(new DecimalFormat("#0.0000").format(wonTimes[2] / countOfBoards));
 
         defaultData.getCalculatorMainTables().add(0, calculatorMainTable);
 
         countOfBoards = 0;
-        mapRange1.clear();
-        mapRange2.clear();
-        allCards.clear();
+
     }
 
-    public void calculateWithoutRiver(DefaultData defaultData,
-                                      List<String> range1, List<String> range2, String board) {
-        removeOpenCardsFromAllCards(board, defaultData.getCardsDeck());
+    public void calculateWithoutTurn(CalculatorMainTable calculatorMainTable,
+                                     DefaultData defaultData, Range[] playersRanges,
+                                     double[] wonTimes) {
+        List<Card> allCards = new LinkedList<>();
+        allCards.addAll(defaultData.getCardList());
 
-        allCards.addAll(defaultData.getCardsDeck());
+        Card c1 = new Card(String.valueOf(
+                calculatorMainTable.getBoard().charAt(0)),
+                String.valueOf(calculatorMainTable.getBoard().charAt(1)));
+        Card c2 = new Card(String.valueOf(
+                calculatorMainTable.getBoard().charAt(2)),
+                String.valueOf(calculatorMainTable.getBoard().charAt(3)));
+        Card c3 = new Card(String.valueOf(
+                calculatorMainTable.getBoard().charAt(4)),
+                String.valueOf(calculatorMainTable.getBoard().charAt(5)));
 
-        for (int i = 0; i < 44; i++) {
+        allCards.remove(c1);
+        allCards.remove(c2);
+        allCards.remove(c3);
 
-            for (int j = 0; j < range1.size(); j++) {
-                removeOpenCardsFromAllCards(range1.get(j), allCards);
+        for (int j = 0; j < playersRanges[0].getRangeGroups().size(); j++) {
+            for (int k = 0; k < playersRanges[0].getRangeGroups().get(j).getGroupHands().size(); k++) {
 
-                for (int k = 0; k < range2.size(); k++) {
-                    removeOpenCardsFromAllCards(range2.get(k), allCards);
+                for (int l = 0; l < playersRanges[1].getRangeGroups().size(); l++) {
+                    for (int m = 0; m < playersRanges[1].getRangeGroups().get(m).getGroupHands().size(); m++) {
 
-                    sumOfPoints = 0;
-                    int p1 = evaluate(
-                            board + allCards.get(i) + range1.get(j),
-                            range1.get(j));
+                        Hand hand1 = playersRanges[0].getRangeGroups().get(j).getGroupHands().get(k);
+                        Hand hand2 = playersRanges[1].getRangeGroups().get(m).getGroupHands().get(m);
 
-                    sumOfPoints = 0;
-                    int p2 = evaluate(
-                            board + allCards.get(i) + range2.get(k),
-                            range2.get(k));
+                        allCards.remove(hand1.getCard1());
+                        allCards.remove(hand1.getCard2());
+                        allCards.remove(hand2.getCard1());
+                        allCards.remove(hand2.getCard2());
 
-                    if (p1 > p2) {
-                        double n = mapRange1.get(range1.get(j));
-                        n += 1;
-                        mapRange1.put(range1.get(j), n);
-                    }
-                    if (p1 < p2) {
-                        double n = mapRange2.get(range2.get(k));
-                        n += 1;
-                        mapRange2.put(range2.get(k), n);
-                    }
-                    allCards.add(range2.get(k).substring(0, 2));
-                    allCards.add(range2.get(k).substring(2, 4));
-                }
-                allCards.add(range1.get(j).substring(0, 2));
-                allCards.add(range1.get(j).substring(2, 4));
-            }
-            countOfBoards++;
-        }
-    }
+                        for (int i = 0; i < allCards.size(); i++) {
 
+                            int countWonByCardP1 = 0;
+                            int countWonByCardP2 = 0;
 
-    public void calculateWithoutTurn(DefaultData defaultData,
-                                     List<String> range1, List<String> range2, String board) {
+                            for (int i2 = i + 1; i2 < allCards.size(); i2++) {
 
-        removeOpenCardsFromAllCards(board, defaultData.getCardsDeck());
+                                Card[] sevenCardP1 = new Card[]{
+                                        c1, c2, c3,
+                                        hand1.getCard1(), hand1.getCard2(),
+                                        allCards.get(i), allCards.get(i2)
+                                };
 
-        allCards.addAll(defaultData.getCardsDeck());
+                                Card[] sevenCardP2 = new Card[]{
+                                        c1, c2, c3,
+                                        hand2.getCard1(), hand2.getCard2(),
+                                        allCards.get(i), allCards.get(i2)
+                                };
 
-        for (int i = 0; i < 45; i++) {
-            for (int i2 = i + 1; i2 < 45; i2++) {
+                                int p1 = evaluate(sevenCardP1);
+                                int p2 = evaluate(sevenCardP2);
 
-                for (int j = 0; j < range1.size(); j++) {
-                    removeOpenCardsFromAllCards(range1.get(j), allCards);
+                                if (p1 < p2) {
+                                    //      hand1.setWonTimes(hand1.getWonTimes() + 1);
+                                    countWonByCardP1++;
+                                    wonTimes[0]++;
+                                }
 
-                    for (int k = 0; k < range2.size(); k++) {
-                        removeOpenCardsFromAllCards(range2.get(k), allCards);
+                                if (p1 > p2) {
+                                    //         hand2.setWonTimes(hand1.getWonTimes() + 1);
+                                    countWonByCardP2++;
+                                    wonTimes[1]++;
+                                }
 
-                        sumOfPoints = 0;
-                        int p1 = evaluate(
-                                board + allCards.get(i) + allCards.get(i2) + range1.get(j),
-                                range1.get(j));
+                                countOfBoards++;
+                            }
 
-                        sumOfPoints = 0;
-                        int p2 = evaluate(
-                                board + allCards.get(i) + allCards.get(i2) + range2.get(k),
-                                range2.get(k));
-
-                        if (p1 > p2) {
-                            double n = mapRange1.get(range1.get(j));
-                            n += 1;
-                            mapRange1.put(range1.get(j), n);
+                            hand1.getEquityHandOnTurnCard().put(defaultData.getCardsDeck().get(i),
+                                    (double) (countWonByCardP1 / defaultData.getCardsDeck().size()));
+                            hand2.getEquityHandOnTurnCard().put(defaultData.getCardsDeck().get(i),
+                                    (double) (countWonByCardP2 / defaultData.getCardsDeck().size()));
                         }
-                        if (p1 < p2) {
-                            double n = mapRange2.get(range2.get(k));
-                            n += 1;
-                            mapRange2.put(range2.get(k), n);
-                        }
-                        allCards.add(range2.get(k).substring(0, 2));
-                        allCards.add(range2.get(k).substring(2, 4));
                     }
-                    allCards.add(range1.get(j).substring(0, 2));
-                    allCards.add(range1.get(j).substring(2, 4));
                 }
-                countOfBoards++;
             }
         }
     }
 
-    public int evaluate(String board, String playerCards) {
+
+    public void calculateWithoutRiver(CalculatorMainTable calculatorMainTable,
+                                      DefaultData defaultData, Range[] playersRanges,
+                                      double[] wonTimes) {
+        List<Card> allCards = new LinkedList<>();
+        allCards.addAll(defaultData.getCardList());
+
+        Card c1 = new Card(String.valueOf(
+                calculatorMainTable.getBoard().charAt(0)),
+                String.valueOf(calculatorMainTable.getBoard().charAt(1)));
+        Card c2 = new Card(String.valueOf(
+                calculatorMainTable.getBoard().charAt(2)),
+                String.valueOf(calculatorMainTable.getBoard().charAt(3)));
+        Card c3 = new Card(String.valueOf(
+                calculatorMainTable.getBoard().charAt(4)),
+                String.valueOf(calculatorMainTable.getBoard().charAt(5)));
+        Card c4 = new Card(String.valueOf(
+                calculatorMainTable.getBoard().charAt(6)),
+                String.valueOf(calculatorMainTable.getBoard().charAt(7)));
+
+        allCards.remove(c1);
+        allCards.remove(c2);
+        allCards.remove(c3);
+        allCards.remove(c4);
+
+        for (int j = 0; j < playersRanges[0].getRangeGroups().size(); j++) {
+            for (int k = 0; k < playersRanges[0].getRangeGroups().get(j).getGroupHands().size(); k++) {
+
+                for (int l = 0; l < playersRanges[1].getRangeGroups().size(); l++) {
+                    for (int m = 0; m < playersRanges[1].getRangeGroups().get(m).getGroupHands().size(); m++) {
+
+                        Hand hand1 = playersRanges[0].getRangeGroups().get(j).getGroupHands().get(k);
+                        Hand hand2 = playersRanges[1].getRangeGroups().get(m).getGroupHands().get(m);
+
+                        allCards.remove(hand1.getCard1());
+                        allCards.remove(hand1.getCard2());
+                        allCards.remove(hand2.getCard1());
+                        allCards.remove(hand2.getCard2());
+
+                        for (int i = 0; i < allCards.size(); i++) {
+
+                            int countWonByCardP1 = 0;
+                            int countWonByCardP2 = 0;
+
+                            Card[] sevenCardP1 = new Card[]{
+                                    c1, c2, c3, c4,
+                                    hand1.getCard1(), hand1.getCard2(),
+                                    allCards.get(i)
+                            };
+
+                            Card[] sevenCardP2 = new Card[]{
+                                    c1, c2, c3, c4,
+                                    hand2.getCard1(), hand2.getCard2(),
+                                    allCards.get(i)
+                            };
+
+                            int p1 = evaluate(sevenCardP1);
+                            int p2 = evaluate(sevenCardP2);
+
+                            if (p1 < p2) {
+                                //      hand1.setWonTimes(hand1.getWonTimes() + 1);
+                                countWonByCardP1++;
+                                wonTimes[0]++;
+                            }
+
+                            if (p1 > p2) {
+                                //         hand2.setWonTimes(hand1.getWonTimes() + 1);
+                                countWonByCardP2++;
+                                wonTimes[1]++;
+                            }
+
+                            hand1.getEquityHandOnTurnCard().put(defaultData.getCardsDeck().get(i),
+                                    (double) (countWonByCardP1 / defaultData.getCardsDeck().size()));
+                            hand2.getEquityHandOnTurnCard().put(defaultData.getCardsDeck().get(i),
+                                    (double) (countWonByCardP2 / defaultData.getCardsDeck().size()));
+                        }
+                        countOfBoards++;
+                    }
+                }
+            }
+        }
+    }
+
+    public int evaluate(Card[] sevenCards) {
+
+        List<String> allVariants = generateAllFiveCombination(sevenCards);
+
+        int result = 20220;
+
+        for (int j = 0; j < allVariants.size(); j++) {
+            int[] cardsArr = new int[5];
+            int[] flushArr = new int[5];
+            String combNumber = null;
+            String flushNumber = null;
+
+            int k = 0;
+            String hand = allVariants.get(j).toLowerCase();
+            for (int i = 0; i < hand.length(); i++) {
+                if (i + 1 < hand.length()) {
+                    String c1 = String.valueOf(hand.charAt(i));
+                    String s1 = String.valueOf(hand.charAt(i + 1));
+                    combNumber = defaultData.getPrimeNumber().get(c1);
+                    flushNumber = defaultData.getSuitNumber().get(s1);
+                    cardsArr[k] = Integer.parseInt(combNumber, 2);
+                    flushArr[k] = Integer.parseInt(flushNumber, 2);
+                    k++;
+                    i++;
+                }
+            }
+
+            int flushResult = flushArr[0] & flushArr[1] & flushArr[2] & flushArr[3] & flushArr[4];
+
+            if (flushResult == 1) {
+                isFlush = true;
+            }
+
+            int resultComb = cardsArr[0] * cardsArr[1] * cardsArr[2] * cardsArr[3] * cardsArr[4];
+
+            int line = numberOfStringFromFile(String.valueOf(resultComb));
+
+            if (line < result) {
+                result = line;
+            }
+        }
+        return result;
+    }
+
+    private List<String> generateAllFiveCombination(Card[] sevenCards) {
+        List<String> variants = new ArrayList<>();
+
+        for (int i = 0; i < sevenCards.length; i++) {
+            for (int j = i + 1; j < sevenCards.length; j++) {
+                for (int k = j + 1; k < sevenCards.length; k++) {
+                    for (int l = k + 1; l < sevenCards.length; l++) {
+                        for (int m = l + 1; m < sevenCards.length; m++) {
+                            variants.add(
+                                    sevenCards[i].getCard() +
+                                            sevenCards[j].getCard() +
+                                            sevenCards[k].getCard() +
+                                            sevenCards[l].getCard() +
+                                            sevenCards[m].getCard()
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        return variants;
+    }
+
+
+    static int numberOfStringFromFile(String str) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("G:\\JAVA\\GeekHub\\CourseWork\\equilator\\domain\\src\\main\\resources\\searchFile.txt"));
+            String line = null;
+            int i = 0;
+            while ((line = reader.readLine()) != null) {
+                i++;
+                if (isFlush == false && i == 323) {
+                    i = 1114;
+                } else {
+                    if (line.equals(str)) {
+                        isFlush = false;
+                        return i;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return -1;
+    }
+
+
+
+
+
+
+
+
+
+
+        /*
+
+
+
+
+    }
+
+
+
+
+
+
+
+    public void evaluate(String board, String playerCards) {
         char[] openedCards = board.toCharArray();
         char[] copyOpenedCards = board.toCharArray();
         Arrays.sort(openedCards);
@@ -316,7 +488,6 @@ public class Calculate {
         }
 
         wasFindCombination = false;
-        return sumOfPoints;
     }
 
     public void evaluateCare(char[] openedCards, char[] copyOpenedCards,
@@ -398,61 +569,61 @@ public class Calculate {
                     twoCards[countOfTwoCard] = openedCards[i];
                     countOfTwoCard++;
                 }
+
+                if (countOfThreeCard == 2) {
+
+                    for (int k = 0; k < 2; k++) {
+                        for (int j = 0; j < copyOpenedCards.length; j++) {
+                            if (copyOpenedCards[j] == threeCards[k]) {
+                                madeHandWithRank.put(
+                                        String.valueOf(copyOpenedCards[j]) +
+                                                String.valueOf(copyOpenedCards[j + 1]),
+                                        defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[j]))
+                                );
+                            }
+                            j++;
+                        }
+                    }
+
+                    madeHandWithRank = sortReversedMap(madeHandWithRank);
+
+                    List<String> fullHouse = getFinalMadeHand(madeHandWithRank);
+                    fullHouse = fullHouse.stream().limit(5).collect(Collectors.toList());
+
+                    wasFindCombination = true;
+
+                    showResult("full house", fullHouse, playerCards);
+                }
+
+                if (countOfThreeCard == 1 && countOfTwoCard > 0) {
+                    finded = false;
+
+                    for (int k = 0; k < copyOpenedCards.length; k++) {
+                        for (int j = 0; j < threeCards.length; j++) {
+                            if (copyOpenedCards[k] == threeCards[j]) {
+                                madeHandWithRank.put(
+                                        String.valueOf(copyOpenedCards[k]) +
+                                                String.valueOf(copyOpenedCards[k + 1]),
+                                        defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[k]))
+                                );
+                            }
+                        }
+                    }
+                    for (int k = 0; k < copyOpenedCards.length; k++) {
+                        for (int j = 0; j < twoCards.length; j++) {
+                            if (copyOpenedCards[k] == twoCards[j]) {
+                                kickersWithRank.put(
+                                        String.valueOf(copyOpenedCards[k]) +
+                                                String.valueOf(copyOpenedCards[k + 1]),
+                                        defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[k]))
+                                );
+                            }
+                        }
+                    }
+
+                }
             }
             i += (allKnowCardsAsString.lastIndexOf(openedCards[i]) - allKnowCardsAsString.indexOf(openedCards[i]) + 1);
-
-            if (countOfThreeCard == 2) {
-
-                for (int k = 0; k < 2; k++) {
-                    for (int j = 0; j < copyOpenedCards.length; j++) {
-                        if (copyOpenedCards[j] == threeCards[k]) {
-                            madeHandWithRank.put(
-                                    String.valueOf(copyOpenedCards[j]) +
-                                            String.valueOf(copyOpenedCards[j + 1]),
-                                    defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[j]))
-                            );
-                        }
-                        j++;
-                    }
-                }
-
-                madeHandWithRank = sortReversedMap(madeHandWithRank);
-
-                List<String> fullHouse = getFinalMadeHand(madeHandWithRank);
-                fullHouse = fullHouse.stream().limit(5).collect(Collectors.toList());
-
-                wasFindCombination = true;
-
-                showResult("full house", fullHouse, playerCards);
-            }
-
-            if (countOfThreeCard == 1 && countOfTwoCard > 0) {
-                finded = false;
-
-                for (int k = 0; k < copyOpenedCards.length; k++) {
-                    for (int j = 0; j < threeCards.length; j++) {
-                        if (copyOpenedCards[k] == threeCards[j]) {
-                            madeHandWithRank.put(
-                                    String.valueOf(copyOpenedCards[k]) +
-                                            String.valueOf(copyOpenedCards[k + 1]),
-                                    defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[k]))
-                            );
-                        }
-                    }
-                }
-                for (int k = 0; k < copyOpenedCards.length; k++) {
-                    for (int j = 0; j < twoCards.length; j++) {
-                        if (copyOpenedCards[k] == twoCards[j]) {
-                            kickersWithRank.put(
-                                    String.valueOf(copyOpenedCards[k]) +
-                                            String.valueOf(copyOpenedCards[k + 1]),
-                                    defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[k]))
-                            );
-                        }
-                    }
-                }
-
-            }
         }
 
         return finded;
@@ -508,7 +679,7 @@ public class Calculate {
         }
     }
 
-    private void getFiveSuited(Map<String, Integer> cardMap, Map<String, Integer> madeHandWithRank, char[] allKnowCards, char[] copyAllKnowCards, String allKnowCardsAsString) {
+    private static void getFiveSuited(Map<String, Integer> cardMap, Map<String, Integer> madeHandWithRank, char[] allKnowCards, char[] copyAllKnowCards, String allKnowCardsAsString) {
         for (int i = 0; i < allKnowCards.length; ) {
             if (allKnowCardsAsString.lastIndexOf(allKnowCards[i]) - allKnowCardsAsString.indexOf(allKnowCards[i]) + 1 > 4) {
                 for (int j = 0; j < copyAllKnowCards.length; j++) {
@@ -545,7 +716,7 @@ public class Calculate {
         }
     }
 
-    private List<String> findStraight(Map<String, Integer> cardWithRank) {
+    private static List<String> findStraight(Map<String, Integer> cardWithRank) {
         List<String> straight = new LinkedList<>();
 
         List<Integer> straightInDigits = cardWithRank
@@ -573,18 +744,15 @@ public class Calculate {
                             .map(Map.Entry::getKey)
                             .findAny().orElse(null));
 
+                    straight.add(cardWithRank.entrySet()
+                            .stream()
+                            .filter(p -> p.getValue() == 13)
+                            .map(Map.Entry::getKey)
+                            .findAny().orElse(null));
                 } else {
                     straight.add(cardWithRank.entrySet()
                             .stream()
                             .filter(p -> p.getValue() == card)
-                            .map(Map.Entry::getKey)
-                            .findFirst().orElse(null));
-                }
-                if (straight.size() == 4){
-                    int card2 = straightInDigits.get(i + 1);
-                    straight.add(cardWithRank.entrySet()
-                            .stream()
-                            .filter(p -> p.getValue() == card2)
                             .map(Map.Entry::getKey)
                             .findFirst().orElse(null));
                 }
@@ -764,16 +932,6 @@ public class Calculate {
     }
 
 
-    public void removeOpenCardsFromAllCards(String cards, List<String> list) {
-        int i = 0;
-
-        do {
-            list.remove(cards.substring(i, i + 2));
-            i += 2;
-        } while (i + 1 < cards.length());
-
-    }
-
     private static LinkedHashMap<String, Integer> sortReversedMap(Map<String, Integer> finalResultWithPoints) {
         return finalResultWithPoints.entrySet()
                 .parallelStream()
@@ -803,14 +961,16 @@ public class Calculate {
 
         sumOfPoints += defaultData.getCombinationWithPoints().get(combName);
 
-        //   playersPoints.put(player, sumOfPoints);
+        playersPoints.put(player, sumOfPoints);
     }
 
     private void showResult(String combination, List<String> hand, String player) {
 
-       //    System.out.println(combination + " = " + hand);
+        //   System.out.println(combination + " = " + hand);
         finalCombinationPoints(hand, combination, player);
     }
+
+         */
 
 
 }

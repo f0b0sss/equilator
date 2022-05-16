@@ -6,7 +6,7 @@ public class CalculatorMainTable {
     private String equityPlayer1;
     private String equityPlayer2;
     private String deal;
-    private String Board;
+    private String board;
 
     public String getRangePlayer1() {
         return rangePlayer1;
@@ -41,11 +41,11 @@ public class CalculatorMainTable {
     }
 
     public String getBoard() {
-        return Board;
+        return board;
     }
 
     public void setBoard(String board) {
-        Board = board;
+        this.board = board;
     }
 
     public String getDeal() {

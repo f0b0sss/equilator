@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+
+<head>
+    <title>Home</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="~{fragments/template :: link}"></th:block>
+
+</head>
+<body>
+<th:block th:insert="~{fragments/template :: #header}"></th:block>
+<th:block th:insert="~{fragments/template :: #menu}"></th:block>
+
+
+<div id="mainContainer">
+
+    <table class="admin_table_all_users">
+        <tr>
+            <th class="colum_user_title">Email</a></th>
+            <th class="colum_user_title">Firstname</a></th>
+            <th class="colum_user_title">Lastname</a></th>
+            <th class="colum_user_title">Role</a></th>
+            <th class="colum_user_title">Status</a></th>
+            <th class="colum_user_title">Info</th>
+        </tr>
+
+            <tr>
+                <th th:text="${user.getEmail()}"></th>
+                <th th:text="${user.getFirstname()}"></th>
+                <th th:text="${user.getLastname()}"></th>
+
+                <th th:text="${user.getRole()}"></th>
+                <div th:if="${#strings.equals(user.status, 'ACTIVE')}">
+                    <th th:text="${user.getStatus()}" class="color_status_active" ></th>
+                </div>
+                <div th:if="${#strings.equals(user.status, 'INACTIVE')}">
+                    <th th:text="${user.getStatus()}" class="color_status_inactive" ></th>
+                </div>
+                <div th:if="${#strings.equals(user.status, 'BANNED')}">
+                    <th th:text="${user.getStatus()}" class="color_status_banned" ></th>
+                </div>
+
+                <th> <a th:href="@{/edit/{id}(id=${user.getId()})}">Edit</a></th>
+            </tr>
+    </table>
+
+
+
+
+
+</div>
+
+
+<div class="clear"></div>
+<th:block th:insert="~{fragments/template :: #footer}"></th:block>
+
+
+</body>
+</html>

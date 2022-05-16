@@ -13,7 +13,6 @@
 
 <div id="mainContainer">
 
-
     <form th:method="POST" th:action="@{/calculate}" th:object="${calculatorMainTable}">
 
          <p>Player1
@@ -30,9 +29,7 @@
              <input type="text" th:field="*{board}" id="board"/>
          </p>
 
-
         <input type="submit" value="Calculate"/>
-        <input type="reset" value="Clear">
     </form>
 
 </div>
@@ -45,6 +42,8 @@
 </body>
 </html>
 
+
+<!--
 <table id="0_table" class="mx-auto range_table">
     <tbody>
     <tr>
@@ -244,3 +243,5 @@
     </tr>
     </tbody>
 </table>
+
+-->

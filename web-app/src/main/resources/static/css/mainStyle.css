@@ -22,7 +22,7 @@ body {
 }
 
 #mainContainer{
-	height: 100px;
+	height: auto;
 	border: 1px solid #dd00ff;
 }
 
@@ -32,7 +32,7 @@ ul {
 	padding-left: 0;
 	background: #cbd7d7;
 }
-a {
+li a {
 	text-decoration: none;
 	background:#cbd7d7;
 	color: #000000;
@@ -41,15 +41,71 @@ a {
 	line-height:25px;
 	display: block;
 }
-a:hover {
+li a:hover {
 	background: #dfd9ec;
 }
+
+#registration_button a{
+	width: 95px;
+	height: 20px;
+	text-decoration: none;
+	color: #0033be;
+	font: 12px Verdana;
+	display: block;
+	background-color: white;
+	padding-top: 2px;
+}
+
+#registration_button a:hover {
+	color: #587cd3;
+}
+
+.admin_table_all_users{
+	border: 1px solid black;
+}
+
+.colum_user_title{
+	color: #0949e8;
+}
+.colum_user_title a{
+	color: #0949e8;
+}
+.colum_user_title a:visited{
+	color: #0949e8;
+}
+
+.color_status_active{
+	color: #3fef04;
+}
+
+.color_status_inactive{
+	color: #ffd613;
+}
+
+.color_status_banned{
+	color: #f1062a;
+}
+
+.admin_table_all_users th{
+	border: 1px solid black;
+	width: 100px;
+}
+
+.admin_table_all_users a{
+	text-decoration: none;
+}
+
+.admin_table_all_users a:hover{
+	color: #bfe809;
+}
+.admin_table_all_users a:visited{
+	color: #0949e8;
+}
+
 li {
 	float:left;
 	position:relative;
 }
-
-
 
 #footer{
 	border: 1px solid red;

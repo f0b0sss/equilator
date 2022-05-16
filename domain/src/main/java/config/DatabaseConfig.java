@@ -1,4 +1,4 @@
-package com.equilator.config;
+package config;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.InitializingBean;
@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:database.properties")
-public class DataBaseConfig{
+public class DatabaseConfig {
 
     @Bean
     public Flyway flyway(DataSource dataSource){

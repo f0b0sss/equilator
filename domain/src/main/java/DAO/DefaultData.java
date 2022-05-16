@@ -2,11 +2,9 @@ package DAO;
 
 
 import models.calculator.CalculatorMainTable;
+import models.calculator.Card;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class DefaultData {
@@ -15,6 +13,27 @@ public class DefaultData {
     private final Map<String, Integer> cardsWithRank = new HashMap<>();
     private final Map<String, Integer> combinationWithPoints = new HashMap<>();
     private final List<String> cardsDeck = new LinkedList<>();
+    private final Map<String, String> suitNumber = new HashMap<>();
+    private final Map<String, String> primeNumber = new HashMap<>();
+    private final List<Card> cardList = new LinkedList<>();
+
+    Map<String, List<String>> allHands = new LinkedHashMap<>();
+
+    public Map<String, List<String>> getAllHands() {
+        return allHands;
+    }
+
+    public List<Card> getCardList() {
+        return cardList;
+    }
+
+    public Map<String, String> getSuitNumber() {
+        return suitNumber;
+    }
+
+    public Map<String, String> getPrimeNumber() {
+        return primeNumber;
+    }
 
     private final List<CalculatorMainTable> calculatorMainTables = new LinkedList<>();
 
@@ -34,7 +53,15 @@ public class DefaultData {
         return cardsDeck;
     }
 
+
     {
+
+        for (int i = 0; i < cards.length; i++) {
+            for (int j = 0; j < cards.length; j++) {
+                allHands.put(cards[i] + cards[j], new LinkedList<>());
+            }
+        }
+
         combinationWithPoints.put("high card", 100);
         combinationWithPoints.put("one pair", 200);
         combinationWithPoints.put("two pair", 300);
@@ -63,6 +90,32 @@ public class DefaultData {
         for (int i = 0; i < suit.length; i++) {
             for (int j = 0; j < cards.length; j++) {
                 cardsDeck.add(cards[j] + suit[i]);
+            }
+        }
+
+        suitNumber.put("s", "0001");
+        suitNumber.put("h", "0010");
+        suitNumber.put("d", "0100");
+        suitNumber.put("c", "1000");
+
+        primeNumber.put("2", "000010");
+        primeNumber.put("3", "000011");
+        primeNumber.put("4", "000101");
+        primeNumber.put("5", "000111");
+        primeNumber.put("6", "001011");
+        primeNumber.put("7", "001101");
+        primeNumber.put("8", "010001");
+        primeNumber.put("9", "010011");
+        primeNumber.put("t", "010111");
+        primeNumber.put("j", "011101");
+        primeNumber.put("q", "011111");
+        primeNumber.put("k", "100101");
+        primeNumber.put("a", "101001");
+
+
+        for (int i = 0; i < suit.length; i++) {
+            for (int j = 0; j < cards.length; j++) {
+                cardList.add(new Card(cards[j], suit[i]));
             }
         }
     }

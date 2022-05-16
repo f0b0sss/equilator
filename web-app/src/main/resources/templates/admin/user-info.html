@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Edit</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="~{fragments/template :: link}"></th:block>
+
+</head>
+<body>
+<th:block th:insert="~{fragments/template :: #header}"></th:block>
+<th:block th:insert="~{fragments/template :: #menu}"></th:block>
+
+
+<div id="mainContainer">
+
+    <form th:method="PATCH" th:action="@{/user-info/{id}(id=${user.getId()})}" th:object="${user}">
+        <input type="text" disabled th:field="*{firstname}"/>
+        <input type="text" hidden th:field="*{firstname}"/>
+        <br>
+        <input type="text" disabled th:field="*{lastname}"/>
+        <input type="text" hidden th:field="*{lastname}"/>
+        <br>
+        <input type="text"  disabled th:field="*{email}"/>
+        <input type="text"  hidden th:field="*{email}"/>
+        <br>
+        <input type="text"  disabled th:field="*{role}"/>
+        <br>
+        <input type="text"  disabled th:field="*{status}"/>
+        <br>
+        <input type="text" hidden th:field="*{password}"/>
+
+        <div sec:authorize="hasAuthority('access:superadmin')">
+            <div th:if="${#strings.equals(user.role, 'ADMIN')}">
+                <fieldset>
+                    <legend>Edit Status</legend>
+                    <div>
+                        <input type="radio" id="active" th:field="*{status}" name="status" value="ACTIVE">
+                        <label for="active">Active</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="inactive" th:field="*{status}" name="status" value="INACTIVE">
+                        <label for="inactive">Inactive</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="banned" th:field="*{status}" name="status" value="BANNED">
+                        <label for="banned">Banned</label>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Edit Role</legend>
+                    <div>
+                        <input type="radio" id="user" th:field="*{role}" name="role" value="USER">
+                        <label for="user">USER</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="admin" th:field="*{role}" name="role" value="ADMIN">
+                        <label for="admin">ADMIN</label>
+                    </div>
+                </fieldset>
+            </div>
+            <div th:if="${!#strings.equals(user.role, 'SUPERADMIN')}">
+                <input type="submit" value="Update"/>
+            </div>
+        </div>
+
+        <div th:if="${#strings.equals(user.role, 'USER')}">
+            <fieldset>
+                <legend>Edit Status</legend>
+                <div>
+                    <input type="radio" id="active" th:field="*{status}" name="status" value="ACTIVE">
+                    <label for="active">Active</label>
+                </div>
+                <div>
+                    <input type="radio" id="inactive" th:field="*{status}" name="status" value="INACTIVE">
+                    <label for="inactive">Inactive</label>
+                </div>
+                <div>
+                    <input type="radio" id="banned" th:field="*{status}" name="status" value="BANNED">
+                    <label for="banned">Banned</label>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Edit Role</legend>
+                <div>
+                    <input type="radio" id="user" th:field="*{role}" name="role" value="USER">
+                    <label for="user">USER</label>
+                </div>
+                <div>
+                    <input type="radio" id="admin" th:field="*{role}" name="role" value="ADMIN">
+                    <label for="admin">ADMIN</label>
+                </div>
+            </fieldset>
+            <input type="submit" value="Update"/>
+        </div>
+    </form>
+    <br>
+
+    <div th:if="${#strings.equals(user.role, 'USER')}">
+        <form th:method="DELETE" th:action="@{/user-info/{id}(id=${user.getId()})}">
+            <input type="submit" value="Delete user">
+        </form>
+    </div>
+
+    <div sec:authorize="hasAuthority('access:superadmin')">
+        <div th:if="${#strings.equals(user.role, 'ADMIN')}">
+            <form th:method="DELETE" th:action="@{/user-info/{id}(id=${user.getId()})}">
+                <input type="submit" value="Delete admin">
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="clear"></div>
+<th:block th:insert="~{fragments/template :: #footer}"></th:block>
+
+
+</body>
+</html>

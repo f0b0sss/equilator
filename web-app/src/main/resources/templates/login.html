@@ -12,11 +12,17 @@
 
 
 <div id="mainContainer">
+    <div style="color: red" th:if="${param.error}">
+        Invalid username or password.
+    </div>
+
     <form th:action="@{/login}" method="post">
         <div><label> User Name : <input type="text" name="username"/> </label></div>
         <div><label> Password: <input type="password" name="password"/> </label></div>
         <div><input type="submit" value="Sign In"/></div>
     </form>
+    <div id="registration_button"><a href="registration">Create account</a></div>
+
 </div>
 
 

@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <title>Registration</title>
+    <title>Home</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="~{fragments/template :: link}"></th:block>
 
@@ -14,29 +14,27 @@
 
 <div id="mainContainer">
 
-    <form th:method="POST" th:action="@{/registration}" th:object="${user}">
-        <label for="email">Enter email: </label>
+    <form th:method="PATCH" th:action="@{/edit/{id}(id=${user.getId()})}" th:object="${user}">
+        <label for="email">Email: </label>
         <input type="text" th:field="*{email}" id="email"/>
         <div style="color: red" th:if="${#fields.hasErrors('email') }" th:errors="*{email}">email error</div>
 
         <br>
-        <label for="firstname">Enter firstname: </label>
+        <label for="firstname">Firstname: </label>
         <input type="text" th:field="*{firstname}" id="firstname"/>
-        <div style="color: red" th:if="${#fields.hasErrors('firstname') }" th:errors="*{firstname}">firstname error</div>
+        <div style="color: red" th:if="${#fields.hasErrors('firstname') }" th:errors="*{firstname}">firstname error
+        </div>
 
         <br>
-        <label for="lastname">Enter lastname: </label>
+        <label for="lastname">Lastname: </label>
         <input type="text" th:field="*{lastname}" id="lastname"/>
         <div style="color: red" th:if="${#fields.hasErrors('lastname') }" th:errors="*{lastname}">lastname error</div>
 
-        <br>
-        <label for="password">Enter password: </label>
-        <input type="text" th:field="*{password}" id="password"/>
-        <div style="color: red" th:if="${#fields.hasErrors('password') }" th:errors="*{password}">password error</div>
-
-        <input type="submit" value="Create"/>
-
+        <input type="submit" value="Update"/>
     </form>
+    <a th:href="@{/password/{id}(id=${user.getId()})}">Edit Password</a>
+
+
 
 
 

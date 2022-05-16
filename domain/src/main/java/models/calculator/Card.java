@@ -1,18 +1,23 @@
 package models.calculator;
 
-import java.util.Objects;
-
 public class Card {
-
-    private String rank;
+    private String value;
     private String suit;
 
-    public String getRank() {
-        return rank;
+    public Card() {
     }
 
-    public void setRank(String rank) {
-        this.rank = rank;
+    public Card(String value, String suit) {
+        this.value = value;
+        this.suit = suit;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getSuit() {
@@ -23,20 +28,10 @@ public class Card {
         this.suit = suit;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Card card = (Card) o;
-        return Objects.equals(rank, card.rank) && Objects.equals(suit, card.suit);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(rank, suit);
-    }
-
     public String getCard(){
-        return rank.toUpperCase() + suit.toLowerCase();
+        return value.toUpperCase() + suit;
     }
+
+
+
 }

@@ -1,6 +1,8 @@
-package com.equilator.model;
+package services;
 
 
+import models.user.Status;
+import models.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
