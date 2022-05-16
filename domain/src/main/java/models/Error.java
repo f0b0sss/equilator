@@ -4,6 +4,9 @@ public class Error {
     private String name;
     private String message;
 
+    public Error() {
+    }
+
     public String getName() {
         return name;
     }

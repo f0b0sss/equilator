@@ -55,4 +55,8 @@ public class DBUtils {
         jdbcTemplate.update("UPDATE users SET email=?, firstname=?, lastname=?, password=?, role=?, status=? WHERE id=?",
                 user.getEmail(), user.getFirstname(), user.getLastname(), user.getPassword(), role, status, id);
     }
+
+    public void updatePassword(String new_password, int id) {
+        jdbcTemplate.update("UPDATE users SET password=? WHERE id=?", new_password, id);
+    }
 }

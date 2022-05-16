@@ -1,10 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class MainApp {
 
@@ -56,6 +52,51 @@ public class MainApp {
 
 
     public static void main(String[] args) throws IOException {
+
+ //       String hands = "[" +
+//  " { regex: /(2345A|23456|34567|45678|56789|6789T|789JT|89JQT|9JKQT|AJKQT)#(.)\2{4}.*/g , name: 'Straight flush' }," +
+//      " { regex: /(.)\1{3}.*#.*/g , name: 'Four of a kind' }," +
+//    "   { regex: /((.)\2{2}(.)\3{1}#.*|(.)\4{1}(.)\5{2}#.*)/g , name: 'Full house' }," +
+//  "     { regex: /.*#(.)\1{4}.*/g , name: 'Flush' }," +
+//      " { regex: /(2345A|23456|34567|45678|56789|6789T|789JT|89JQT|9JKQT|AJKQT)#.*/g , name: 'Straight' }," +
+//   "    { regex: /(.)\1{2}.*#.*/g , name: 'Three of a kind' }," +
+//       "{ regex: /(.)\1{1}.*(.)\2{1}.*#.*/g , name: 'Two pair' }," +
+//       "{ regex: /(.)\1{1}.*#.*/g , name: 'One pair' }," +
+// "]";
+
+
+    //    String regex = "[AKQJT98765432akqjt]|[AKQJT98765432akqjt][hdsc][AKQJT98765432akqjt][hdsc]|[AKQJT98765432akqjt][os]";
+
+        String regex = "[AKQJT98765432akqjt][hdcs]{4}";
+
+        String board = "Asqsjh";
+
+
+        for (int i = 0; i < board.length(); i += 2) {
+            System.out.println(board.substring(i, i + 2));
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
         Map<String, String> bit = new HashMap<>();
         bit.put("2", "0000000000001");
         bit.put("3", "0000000000010");
@@ -142,6 +183,8 @@ public class MainApp {
             i += 1;
         }
 
+
+ */
 
 
 

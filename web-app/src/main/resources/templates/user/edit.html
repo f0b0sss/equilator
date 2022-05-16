@@ -30,6 +30,11 @@
         <input type="text" th:field="*{lastname}" id="lastname"/>
         <div style="color: red" th:if="${#fields.hasErrors('lastname') }" th:errors="*{lastname}">lastname error</div>
 
+        <input type="text" hidden th:field="*{role}" id="role"/>
+        <input type="text" hidden th:field="*{status}" id="status"/>
+        <input type="text" hidden th:field="*{password}" id="password"/>
+
+
         <input type="submit" value="Update"/>
     </form>
     <a th:href="@{/password/{id}(id=${user.getId()})}">Edit Password</a>

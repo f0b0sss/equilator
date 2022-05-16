@@ -2,6 +2,7 @@ package config;
 
 import DAO.DBUtils;
 import DAO.DefaultData;
+import models.Error;
 import models.calculator.CalculatorMainTable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,6 @@ public class DomainConfig {
     public DomainConfig(@Qualifier("dbUtils") DBUtils dbUtils) {
         this.dbUtils = dbUtils;
     }
-
 
     @Bean
     public DefaultData defaultData(){
@@ -54,6 +54,11 @@ public class DomainConfig {
     @Bean
     public Calculate3 calculate3(){
         return new Calculate3(defaultData());
+    }
+
+    @Bean
+    public Error error(){
+        return new Error();
     }
 
 }

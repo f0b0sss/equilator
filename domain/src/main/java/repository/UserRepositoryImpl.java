@@ -76,6 +76,11 @@ public class UserRepositoryImpl implements UserRepository{
     public void updateUser(int id, User user) {
         dbUtils.updateUser(id, user);
     }
+
+    @Override
+    public void updatePassword(String new_password, int id) {
+        dbUtils.updatePassword(new_password, id);
+    }
 }
 
 

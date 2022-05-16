@@ -1,6 +1,7 @@
 package com.equilator.controllers;
 
 import exceptions.UserAlreadyExistException;
+import models.Error;
 import models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +32,9 @@ public class AccountController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private Error error;
 
     private final UserService userService;
 
@@ -101,11 +105,8 @@ public class AccountController {
 
     @PatchMapping("/edit/{id}")
     public String update(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult,
+                         BindingResult bindingResult, Model model,
                          @PathVariable("id") int id) {
-
-        System.out.println(user.getRole());
-        System.out.println(user.getEmail());
 
         if (bindingResult.hasErrors()) {
             return "/edit";
@@ -119,6 +120,7 @@ public class AccountController {
     @GetMapping("/password/{id}")
     public String password(Model model, @PathVariable("id") int id) {
         model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("error", new Error());
 
         return "/password";
     }
@@ -128,26 +130,24 @@ public class AccountController {
                              @RequestParam("old_password") String old_password,
                              @RequestParam("new_password") String new_password,
                              @PathVariable("id") int id) {
-        System.out.println(user.getRole());
-        System.out.println(user.getEmail());
-        System.out.println(old_password);
-        System.out.println(new_password);
 
         if (!isOldPassCorrect(old_password, id)){
-            System.out.println("1");
             bindingResult.rejectValue("password", "user.password", "Invalid Old Password");
             return "/password";
         }
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
+            bindingResult.rejectValue("password", "user.password", "New password must be min 3 symbols");
             return "/password";
         }
+
+        userService.updatePassword(new_password, passwordEncoder, id);
 
         return "redirect:/account";
     }
 
-    private boolean isOldPassCorrect(String password, int id) {
-        return passwordEncoder.matches(password, userService.getUserById(id).getPassword());
+    private boolean isOldPassCorrect(String old_password, int id) {
+
+        return passwordEncoder.matches(old_password, userService.getUserById(id).getPassword());
     }
 
 

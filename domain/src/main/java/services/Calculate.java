@@ -1,6 +1,7 @@
 package services;
 
 import DAO.DefaultData;
+import exceptions.InvalidInputCards;
 import models.calculator.CalculatorMainTable;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -109,6 +110,15 @@ public class Calculate {
     public List<String> buildGroup(String[] rangeArr, String board) {
         List<String> hands = new ArrayList<>();
 
+        String regex = "[AKQJT98765432akqjt][hdcs][AKQJT98765432akqjt][hdcs]" +
+                "|[AKQJT98765432akqjt]{2}|[AKQJT98765432akqjt]{2}[os]";
+
+        for (int i = 0; i < rangeArr.length; i++) {
+            if (!rangeArr[i].matches(regex)){
+                throw new InvalidInputCards("invalid format - " + rangeArr[i]);
+            }
+        }
+
         for (int i = 0; i < rangeArr.length; i++) {
             if (rangeArr[i].length() == 4) {
                 hands.add(rangeArr[i]);
@@ -118,10 +128,6 @@ public class Calculate {
             }
             if (rangeArr[i].length() == 2 && rangeArr[i].charAt(0) != rangeArr[i].charAt(1)) {
                 hands.addAll(buildAllGroupHands(rangeArr[i], board));
-            }
-            if (rangeArr[i].length() == 3 && rangeArr[i].charAt(2) == 'o' &&
-                    rangeArr[i].charAt(0) != rangeArr[i].charAt(1)) {
-                hands.addAll(buildOffsuitedGroupHands(rangeArr[i], board));
             }
             if (rangeArr[i].length() == 3 && rangeArr[i].charAt(2) == 'o' &&
                     rangeArr[i].charAt(0) != rangeArr[i].charAt(1)) {
@@ -149,6 +155,8 @@ public class Calculate {
     public void calculate(CalculatorMainTable calculatorMainTable) {
         String board = calculatorMainTable.getBoard();
 
+        validateBoard(board);
+
         List<String> range1 = buildRange(calculatorMainTable.getRangePlayer1(), board);
         List<String> range2 = buildRange(calculatorMainTable.getRangePlayer2(), board);
 
@@ -158,8 +166,6 @@ public class Calculate {
         for (int i = 0; i < range2.size(); i++) {
             mapRange2.put(range2.get(i), 0.0);
         }
-
-        double[] wonTimes = new double[]{0, 0, 0};
 
         switch (calculatorMainTable.getBoard().length()) {
             case (6):
@@ -187,6 +193,19 @@ public class Calculate {
         mapRange1.clear();
         mapRange2.clear();
         allCards.clear();
+    }
+
+    private void validateBoard(String board) {
+        if(board.length() > 8 || board.length() < 6 || board.length() == 7){
+            throw new InvalidInputCards("invalid board - " + board);
+        }
+        String regex = "[AKQJT98765432akqjt][hdcs]";
+
+        for (int i = 0; i + 2 < board.length(); i += 2) {
+            if (!board.substring(i, i + 2).matches(regex)){
+                throw new InvalidInputCards("invalid card in board - " + board.substring(i, i + 2));
+            }
+        }
     }
 
     public void calculateWithoutRiver(DefaultData defaultData,
@@ -580,7 +599,7 @@ public class Calculate {
                             .map(Map.Entry::getKey)
                             .findFirst().orElse(null));
                 }
-                if (straight.size() == 4){
+                if (straight.size() == 4) {
                     int card2 = straightInDigits.get(i + 1);
                     straight.add(cardWithRank.entrySet()
                             .stream()
@@ -808,7 +827,7 @@ public class Calculate {
 
     private void showResult(String combination, List<String> hand, String player) {
 
-       //    System.out.println(combination + " = " + hand);
+        //    System.out.println(combination + " = " + hand);
         finalCombinationPoints(hand, combination, player);
     }
 

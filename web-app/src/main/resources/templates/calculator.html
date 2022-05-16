@@ -5,6 +5,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="~{fragments/template :: link}"></th:block>
 
+    <style>
+        #selectable .ui-selecting { background: #FECA40; }
+        #selectable .ui-selected { background: #F39814; color: white; }
+        #selectable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
+        #selectable li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script>
+        $( function() {
+            $( "#selectable" ).selectable();
+        } );
+    </script>
+
 </head>
 <body>
 <th:block th:insert="~{fragments/template :: #header}"></th:block>
@@ -13,11 +27,14 @@
 
 <div id="mainContainer">
 
+    <span style="color: red" th:text="${InvalidInputCards}"></span>
+
     <form th:method="POST" th:action="@{/calculate}" th:object="${calculatorMainTable}">
 
          <p>Player1
              <input type="text" th:field="*{rangePlayer1}" id="rangePlayer1"/>
              <input type="text" readonly th:field="*{equityPlayer1}" id="equityPlayer1"/>
+
              Deal
              <input type="text" readonly th:field="*{deal}" id="deal"/>
          </p>
@@ -35,8 +52,11 @@
 </div>
 
 
+
+
 <div class="clear"></div>
 <th:block th:insert="~{fragments/template :: #footer}"></th:block>
+
 
 
 </body>
@@ -44,6 +64,27 @@
 
 
 <!--
+
+<ol id="selectable">
+    <li class="ui-state-default">1</li>
+    <li class="ui-state-default">2</li>
+    <li class="ui-state-default">3</li>
+    <li class="ui-state-default">4</li>
+    <li class="ui-state-default">5</li>
+    <li class="ui-state-default">6</li>
+    <li class="ui-state-default">7</li>
+    <li class="ui-state-default">8</li>
+    <li class="ui-state-default">9</li>
+    <li class="ui-state-default">10</li>
+    <li class="ui-state-default">11</li>
+    <li class="ui-state-default">12</li>
+</ol>
+
+
+
+
+
+
 <table id="0_table" class="mx-auto range_table">
     <tbody>
     <tr>

@@ -77,4 +77,9 @@ public class UserService implements UserDetailsService {
     public void updateUser(int id, User user) {
         userRepository.updateUser(id, user);
     }
+
+    public void updatePassword(String new_password, PasswordEncoder passwordEncoder, int id) {
+        String pass = passwordEncoder.encode(new_password);
+        userRepository.updatePassword(pass, id);
+    }
 }
