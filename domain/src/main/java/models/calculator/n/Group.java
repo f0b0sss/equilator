@@ -1,4 +1,4 @@
-package models.calculator;
+package models.calculator.n;
 
 import models.calculator.enums.Type;
 

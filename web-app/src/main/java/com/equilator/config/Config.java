@@ -51,5 +51,18 @@ public class Config {
         return classLoaderTemplateResolver;
     }
 
+    @Bean
+    public ClassLoaderTemplateResolver calculatorClassLoaderTemplateResolver() {
+        ClassLoaderTemplateResolver classLoaderTemplateResolver = new ClassLoaderTemplateResolver();
+        classLoaderTemplateResolver.setPrefix("templates/calculator/");
+        classLoaderTemplateResolver.setSuffix(".html");
+        classLoaderTemplateResolver.setTemplateMode(TemplateMode.HTML);
+        classLoaderTemplateResolver.setCharacterEncoding("UTF-8");
+        classLoaderTemplateResolver.setOrder(0);
+        classLoaderTemplateResolver.setCheckExistence(true);
+
+        return classLoaderTemplateResolver;
+    }
+
 
 }

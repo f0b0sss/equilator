@@ -67,14 +67,16 @@ public class MainApp {
 
     //    String regex = "[AKQJT98765432akqjt]|[AKQJT98765432akqjt][hdsc][AKQJT98765432akqjt][hdsc]|[AKQJT98765432akqjt][os]";
 
-        String regex = "[AKQJT98765432akqjt][hdcs]{4}";
+      //  String regex = "[AKQJT98765432akqjt][hdcs]{4}";
 
-        String board = "Asqsjh";
+        String board = "AsQsKd4c";
+
+        System.out.println(!board.contains("4s"));
+
+     //   System.out.println(board.substring(2,4));
 
 
-        for (int i = 0; i < board.length(); i += 2) {
-            System.out.println(board.substring(i, i + 2));
-        }
+
 
 
 

@@ -2,6 +2,10 @@ package services;
 
 import DAO.DefaultData;
 import models.calculator.*;
+import models.calculator.n.Card;
+import models.calculator.n.Group;
+import models.calculator.n.Hand;
+import models.calculator.n.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;

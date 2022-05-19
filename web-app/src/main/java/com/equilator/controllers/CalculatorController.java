@@ -3,6 +3,7 @@ package com.equilator.controllers;
 import DAO.DefaultData;
 import exceptions.InvalidInputCards;
 import models.calculator.CalculatorMainTable;
+import models.calculator.GameInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,9 @@ public class CalculatorController {
     private String error;
 
     @Autowired
+    private GameInfo gameInfo;
+
+    @Autowired
     public CalculatorController(DefaultData defaultData, Calculate calculate) {
         this.defaultData = defaultData;
         this.calculate = calculate;
@@ -29,6 +33,8 @@ public class CalculatorController {
     public String calculator(Model model) {
         model.addAttribute("calculatorMainTable", defaultData.getCalculatorMainTables().get(0));
         model.addAttribute("InvalidInputCards", error);
+        model.addAttribute("statsP1", gameInfo.getEquityByCardP1());
+        model.addAttribute("statsP2", gameInfo.getEquityByCardP2());
 
         error = null;
 
@@ -46,6 +52,16 @@ public class CalculatorController {
         }
 
         return "redirect:/calculator";
+    }
+
+    @GetMapping("/statistic")
+    @PreAuthorize("hasAuthority('access:user')")
+    public String statistic(Model model) {
+        model.addAttribute("calculatorMainTable", defaultData.getCalculatorMainTables().get(0));
+        model.addAttribute("statsP1", gameInfo.getEquityByCardP1());
+        model.addAttribute("statsP2", gameInfo.getEquityByCardP2());
+
+        return "statistic";
     }
 
 

@@ -2,7 +2,7 @@ package DAO;
 
 
 import models.calculator.CalculatorMainTable;
-import models.calculator.Card;
+import models.calculator.n.Card;
 
 import java.util.*;
 
@@ -17,10 +17,10 @@ public class DefaultData {
     private final Map<String, String> primeNumber = new HashMap<>();
     private final List<Card> cardList = new LinkedList<>();
 
-    Map<String, List<String>> allHands = new LinkedHashMap<>();
+    private final Map<String, Double[]> wonTimesByCard = new LinkedHashMap<>(52);
 
-    public Map<String, List<String>> getAllHands() {
-        return allHands;
+    public Map<String, Double[]> getWonTimesByCard() {
+        return wonTimesByCard;
     }
 
     public List<Card> getCardList() {
@@ -55,13 +55,6 @@ public class DefaultData {
 
 
     {
-
-        for (int i = 0; i < cards.length; i++) {
-            for (int j = 0; j < cards.length; j++) {
-                allHands.put(cards[i] + cards[j], new LinkedList<>());
-            }
-        }
-
         combinationWithPoints.put("high card", 100);
         combinationWithPoints.put("one pair", 200);
         combinationWithPoints.put("two pair", 300);

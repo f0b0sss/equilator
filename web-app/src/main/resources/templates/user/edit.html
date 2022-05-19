@@ -34,7 +34,6 @@
         <input type="text" hidden th:field="*{status}" id="status"/>
         <input type="text" hidden th:field="*{password}" id="password"/>
 
-
         <input type="submit" value="Update"/>
     </form>
     <a th:href="@{/password/{id}(id=${user.getId()})}">Edit Password</a>

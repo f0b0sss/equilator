@@ -1,8 +1,8 @@
 package services;
 
-import models.calculator.Group;
-import models.calculator.Hand;
-import models.calculator.Range;
+import models.calculator.n.Group;
+import models.calculator.n.Hand;
+import models.calculator.n.Range;
 import models.calculator.enums.Type;
 
 import java.io.BufferedReader;

@@ -1,0 +1,509 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Calculator</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="~{fragments/template :: link}"></th:block>
+
+</head>
+<body>
+<th:block th:insert="~{fragments/template :: #header}"></th:block>
+<th:block th:insert="~{fragments/template :: #menu}"></th:block>
+
+
+<div id="mainContainer">
+
+    <h2>Player1</h2>
+    <table id="equity_by_card">
+        <tr>
+            <th><b>Card</b></th>
+            <th>2<img src="../img/heart.png"></th>
+            <th>3<img src="../img/heart.png"></th>
+            <th>4<img src="../img/heart.png"></th>
+            <th>5<img src="../img/heart.png"></th>
+            <th>6<img src="../img/heart.png"></th>
+            <th>7<img src="../img/heart.png"></th>
+            <th>8<img src="../img/heart.png"></th>
+            <th>9<img src="../img/heart.png"></th>
+            <th>T<img src="../img/heart.png"></th>
+            <th>J<img src="../img/heart.png"></th>
+            <th>Q<img src="../img/heart.png"></th>
+            <th>K<img src="../img/heart.png"></th>
+            <th>A<img src="../img/heart.png"></th>
+        </tr>
+        <tr>
+            <th><b>Equity</b></th>
+       <!--     <th th:utext=" ${statsP1.get('2h')}" th:styleappend="${statsP1.get('2h')} < '0,1' ? 'background-color: red;' : 'background-color: green;'"></th> -->
+            <th th:utext=" ${statsP1.get('2h')}"></th>
+            <th th:utext=" ${statsP1.get('3h')}"></th>
+            <th th:utext=" ${statsP1.get('4h')}"></th>
+            <th th:utext=" ${statsP1.get('5h')}"></th>
+            <th th:utext=" ${statsP1.get('6h')}"></th>
+            <th th:utext=" ${statsP1.get('7h')}"></th>
+            <th th:utext=" ${statsP1.get('8h')}"></th>
+            <th th:utext=" ${statsP1.get('9h')}"></th>
+            <th th:utext=" ${statsP1.get('Th')}"></th>
+            <th th:utext=" ${statsP1.get('Jh')}"></th>
+            <th th:utext=" ${statsP1.get('Qh')}"></th>
+            <th th:utext=" ${statsP1.get('Kh')}"></th>
+            <th th:utext=" ${statsP1.get('Ah')}"></th>
+        </tr>
+        <tr>
+            <th><b>Card</b></th>
+            <th>2<img src="../img/diamonds.png"></th>
+            <th>3<img src="../img/diamonds.png"></th>
+            <th>4<img src="../img/diamonds.png"></th>
+            <th>5<img src="../img/diamonds.png"></th>
+            <th>6<img src="../img/diamonds.png"></th>
+            <th>7<img src="../img/diamonds.png"></th>
+            <th>8<img src="../img/diamonds.png"></th>
+            <th>9<img src="../img/diamonds.png"></th>
+            <th>T<img src="../img/diamonds.png"></th>
+            <th>J<img src="../img/diamonds.png"></th>
+            <th>Q<img src="../img/diamonds.png"></th>
+            <th>K<img src="../img/diamonds.png"></th>
+            <th>A<img src="../img/diamonds.png"></th>
+        </tr>
+        <tr>
+            <th><b>Equity</b></th>
+            <th th:utext=" ${statsP1.get('2d')}"></th>
+            <th th:utext=" ${statsP1.get('3d')}"></th>
+            <th th:utext=" ${statsP1.get('4d')}"></th>
+            <th th:utext=" ${statsP1.get('5d')}"></th>
+            <th th:utext=" ${statsP1.get('6d')}"></th>
+            <th th:utext=" ${statsP1.get('7d')}"></th>
+            <th th:utext=" ${statsP1.get('8d')}"></th>
+            <th th:utext=" ${statsP1.get('9d')}"></th>
+            <th th:utext=" ${statsP1.get('Td')}"></th>
+            <th th:utext=" ${statsP1.get('Jd')}"></th>
+            <th th:utext=" ${statsP1.get('Qd')}"></th>
+            <th th:utext=" ${statsP1.get('Kd')}"></th>
+            <th th:utext=" ${statsP1.get('Ad')}"></th>
+        </tr>
+        <tr>
+            <th><b>Card</b></th>
+            <th>2<img src="../img/clubs.png"></th>
+            <th>3<img src="../img/clubs.png"></th>
+            <th>4<img src="../img/clubs.png"></th>
+            <th>5<img src="../img/clubs.png"></th>
+            <th>6<img src="../img/clubs.png"></th>
+            <th>7<img src="../img/clubs.png"></th>
+            <th>8<img src="../img/clubs.png"></th>
+            <th>9<img src="../img/clubs.png"></th>
+            <th>T<img src="../img/clubs.png"></th>
+            <th>J<img src="../img/clubs.png"></th>
+            <th>Q<img src="../img/clubs.png"></th>
+            <th>K<img src="../img/clubs.png"></th>
+            <th>A<img src="../img/clubs.png"></th>
+        </tr>
+        <tr>
+            <th><b>Equity</b></th>
+            <th th:utext=" ${statsP1.get('2c')}"></th>
+            <th th:utext=" ${statsP1.get('3c')}"></th>
+            <th th:utext=" ${statsP1.get('4c')}"></th>
+            <th th:utext=" ${statsP1.get('5c')}"></th>
+            <th th:utext=" ${statsP1.get('6c')}"></th>
+            <th th:utext=" ${statsP1.get('7c')}"></th>
+            <th th:utext=" ${statsP1.get('8c')}"></th>
+            <th th:utext=" ${statsP1.get('9c')}"></th>
+            <th th:utext=" ${statsP1.get('Tc')}"></th>
+            <th th:utext=" ${statsP1.get('Jc')}"></th>
+            <th th:utext=" ${statsP1.get('Qc')}"></th>
+            <th th:utext=" ${statsP1.get('Kc')}"></th>
+            <th th:utext=" ${statsP1.get('Ac')}"></th>
+        </tr>
+        <tr>
+            <th><b>Card</b></th>
+            <th>2<img src="../img/spade.png"></th>
+            <th>3<img src="../img/spade.png"></th>
+            <th>4<img src="../img/spade.png"></th>
+            <th>5<img src="../img/spade.png"></th>
+            <th>6<img src="../img/spade.png"></th>
+            <th>7<img src="../img/spade.png"></th>
+            <th>8<img src="../img/spade.png"></th>
+            <th>9<img src="../img/spade.png"></th>
+            <th>T<img src="../img/spade.png"></th>
+            <th>J<img src="../img/spade.png"></th>
+            <th>Q<img src="../img/spade.png"></th>
+            <th>K<img src="../img/spade.png"></th>
+            <th>A<img src="../img/spade.png"></th>
+        </tr>
+        <tr>
+            <th><b>Equity</b></th>
+            <th th:utext=" ${statsP1.get('2s')}"></th>
+            <th th:utext=" ${statsP1.get('3s')}"></th>
+            <th th:utext=" ${statsP1.get('4s')}"></th>
+            <th th:utext=" ${statsP1.get('5s')}"></th>
+            <th th:utext=" ${statsP1.get('6s')}"></th>
+            <th th:utext=" ${statsP1.get('7s')}"></th>
+            <th th:utext=" ${statsP1.get('8s')}"></th>
+            <th th:utext=" ${statsP1.get('9s')}"></th>
+            <th th:utext=" ${statsP1.get('Ts')}"></th>
+            <th th:utext=" ${statsP1.get('Js')}"></th>
+            <th th:utext=" ${statsP1.get('Qs')}"></th>
+            <th th:utext=" ${statsP1.get('Ks')}"></th>
+            <th th:utext=" ${statsP1.get('As')}"></th>
+        </tr>
+    </table>
+    <br>
+    <h2>Player2</h2>
+    <table id="equity_by_card">
+        <tr>
+            <th><b>Card</b></th>
+            <th>2<img src="../img/heart.png"></th>
+            <th>3<img src="../img/heart.png"></th>
+            <th>4<img src="../img/heart.png"></th>
+            <th>5<img src="../img/heart.png"></th>
+            <th>6<img src="../img/heart.png"></th>
+            <th>7<img src="../img/heart.png"></th>
+            <th>8<img src="../img/heart.png"></th>
+            <th>9<img src="../img/heart.png"></th>
+            <th>T<img src="../img/heart.png"></th>
+            <th>J<img src="../img/heart.png"></th>
+            <th>Q<img src="../img/heart.png"></th>
+            <th>K<img src="../img/heart.png"></th>
+            <th>A<img src="../img/heart.png"></th>
+        </tr>
+        <tr>
+            <th><b>Equity</b></th>
+            <th th:utext=" ${statsP2.get('2h')}"></th>
+            <th th:utext=" ${statsP2.get('3h')}"></th>
+            <th th:utext=" ${statsP2.get('4h')}"></th>
+            <th th:utext=" ${statsP2.get('5h')}"></th>
+            <th th:utext=" ${statsP2.get('6h')}"></th>
+            <th th:utext=" ${statsP2.get('7h')}"></th>
+            <th th:utext=" ${statsP2.get('8h')}"></th>
+            <th th:utext=" ${statsP2.get('9h')}"></th>
+            <th th:utext=" ${statsP2.get('Th')}"></th>
+            <th th:utext=" ${statsP2.get('Jh')}"></th>
+            <th th:utext=" ${statsP2.get('Qh')}"></th>
+            <th th:utext=" ${statsP2.get('Kh')}"></th>
+            <th th:utext=" ${statsP2.get('Ah')}"></th>
+        </tr>
+        <tr>
+            <th><b>Card</b></th>
+            <th>2<img src="../img/diamonds.png"></th>
+            <th>3<img src="../img/diamonds.png"></th>
+            <th>4<img src="../img/diamonds.png"></th>
+            <th>5<img src="../img/diamonds.png"></th>
+            <th>6<img src="../img/diamonds.png"></th>
+            <th>7<img src="../img/diamonds.png"></th>
+            <th>8<img src="../img/diamonds.png"></th>
+            <th>9<img src="../img/diamonds.png"></th>
+            <th>T<img src="../img/diamonds.png"></th>
+            <th>J<img src="../img/diamonds.png"></th>
+            <th>Q<img src="../img/diamonds.png"></th>
+            <th>K<img src="../img/diamonds.png"></th>
+            <th>A<img src="../img/diamonds.png"></th>
+        </tr>
+        <tr>
+            <th><b>Equity</b></th>
+            <th th:utext=" ${statsP2.get('2d')}"></th>
+            <th th:utext=" ${statsP2.get('3d')}"></th>
+            <th th:utext=" ${statsP2.get('4d')}"></th>
+            <th th:utext=" ${statsP2.get('5d')}"></th>
+            <th th:utext=" ${statsP2.get('6d')}"></th>
+            <th th:utext=" ${statsP2.get('7d')}"></th>
+            <th th:utext=" ${statsP2.get('8d')}"></th>
+            <th th:utext=" ${statsP2.get('9d')}"></th>
+            <th th:utext=" ${statsP2.get('Td')}"></th>
+            <th th:utext=" ${statsP2.get('Jd')}"></th>
+            <th th:utext=" ${statsP2.get('Qd')}"></th>
+            <th th:utext=" ${statsP2.get('Kd')}"></th>
+            <th th:utext=" ${statsP2.get('Ad')}"></th>
+        </tr>
+        <tr>
+            <th><b>Card</b></th>
+            <th>2<img src="../img/clubs.png"></th>
+            <th>3<img src="../img/clubs.png"></th>
+            <th>4<img src="../img/clubs.png"></th>
+            <th>5<img src="../img/clubs.png"></th>
+            <th>6<img src="../img/clubs.png"></th>
+            <th>7<img src="../img/clubs.png"></th>
+            <th>8<img src="../img/clubs.png"></th>
+            <th>9<img src="../img/clubs.png"></th>
+            <th>T<img src="../img/clubs.png"></th>
+            <th>J<img src="../img/clubs.png"></th>
+            <th>Q<img src="../img/clubs.png"></th>
+            <th>K<img src="../img/clubs.png"></th>
+            <th>A<img src="../img/clubs.png"></th>
+        </tr>
+        <tr>
+            <th><b>Equity</b></th>
+            <th th:utext=" ${statsP2.get('2c')}"></th>
+            <th th:utext=" ${statsP2.get('3c')}"></th>
+            <th th:utext=" ${statsP2.get('4c')}"></th>
+            <th th:utext=" ${statsP2.get('5c')}"></th>
+            <th th:utext=" ${statsP2.get('6c')}"></th>
+            <th th:utext=" ${statsP2.get('7c')}"></th>
+            <th th:utext=" ${statsP2.get('8c')}"></th>
+            <th th:utext=" ${statsP2.get('9c')}"></th>
+            <th th:utext=" ${statsP2.get('Tc')}"></th>
+            <th th:utext=" ${statsP2.get('Jc')}"></th>
+            <th th:utext=" ${statsP2.get('Qc')}"></th>
+            <th th:utext=" ${statsP2.get('Kc')}"></th>
+            <th th:utext=" ${statsP2.get('Ac')}"></th>
+        </tr>
+        <tr>
+            <th><b>Card</b></th>
+            <th>2<img src="../img/spade.png"></th>
+            <th>3<img src="../img/spade.png"></th>
+            <th>4<img src="../img/spade.png"></th>
+            <th>5<img src="../img/spade.png"></th>
+            <th>6<img src="../img/spade.png"></th>
+            <th>7<img src="../img/spade.png"></th>
+            <th>8<img src="../img/spade.png"></th>
+            <th>9<img src="../img/spade.png"></th>
+            <th>T<img src="../img/spade.png"></th>
+            <th>J<img src="../img/spade.png"></th>
+            <th>Q<img src="../img/spade.png"></th>
+            <th>K<img src="../img/spade.png"></th>
+            <th>A<img src="../img/spade.png"></th>
+        </tr>
+        <tr>
+            <th><b>Equity</b></th>
+            <th th:utext=" ${statsP2.get('2s')}"></th>
+            <th th:utext=" ${statsP2.get('3s')}"></th>
+            <th th:utext=" ${statsP2.get('4s')}"></th>
+            <th th:utext=" ${statsP2.get('5s')}"></th>
+            <th th:utext=" ${statsP2.get('6s')}"></th>
+            <th th:utext=" ${statsP2.get('7s')}"></th>
+            <th th:utext=" ${statsP2.get('8s')}"></th>
+            <th th:utext=" ${statsP2.get('9s')}"></th>
+            <th th:utext=" ${statsP2.get('Ts')}"></th>
+            <th th:utext=" ${statsP2.get('Js')}"></th>
+            <th th:utext=" ${statsP2.get('Qs')}"></th>
+            <th th:utext=" ${statsP2.get('Ks')}"></th>
+            <th th:utext=" ${statsP2.get('As')}"></th>
+        </tr>
+    </table>
+
+
+    <!--
+
+    <table style="border: 1px">
+        <tr>
+            <th>No</th>
+            <th>Card</th>
+            <th>Equity</th>
+        </tr>
+        <tr th:each="mapItem, state : ${statsP1}"
+            class="row" th:classappend="${state.odd} ? 'odd-row' : 'even-row'">
+            <td th:utext="${state.count}">No</td>
+            <td th:utext="${mapItem.key}">Card</td>
+            <td th:utext="${mapItem.value}">Equity</td>
+        </tr>
+    </table>
+
+    <table id="0_table" class="mx-auto range_table">
+        <tbody>
+        <tr>
+            <td id="0_AA" class="range_cell pocketpair">AA</td>
+            <td id="0_AKs" class="range_cell suited ">AKs</td>
+            <td id="0_AQs" class="range_cell suited">AQs</td>
+            <td id="0_AJs" class="range_cell suited">AJs</td>
+            <td id="0_ATs" class="range_cell suited">ATs</td>
+            <td id="0_A9s" class="range_cell suited">A9s</td>
+            <td id="0_A8s" class="range_cell suited">A8s</td>
+            <td id="0_A7s" class="range_cell suited">A7s</td>
+            <td id="0_A6s" class="range_cell suited">A6s</td>
+            <td id="0_A5s" class="range_cell suited">A5s</td>
+            <td id="0_A4s" class="range_cell suited">A4s</td>
+            <td id="0_A3s" class="range_cell suited">A3s</td>
+            <td id="0_A2s" class="range_cell suited">A2s</td>
+        </tr>
+        <tr>
+            <td id="0_AKo" class="range_cell offsuit">AKo</td>
+            <td id="0_KK" class="range_cell pocketpair">KK</td>
+            <td id="0_KQs" class="range_cell suited">KQs</td>
+            <td id="0_KJs" class="range_cell suited">KJs</td>
+            <td id="0_KTs" class="range_cell suited">KTs</td>
+            <td id="0_K9s" class="range_cell suited">K9s</td>
+            <td id="0_K8s" class="range_cell suited">K8s</td>
+            <td id="0_K7s" class="range_cell suited">K7s</td>
+            <td id="0_K6s" class="range_cell suited">K6s</td>
+            <td id="0_K5s" class="range_cell suited">K5s</td>
+            <td id="0_K4s" class="range_cell suited">K4s</td>
+            <td id="0_K3s" class="range_cell suited">K3s</td>
+            <td id="0_K2s" class="range_cell suited">K2s</td>
+        </tr>
+        <tr>
+            <td id="0_AQo" class="range_cell offsuit">AQo</td>
+            <td id="0_KQo" class="range_cell offsuit">KQo</td>
+            <td id="0_QQ" class="range_cell pocketpair">QQ</td>
+            <td id="0_QJs" class="range_cell suited">QJs</td>
+            <td id="0_QTs" class="range_cell suited">QTs</td>
+            <td id="0_Q9s" class="range_cell suited">Q9s</td>
+            <td id="0_Q8s" class="range_cell suited">Q8s</td>
+            <td id="0_Q7s" class="range_cell suited">Q7s</td>
+            <td id="0_Q6s" class="range_cell suited">Q6s</td>
+            <td id="0_Q5s" class="range_cell suited">Q5s</td>
+            <td id="0_Q4s" class="range_cell suited">Q4s</td>
+            <td id="0_Q3s" class="range_cell suited">Q3s</td>
+            <td id="0_Q2s" class="range_cell suited">Q2s</td>
+        </tr>
+        <tr>
+            <td id="0_AJo" class="range_cell offsuit">AJo</td>
+            <td id="0_KJo" class="range_cell offsuit">KJo</td>
+            <td id="0_QJo" class="range_cell offsuit">QJo</td>
+            <td id="0_JJ" class="range_cell pocketpair">JJ</td>
+            <td id="0_JTs" class="range_cell suited">JTs</td>
+            <td id="0_J9s" class="range_cell suited">J9s</td>
+            <td id="0_J8s" class="range_cell suited">J8s</td>
+            <td id="0_J7s" class="range_cell suited">J7s</td>
+            <td id="0_J6s" class="range_cell suited">J6s</td>
+            <td id="0_J5s" class="range_cell suited">J5s</td>
+            <td id="0_J4s" class="range_cell suited">J4s</td>
+            <td id="0_J3s" class="range_cell suited">J3s</td>
+            <td id="0_J2s" class="range_cell suited">J2s</td>
+        </tr>
+        <tr>
+            <td id="0_ATo" class="range_cell offsuit">ATo</td>
+            <td id="0_KTo" class="range_cell offsuit">KTo</td>
+            <td id="0_QTo" class="range_cell offsuit">QTo</td>
+            <td id="0_JTo" class="range_cell offsuit">JTo</td>
+            <td id="0_TT" class="range_cell pocketpair">TT</td>
+            <td id="0_T9s" class="range_cell suited">T9s</td>
+            <td id="0_T8s" class="range_cell suited">T8s</td>
+            <td id="0_T7s" class="range_cell suited">T7s</td>
+            <td id="0_T6s" class="range_cell suited">T6s</td>
+            <td id="0_T5s" class="range_cell suited">T5s</td>
+            <td id="0_T4s" class="range_cell suited">T4s</td>
+            <td id="0_T3s" class="range_cell suited">T3s</td>
+            <td id="0_T2s" class="range_cell suited">T2s</td>
+        </tr>
+        <tr>
+            <td id="0_A9o" class="range_cell offsuit">A9o</td>
+            <td id="0_K9o" class="range_cell offsuit">K9o</td>
+            <td id="0_Q9o" class="range_cell offsuit">Q9o</td>
+            <td id="0_J9o" class="range_cell offsuit">J9o</td>
+            <td id="0_T9o" class="range_cell offsuit">T9o</td>
+            <td id="0_99" class="range_cell pocketpair">99</td>
+            <td id="0_98s" class="range_cell suited">98s</td>
+            <td id="0_97s" class="range_cell suited">97s</td>
+            <td id="0_96s" class="range_cell suited">96s</td>
+            <td id="0_95s" class="range_cell suited">95s</td>
+            <td id="0_94s" class="range_cell suited">94s</td>
+            <td id="0_93s" class="range_cell suited">93s</td>
+            <td id="0_92s" class="range_cell suited">92s</td>
+        </tr>
+        <tr>
+            <td id="0_A8o" class="range_cell offsuit">A8o</td>
+            <td id="0_K8o" class="range_cell offsuit">K8o</td>
+            <td id="0_Q8o" class="range_cell offsuit">Q8o</td>
+            <td id="0_J8o" class="range_cell offsuit">J8o</td>
+            <td id="0_T8o" class="range_cell offsuit">T8o</td>
+            <td id="0_98o" class="range_cell offsuit">98o</td>
+            <td id="0_88" class="range_cell pocketpair">88</td>
+            <td id="0_87s" class="range_cell suited">87s</td>
+            <td id="0_86s" class="range_cell suited">86s</td>
+            <td id="0_85s" class="range_cell suited">85s</td>
+            <td id="0_84s" class="range_cell suited">84s</td>
+            <td id="0_83s" class="range_cell suited">83s</td>
+            <td id="0_82s" class="range_cell suited">82s</td>
+        </tr>
+        <tr>
+            <td id="0_A7o" class="range_cell offsuit">A7o</td>
+            <td id="0_K7o" class="range_cell offsuit">K7o</td>
+            <td id="0_Q7o" class="range_cell offsuit">Q7o</td>
+            <td id="0_J7o" class="range_cell offsuit">J7o</td>
+            <td id="0_T7o" class="range_cell offsuit">T7o</td>
+            <td id="0_97o" class="range_cell offsuit">97o</td>
+            <td id="0_87o" class="range_cell offsuit">87o</td>
+            <td id="0_77" class="range_cell pocketpair">77</td>
+            <td id="0_76s" class="range_cell suited">76s</td>
+            <td id="0_75s" class="range_cell suited">75s</td>
+            <td id="0_74s" class="range_cell suited">74s</td>
+            <td id="0_73s" class="range_cell suited">73s</td>
+            <td id="0_72s" class="range_cell suited">72s</td>
+        </tr>
+        <tr>
+            <td id="0_A6o" class="range_cell offsuit">A6o</td>
+            <td id="0_K6o" class="range_cell offsuit">K6o</td>
+            <td id="0_Q6o" class="range_cell offsuit">Q6o</td>
+            <td id="0_J6o" class="range_cell offsuit">J6o</td>
+            <td id="0_T6o" class="range_cell offsuit">T6o</td>
+            <td id="0_96o" class="range_cell offsuit">96o</td>
+            <td id="0_86o" class="range_cell offsuit">86o</td>
+            <td id="0_76o" class="range_cell offsuit">76o</td>
+            <td id="0_66" class="range_cell pocketpair">66</td>
+            <td id="0_65s" class="range_cell suited">65s</td>
+            <td id="0_64s" class="range_cell suited">64s</td>
+            <td id="0_63s" class="range_cell suited">63s</td>
+            <td id="0_62s" class="range_cell suited">62s</td>
+        </tr>
+        <tr>
+            <td id="0_A5o" class="range_cell offsuit">A5o</td>
+            <td id="0_K5o" class="range_cell offsuit">K5o</td>
+            <td id="0_Q5o" class="range_cell offsuit">Q5o</td>
+            <td id="0_J5o" class="range_cell offsuit">J5o</td>
+            <td id="0_T5o" class="range_cell offsuit">T5o</td>
+            <td id="0_95o" class="range_cell offsuit">95o</td>
+            <td id="0_85o" class="range_cell offsuit">85o</td>
+            <td id="0_75o" class="range_cell offsuit">75o</td>
+            <td id="0_65o" class="range_cell offsuit">65o</td>
+            <td id="0_55" class="range_cell pocketpair">55</td>
+            <td id="0_54s" class="range_cell suited">54s</td>
+            <td id="0_53s" class="range_cell suited">53s</td>
+            <td id="0_52s" class="range_cell suited">52s</td>
+        </tr>
+        <tr>
+            <td id="0_A4o" class="range_cell offsuit">A4o</td>
+            <td id="0_K4o" class="range_cell offsuit">K4o</td>
+            <td id="0_Q4o" class="range_cell offsuit">Q4o</td>
+            <td id="0_J4o" class="range_cell offsuit">J4o</td>
+            <td id="0_T4o" class="range_cell offsuit">T4o</td>
+            <td id="0_94o" class="range_cell offsuit">94o</td>
+            <td id="0_84o" class="range_cell offsuit">84o</td>
+            <td id="0_74o" class="range_cell offsuit">74o</td>
+            <td id="0_64o" class="range_cell offsuit">64o</td>
+            <td id="0_54o" class="range_cell offsuit">54o</td>
+            <td id="0_44" class="range_cell pocketpair">44</td>
+            <td id="0_43s" class="range_cell suited">43s</td>
+            <td id="0_42s" class="range_cell suited">42s</td>
+        </tr>
+        <tr>
+            <td id="0_A3o" class="range_cell offsuit">A3o</td>
+            <td id="0_K3o" class="range_cell offsuit">K3o</td>
+            <td id="0_Q3o" class="range_cell offsuit">Q3o</td>
+            <td id="0_J3o" class="range_cell offsuit">J3o</td>
+            <td id="0_T3o" class="range_cell offsuit">T3o</td>
+            <td id="0_93o" class="range_cell offsuit">93o</td>
+            <td id="0_83o" class="range_cell offsuit">83o</td>
+            <td id="0_73o" class="range_cell offsuit">73o</td>
+            <td id="0_63o" class="range_cell offsuit">63o</td>
+            <td id="0_53o" class="range_cell offsuit">53o</td>
+            <td id="0_43o" class="range_cell offsuit">43o</td>
+            <td id="0_33" class="range_cell pocketpair">33</td>
+            <td id="0_32s" class="range_cell suited">32s</td>
+        </tr>
+        <tr>
+            <td id="0_A2o" class="range_cell offsuit">A2o</td>
+            <td id="0_K2o" class="range_cell offsuit">K2o</td>
+            <td id="0_Q2o" class="range_cell offsuit">Q2o</td>
+            <td id="0_J2o" class="range_cell offsuit">J2o</td>
+            <td id="0_T2o" class="range_cell offsuit">T2o</td>
+            <td id="0_92o" class="range_cell offsuit">92o</td>
+            <td id="0_82o" class="range_cell offsuit">82o</td>
+            <td id="0_72o" class="range_cell offsuit">72o</td>
+            <td id="0_62o" class="range_cell offsuit">62o</td>
+            <td id="0_52o" class="range_cell offsuit">52o</td>
+            <td id="0_42o" class="range_cell offsuit">42o</td>
+            <td id="0_32o" class="range_cell offsuit">32o</td>
+            <td id="0_22" class="range_cell pocketpair">22</td>
+        </tr>
+        </tbody>
+    </table>
+    -->
+
+
+</div>
+
+
+<div class="clear"></div>
+<th:block th:insert="~{fragments/template :: #footer}"></th:block>
+
+
+</body>
+</html>
+

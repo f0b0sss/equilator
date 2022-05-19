@@ -3,6 +3,7 @@ package services;
 import DAO.DefaultData;
 import exceptions.InvalidInputCards;
 import models.calculator.CalculatorMainTable;
+import models.calculator.GameInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.DecimalFormat;
@@ -13,26 +14,28 @@ public class Calculate {
 
     private final DefaultData defaultData;
 
-    private final String[] cards = {"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"};
-    private final String[] suit = {"h", "d", "c", "s"};
-
-    private final Map<String, Integer> playersPoints = new HashMap<>(2);
-    private Map<String, Integer> madeHandWithRank = new HashMap<>(7);
-    private Map<String, Integer> kickersWithRank = new HashMap<>(7);
-    private boolean wasFindCombination = false;
-    private int countOfBoards;
-    private int sumOfPoints;
-    private List<String> allCards = new LinkedList<>();
-
-
-    private Map<String, Double> mapRange1 = new LinkedHashMap<>();
-    private Map<String, Double> mapRange2 = new LinkedHashMap<>();
-
     @Autowired
     public Calculate(DefaultData defaultData) {
         this.defaultData = defaultData;
     }
 
+    @Autowired
+    private GameInfo gameInfo;
+
+    private final String[] cards = {"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"};
+    private final String[] suit = {"h", "d", "c", "s"};
+
+    private Map<String, Integer> madeHandWithRank = new HashMap<>(7);
+    private Map<String, Integer> kickersWithRank = new HashMap<>(7);
+    private boolean wasFindCombination = false;
+    private int countOfBoards;
+    private int sumOfPoints;
+
+    private List<String> allCards = new LinkedList<>();
+
+    private Map<String, Double> wonTimesByCardP1 = new TreeMap<>();
+    private Map<String, Double> wonTimesByCardP2 = new TreeMap<>();
+    private Map<String, Integer> timesByCard = new TreeMap<>();
 
     public List<String> buildAllGroupHands(String groupHand, String board) {
         List<String> hands = new ArrayList<>();
@@ -114,13 +117,17 @@ public class Calculate {
                 "|[AKQJT98765432akqjt]{2}|[AKQJT98765432akqjt]{2}[os]";
 
         for (int i = 0; i < rangeArr.length; i++) {
-            if (!rangeArr[i].matches(regex)){
+            if (!rangeArr[i].matches(regex)) {
                 throw new InvalidInputCards("invalid format - " + rangeArr[i]);
             }
         }
 
         for (int i = 0; i < rangeArr.length; i++) {
             if (rangeArr[i].length() == 4) {
+                if (rangeArr[i].charAt(0) == rangeArr[i].charAt(2) &&
+                        rangeArr[i].charAt(1) == rangeArr[i].charAt(3)) {
+                    throw new InvalidInputCards("invalid format - " + rangeArr[i]);
+                }
                 hands.add(rangeArr[i]);
             }
             if (rangeArr[i].length() == 2 && rangeArr[i].charAt(0) == rangeArr[i].charAt(1)) {
@@ -152,6 +159,26 @@ public class Calculate {
         return groups.stream().distinct().collect(Collectors.toList());
     }
 
+    private void buildWonTimesByCardMap() {
+        for (int i = 0; i < suit.length; i++) {
+            for (int j = 0; j < cards.length; j++) {
+                wonTimesByCardP1.put(cards[j] + suit[i], 0.0);
+                wonTimesByCardP2.put(cards[j] + suit[i], 0.0);
+                timesByCard.put(cards[j] + suit[i], 0);
+            }
+        }
+    }
+
+    private void deleteFromRangeSameCardWithBoard(List<String> range, String board) {
+        for (int i = 0; i < range.size(); ) {
+            if (board.contains(range.get(i).substring(0, 2)) || board.contains(range.get(i).substring(2, 4))) {
+                range.remove(range.get(i));
+            } else {
+                i++;
+            }
+        }
+    }
+
     public void calculate(CalculatorMainTable calculatorMainTable) {
         String board = calculatorMainTable.getBoard();
 
@@ -160,12 +187,10 @@ public class Calculate {
         List<String> range1 = buildRange(calculatorMainTable.getRangePlayer1(), board);
         List<String> range2 = buildRange(calculatorMainTable.getRangePlayer2(), board);
 
-        for (int i = 0; i < range1.size(); i++) {
-            mapRange1.put(range1.get(i), 0.0);
-        }
-        for (int i = 0; i < range2.size(); i++) {
-            mapRange2.put(range2.get(i), 0.0);
-        }
+        deleteFromRangeSameCardWithBoard(range1, board);
+        deleteFromRangeSameCardWithBoard(range2, board);
+
+        buildWonTimesByCardMap();
 
         switch (calculatorMainTable.getBoard().length()) {
             case (6):
@@ -176,13 +201,12 @@ public class Calculate {
                 break;
         }
 
-        double sum1 = mapRange1.values().stream().mapToDouble(Double::doubleValue).sum();
-        double sum2 = mapRange2.values().stream().mapToDouble(Double::doubleValue).sum();
-        int count = range1.size() * range2.size();
+        double equityP1 = wonTimesByCardP1.values().stream().mapToDouble(Double::doubleValue).sum() / countOfBoards;
+        double equityP2 = wonTimesByCardP2.values().stream().mapToDouble(Double::doubleValue).sum() / countOfBoards;
+        double deal = 1 - equityP2 - equityP1;
 
-        double equityP1 = sum1 / (countOfBoards * count);
-        double equityP2 = sum2 / (countOfBoards * count);
-        double deal = 1 - ((sum1 + sum2) / (countOfBoards * count));
+
+        //    evaluateEquityByCard(wonTimesByCardP1, gameInfo.getEquityByCardP1());
 
         calculatorMainTable.setEquityPlayer1(new DecimalFormat("#0.0000").format(equityP1 + deal / 2));
         calculatorMainTable.setEquityPlayer2(new DecimalFormat("#0.0000").format(equityP2 + deal / 2));
@@ -190,19 +214,20 @@ public class Calculate {
         defaultData.getCalculatorMainTables().add(0, calculatorMainTable);
 
         countOfBoards = 0;
-        mapRange1.clear();
-        mapRange2.clear();
         allCards.clear();
+        wonTimesByCardP1.clear();
+        wonTimesByCardP2.clear();
+        timesByCard.clear();
     }
 
     private void validateBoard(String board) {
-        if(board.length() > 8 || board.length() < 6 || board.length() == 7){
+        if (board.length() > 8 || board.length() < 6 || board.length() == 7) {
             throw new InvalidInputCards("invalid board - " + board);
         }
         String regex = "[AKQJT98765432akqjt][hdcs]";
 
         for (int i = 0; i + 2 < board.length(); i += 2) {
-            if (!board.substring(i, i + 2).matches(regex)){
+            if (!board.substring(i, i + 2).matches(regex)) {
                 throw new InvalidInputCards("invalid card in board - " + board.substring(i, i + 2));
             }
         }
@@ -210,93 +235,108 @@ public class Calculate {
 
     public void calculateWithoutRiver(DefaultData defaultData,
                                       List<String> range1, List<String> range2, String board) {
-        removeOpenCardsFromAllCards(board, defaultData.getCardsDeck());
-
         allCards.addAll(defaultData.getCardsDeck());
 
-        for (int i = 0; i < 44; i++) {
+        removeOpenCardsFromAllCards(board, allCards);
 
-            for (int j = 0; j < range1.size(); j++) {
-                removeOpenCardsFromAllCards(range1.get(j), allCards);
+        for (int j = 0; j < range1.size(); j++) {
+            for (int k = 0; k < range2.size(); k++) {
+                for (int i = 0; i < allCards.size(); i++) {
+                    if (!range1.get(j).contains(allCards.get(i)) &&
+                            !range2.get(k).contains(allCards.get(i))
+                    ) {
+                        int p1 = evaluate(
+                                board + allCards.get(i) + range1.get(j),
+                                range1.get(j));
 
-                for (int k = 0; k < range2.size(); k++) {
-                    removeOpenCardsFromAllCards(range2.get(k), allCards);
+                        int p2 = evaluate(
+                                board + allCards.get(i) + range2.get(k),
+                                range2.get(k));
 
-                    sumOfPoints = 0;
-                    int p1 = evaluate(
-                            board + allCards.get(i) + range1.get(j),
-                            range1.get(j));
+                        if (p1 > p2) {
+                            double n = wonTimesByCardP1.get(allCards.get(i));
+                            n += 1;
+                            wonTimesByCardP1.put(allCards.get(i), n);
+                        }
+                        if (p1 < p2) {
+                            double n = wonTimesByCardP2.get(allCards.get(i));
+                            n += 1;
+                            wonTimesByCardP2.put(allCards.get(i), n);
+                        }
 
-                    sumOfPoints = 0;
-                    int p2 = evaluate(
-                            board + allCards.get(i) + range2.get(k),
-                            range2.get(k));
+                        int t = timesByCard.get(allCards.get(i));
+                        t += 1;
+                        timesByCard.put(allCards.get(i), t);
 
-                    if (p1 > p2) {
-                        double n = mapRange1.get(range1.get(j));
-                        n += 1;
-                        mapRange1.put(range1.get(j), n);
+                        countOfBoards++;
                     }
-                    if (p1 < p2) {
-                        double n = mapRange2.get(range2.get(k));
-                        n += 1;
-                        mapRange2.put(range2.get(k), n);
-                    }
-                    allCards.add(range2.get(k).substring(0, 2));
-                    allCards.add(range2.get(k).substring(2, 4));
                 }
-                allCards.add(range1.get(j).substring(0, 2));
-                allCards.add(range1.get(j).substring(2, 4));
             }
-            countOfBoards++;
         }
+        buildEquityByCard();
     }
 
 
     public void calculateWithoutTurn(DefaultData defaultData,
                                      List<String> range1, List<String> range2, String board) {
 
-        removeOpenCardsFromAllCards(board, defaultData.getCardsDeck());
-
         allCards.addAll(defaultData.getCardsDeck());
 
-        for (int i = 0; i < 45; i++) {
-            for (int i2 = i + 1; i2 < 45; i2++) {
+        removeOpenCardsFromAllCards(board, allCards);
 
-                for (int j = 0; j < range1.size(); j++) {
-                    removeOpenCardsFromAllCards(range1.get(j), allCards);
+        for (int j = 0; j < range1.size(); j++) {
+            for (int k = 0; k < range2.size(); k++) {
 
-                    for (int k = 0; k < range2.size(); k++) {
-                        removeOpenCardsFromAllCards(range2.get(k), allCards);
+                for (int i = 0; i < allCards.size(); i++) {
+                    for (int i2 = 0; i2 < allCards.size(); i2++) {
 
-                        sumOfPoints = 0;
-                        int p1 = evaluate(
-                                board + allCards.get(i) + allCards.get(i2) + range1.get(j),
-                                range1.get(j));
+                        if (!allCards.get(i).equals(allCards.get(i2))) {
 
-                        sumOfPoints = 0;
-                        int p2 = evaluate(
-                                board + allCards.get(i) + allCards.get(i2) + range2.get(k),
-                                range2.get(k));
+                            if (!range1.get(j).contains(allCards.get(i)) &&
+                                    !range2.get(k).contains(allCards.get(i)) &&
+                                    !range1.get(j).contains(allCards.get(i2)) &&
+                                    !range2.get(k).contains(allCards.get(i2))
+                            ) {
+                                int p1 = evaluate(
+                                        board + allCards.get(i) + allCards.get(i2) + range1.get(j),
+                                        range1.get(j));
 
-                        if (p1 > p2) {
-                            double n = mapRange1.get(range1.get(j));
-                            n += 1;
-                            mapRange1.put(range1.get(j), n);
+                                int p2 = evaluate(
+                                        board + allCards.get(i) + allCards.get(i2) + range2.get(k),
+                                        range2.get(k));
+
+                                if (p1 > p2) {
+                                    double n = wonTimesByCardP1.get(allCards.get(i));
+                                    n += 1;
+                                    wonTimesByCardP1.put(allCards.get(i), n);
+                                }
+                                if (p1 < p2) {
+                                    double n = wonTimesByCardP2.get(allCards.get(i));
+                                    n += 1;
+                                    wonTimesByCardP2.put(allCards.get(i), n);
+                                }
+
+                                int t = timesByCard.get(allCards.get(i));
+                                t += 1;
+                                timesByCard.put(allCards.get(i), t);
+                            }
                         }
-                        if (p1 < p2) {
-                            double n = mapRange2.get(range2.get(k));
-                            n += 1;
-                            mapRange2.put(range2.get(k), n);
-                        }
-                        allCards.add(range2.get(k).substring(0, 2));
-                        allCards.add(range2.get(k).substring(2, 4));
+                        countOfBoards++;
                     }
-                    allCards.add(range1.get(j).substring(0, 2));
-                    allCards.add(range1.get(j).substring(2, 4));
                 }
-                countOfBoards++;
             }
+        }
+        buildEquityByCard();
+    }
+
+    private void buildEquityByCard() {
+        for (int i = 0; i < allCards.size(); i++) {
+            double eq1 = wonTimesByCardP1.get(allCards.get(i)) / timesByCard.get(allCards.get(i));
+            double eq2 = wonTimesByCardP2.get(allCards.get(i)) / timesByCard.get(allCards.get(i));
+            double deal = 1 - eq1 - eq2;
+
+            gameInfo.getEquityByCardP1().put(allCards.get(i), String.format("%.2f", eq1 + deal / 2));
+            gameInfo.getEquityByCardP2().put(allCards.get(i), String.format("%.2f", eq2 + deal / 2));
         }
     }
 
@@ -386,16 +426,16 @@ public class Calculate {
         kickersWithRank.clear();
         madeHandWithRank.clear();
 
-        if (firstFullHouseVariant(openedCards, copyOpenedCards, allKnowCardsAsString, playerCards) == false) {
+        if (!firstFullHouseVariant(openedCards, copyOpenedCards, allKnowCardsAsString, playerCards)) {
             secondFullHouseVariant(playerCards);
         }
     }
 
     private boolean firstFullHouseVariant(char[] openedCards, char[] copyOpenedCards,
                                           String allKnowCardsAsString, String playerCards) {
-        char[] threeCards = new char[6];
+        char[] threeCards = new char[2];
         int countOfThreeCard = 0;
-        char[] twoCards = new char[6];
+        char[] twoCards = new char[3];
         int countOfTwoCard = 0;
         boolean finded = true;
 
@@ -419,58 +459,57 @@ public class Calculate {
                 }
             }
             i += (allKnowCardsAsString.lastIndexOf(openedCards[i]) - allKnowCardsAsString.indexOf(openedCards[i]) + 1);
+        }
 
-            if (countOfThreeCard == 2) {
+        if (countOfThreeCard == 2) {
 
-                for (int k = 0; k < 2; k++) {
-                    for (int j = 0; j < copyOpenedCards.length; j++) {
-                        if (copyOpenedCards[j] == threeCards[k]) {
-                            madeHandWithRank.put(
-                                    String.valueOf(copyOpenedCards[j]) +
-                                            String.valueOf(copyOpenedCards[j + 1]),
-                                    defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[j]))
-                            );
-                        }
-                        j++;
+            for (int k = 0; k < 2; k++) {
+                for (int j = 0; j < copyOpenedCards.length; j++) {
+                    if (copyOpenedCards[j] == threeCards[k]) {
+                        madeHandWithRank.put(
+                                String.valueOf(copyOpenedCards[j]) +
+                                        String.valueOf(copyOpenedCards[j + 1]),
+                                defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[j]))
+                        );
                     }
+                    j++;
                 }
-
-                madeHandWithRank = sortReversedMap(madeHandWithRank);
-
-                List<String> fullHouse = getFinalMadeHand(madeHandWithRank);
-                fullHouse = fullHouse.stream().limit(5).collect(Collectors.toList());
-
-                wasFindCombination = true;
-
-                showResult("full house", fullHouse, playerCards);
             }
 
-            if (countOfThreeCard == 1 && countOfTwoCard > 0) {
-                finded = false;
+            madeHandWithRank = sortReversedMap(madeHandWithRank);
 
-                for (int k = 0; k < copyOpenedCards.length; k++) {
-                    for (int j = 0; j < threeCards.length; j++) {
-                        if (copyOpenedCards[k] == threeCards[j]) {
-                            madeHandWithRank.put(
-                                    String.valueOf(copyOpenedCards[k]) +
-                                            String.valueOf(copyOpenedCards[k + 1]),
-                                    defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[k]))
-                            );
-                        }
+            List<String> fullHouse = getFinalMadeHand(madeHandWithRank);
+            fullHouse = fullHouse.stream().limit(5).collect(Collectors.toList());
+
+            wasFindCombination = true;
+
+            showResult("full house", fullHouse, playerCards);
+        }
+
+        if (countOfThreeCard == 1 && countOfTwoCard > 0) {
+            finded = false;
+
+            for (int k = 0; k + 1 < copyOpenedCards.length; k++) {
+                for (int j = 0; j < threeCards.length; j++) {
+                    if (copyOpenedCards[k] == threeCards[j]) {
+                        madeHandWithRank.put(
+                                String.valueOf(copyOpenedCards[k]) +
+                                        String.valueOf(copyOpenedCards[k + 1]),
+                                defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[k]))
+                        );
                     }
                 }
-                for (int k = 0; k < copyOpenedCards.length; k++) {
-                    for (int j = 0; j < twoCards.length; j++) {
-                        if (copyOpenedCards[k] == twoCards[j]) {
-                            kickersWithRank.put(
-                                    String.valueOf(copyOpenedCards[k]) +
-                                            String.valueOf(copyOpenedCards[k + 1]),
-                                    defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[k]))
-                            );
-                        }
+            }
+            for (int k = 0; k + 1 < copyOpenedCards.length; k++) {
+                for (int j = 0; j < twoCards.length; j++) {
+                    if (copyOpenedCards[k] == twoCards[j]) {
+                        kickersWithRank.put(
+                                String.valueOf(copyOpenedCards[k]) +
+                                        String.valueOf(copyOpenedCards[k + 1]),
+                                defaultData.getCardsWithRank().get(String.valueOf(copyOpenedCards[k]))
+                        );
                     }
                 }
-
             }
         }
 
@@ -512,7 +551,6 @@ public class Calculate {
             List<String> straightFlush = findStraight(madeHandWithRank);
 
             if (straightFlush.size() >= 5) {
-
                 wasFindCombination = true;
                 showResult("straight flush", straightFlush, playerCards);
             } else {
@@ -560,6 +598,7 @@ public class Calculate {
 
         if (straight.size() >= 5) {
             wasFindCombination = true;
+
             showResult("straight", straight, playerCards);
         }
     }
@@ -591,7 +630,11 @@ public class Calculate {
                             .filter(p -> p.getValue() == card)
                             .map(Map.Entry::getKey)
                             .findAny().orElse(null));
-
+                    straight.add(cardWithRank.entrySet()
+                            .stream()
+                            .filter(p -> p.getValue() == 13)
+                            .map(Map.Entry::getKey)
+                            .findAny().orElse(null));
                 } else {
                     straight.add(cardWithRank.entrySet()
                             .stream()
@@ -599,7 +642,7 @@ public class Calculate {
                             .map(Map.Entry::getKey)
                             .findFirst().orElse(null));
                 }
-                if (straight.size() == 4) {
+                if (straight.size() == 4 && straight.get(3).charAt(0) != ('A')) {
                     int card2 = straightInDigits.get(i + 1);
                     straight.add(cardWithRank.entrySet()
                             .stream()

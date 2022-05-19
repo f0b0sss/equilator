@@ -4,6 +4,7 @@ import DAO.DBUtils;
 import DAO.DefaultData;
 import models.Error;
 import models.calculator.CalculatorMainTable;
+import models.calculator.GameInfo;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -60,5 +61,11 @@ public class DomainConfig {
     public Error error(){
         return new Error();
     }
+
+    @Bean
+    public GameInfo gameInfo(){
+        return new GameInfo();
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package models.calculator;
+package models.calculator.n;
 
 public class Card {
     private String value;
