@@ -1,10 +1,18 @@
-package models.calculator.n;
+package models.calculator;
 
 public class Player {
 
     private int id;
     private String range;
     private String equity;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getRange() {
         return range;
@@ -22,15 +30,5 @@ public class Player {
         this.equity = equity;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Player(int id) {
-        this.id = id;
-    }
 }

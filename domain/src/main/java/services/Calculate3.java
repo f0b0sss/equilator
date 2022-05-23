@@ -1,18 +1,7 @@
 package services;
 
-import DAO.DefaultData;
-import models.calculator.CalculatorMainTable;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class Calculate3 {
+    /*
     private final DefaultData defaultData;
 
     private final Map<String, Integer> playersPoints = new HashMap<>(2);
@@ -27,17 +16,17 @@ public class Calculate3 {
         this.defaultData = defaultData;
     }
 
-    public void calculate(CalculatorMainTable calculatorMainTable) {
+    public void calculate(CalculatorData calculatorData) {
 
-        String cardsPlayer1 = calculatorMainTable.getRangePlayer1();
-        String cardsPlayer2 = calculatorMainTable.getRangePlayer2();
+        String cardsPlayer1 = calculatorData.getRangePlayer1();
+        String cardsPlayer2 = calculatorData.getRangePlayer2();
 
         double[] wonTimes = new double[]{0, 0, 0};
 
         playersPoints.put(cardsPlayer1, 0);
         playersPoints.put(cardsPlayer2, 0);
 
-        switch (calculatorMainTable.getBoard().length()) {
+        switch (calculatorData.getBoard().length()) {
             case (0):
                 //      calculateWithoutFlop(defaultData, playersRanges, wonTimes);
                 break;
@@ -45,27 +34,27 @@ public class Calculate3 {
                 //      calculateWithoutTurn(calculatorMainTable, defaultData, playersRanges, wonTimes);
                 break;
             case (8):
-                calculateWithoutRiver(calculatorMainTable, defaultData, wonTimes);
+                calculateWithoutRiver(calculatorData, defaultData, wonTimes);
                 break;
         }
 
-        calculatorMainTable.setEquityPlayer1(new DecimalFormat("#0.0000").format((wonTimes[0] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
-        calculatorMainTable.setEquityPlayer2(new DecimalFormat("#0.0000").format((wonTimes[1] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
-        calculatorMainTable.setDeal(new DecimalFormat("#0.0000").format(wonTimes[2] / countOfBoards));
+        calculatorData.setEquityPlayer1(new DecimalFormat("#0.0000").format((wonTimes[0] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
+        calculatorData.setEquityPlayer2(new DecimalFormat("#0.0000").format((wonTimes[1] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
+        calculatorData.setDeal(new DecimalFormat("#0.0000").format(wonTimes[2] / countOfBoards));
 
-        defaultData.getCalculatorMainTables().add(0, calculatorMainTable);
+        defaultData.getCalculatorMainTables().add(0, calculatorData);
 
         countOfBoards = 0;
 
     }
 
-    public void calculateWithoutRiver(CalculatorMainTable calculatorMainTable,
+    public void calculateWithoutRiver(CalculatorData calculatorData,
                                       DefaultData defaultData,
                                       double[] wonTimes) {
 
-        String hand1 = calculatorMainTable.getRangePlayer1();
-        String hand2 = calculatorMainTable.getRangePlayer2();
-        String boardInput = calculatorMainTable.getBoard();
+        String hand1 = calculatorData.getRangePlayer1();
+        String hand2 = calculatorData.getRangePlayer2();
+        String boardInput = calculatorData.getBoard();
 
         removeOpenCardsFromAllCards(hand1);
         removeOpenCardsFromAllCards(hand2);
@@ -210,5 +199,7 @@ public class Calculate3 {
         return -1;
     }
 
+
+     */
 
 }

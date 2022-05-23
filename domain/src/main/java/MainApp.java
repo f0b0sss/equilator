@@ -69,31 +69,16 @@ public class MainApp {
 
       //  String regex = "[AKQJT98765432akqjt][hdcs]{4}";
 
-        String board = "AsQsKd4c";
 
-        System.out.println(!board.contains("4s"));
-
-     //   System.out.println(board.substring(2,4));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+     // Card aceOfHearts = new Card(Card.ACE, Suit.HEARTS);
+     // Card aceOfSpades = new Card("As");
+     //
+     // Hand aces = new Hand(aceOfHearts, aceOfSpades);
+     //
+     // Hand kings = new Hand("KhKs");
+     //
+     // /* Calculate these hands' equity against each other. */
+     // Map<Hand, EquityCalculationBuilder.Equity> equities = new EquityCalculationBuilder(aces, kings);
 
 
 

@@ -1,5 +1,6 @@
 package DAO;
 
+import models.calculator.RangeDB;
 import models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,7 +45,6 @@ public class DBUtils {
     }
 
     public void deleteUserById(int id) throws SQLException {
-        System.out.println(id);
         jdbcTemplate.update("Delete from users where id=" + id);
     }
 
@@ -59,4 +59,23 @@ public class DBUtils {
     public void updatePassword(String new_password, int id) {
         jdbcTemplate.update("UPDATE users SET password=? WHERE id=?", new_password, id);
     }
+
+    public List<RangeDB> getRanges(long playerId) throws SQLException {
+        return jdbcTemplate.query("Select * from ranges where player_id=" + playerId, new RangeMapper());
+    }
+
+    public RangeDB getRangeById(int id) throws SQLException  {
+        return jdbcTemplate.query("Select * from ranges where id=" + id, new RangeMapper())
+                .stream().findAny().orElse(null);
+    }
+
+    public void addRange(RangeDB range) throws SQLException {
+        jdbcTemplate.update("Insert into ranges (player_id, name, range) values (?,?,?)",
+                range.getPlayerId(), range.getName(), range.getRange());
+    }
+
+    public void deleteRangeById(int id) throws SQLException {
+        jdbcTemplate.update("Delete from ranges where id=" + id);
+    }
+
 }

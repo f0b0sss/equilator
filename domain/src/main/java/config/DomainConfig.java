@@ -3,17 +3,20 @@ package config;
 import DAO.DBUtils;
 import DAO.DefaultData;
 import models.Error;
+import models.calculator.CalculatorData;
 import models.calculator.CalculatorMainTable;
 import models.calculator.GameInfo;
+import models.calculator.RangeDB;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import repository.RangeRepository;
+import repository.RangeRepositoryImpl;
 import repository.UserRepository;
 import repository.UserRepositoryImpl;
 import services.Calculate;
-import services.Calculate2;
-import services.Calculate3;
 
 @Configuration
 @ComponentScan("DAO")
@@ -36,6 +39,11 @@ public class DomainConfig {
     }
 
     @Bean
+    public RangeRepository repository(){
+        return new RangeRepositoryImpl(dbUtils);
+    }
+
+    @Bean
     public CalculatorMainTable calculatorMainTable(){
         CalculatorMainTable calculatorMainTable = new CalculatorMainTable();
         defaultData().getCalculatorMainTables().add(calculatorMainTable);
@@ -43,18 +51,14 @@ public class DomainConfig {
     }
 
     @Bean
+    @Scope("singleton")
+    public CalculatorData calculatorData(){
+        return new CalculatorData();
+    }
+
+    @Bean
     public Calculate calculate(){
         return new Calculate(defaultData());
-    }
-
-    @Bean
-    public Calculate2 calculate2(){
-        return new Calculate2(defaultData());
-    }
-
-    @Bean
-    public Calculate3 calculate3(){
-        return new Calculate3(defaultData());
     }
 
     @Bean
@@ -67,5 +71,9 @@ public class DomainConfig {
         return new GameInfo();
     }
 
+    @Bean
+    public RangeDB rangeDB(){
+        return new RangeDB();
+    }
 
 }

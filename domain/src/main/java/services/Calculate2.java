@@ -1,20 +1,8 @@
 package services;
 
-import DAO.DefaultData;
-import models.calculator.*;
-import models.calculator.n.Card;
-import models.calculator.n.Group;
-import models.calculator.n.Hand;
-import models.calculator.n.Range;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.*;
-
 public class Calculate2 {
+
+    /*
     private final DefaultData defaultData;
 
     private final Map<String, Integer> playersPoints = new HashMap<>(2);
@@ -135,10 +123,10 @@ public class Calculate2 {
         return range;
     }
 
-    public void calculate(CalculatorMainTable calculatorMainTable) {
+    public void calculate(CalculatorData calculatorData) {
 
-        String cardsPlayer1 = calculatorMainTable.getRangePlayer1();
-        String cardsPlayer2 = calculatorMainTable.getRangePlayer2();
+        String cardsPlayer1 = calculatorData.getPlayer1().getRange();
+        String cardsPlayer2 = calculatorData.getPlayer2().getRange();
 
         Range rangeP1 = buildRange(cardsPlayer1);
         Range rangeP2 = buildRange(cardsPlayer2);
@@ -149,43 +137,43 @@ public class Calculate2 {
         playersPoints.put(cardsPlayer1, 0);
         playersPoints.put(cardsPlayer2, 0);
 
-        switch (calculatorMainTable.getBoard().length()) {
+        switch (calculatorData.getBoard().length()) {
             case (0):
                 //      calculateWithoutFlop(defaultData, playersRanges, wonTimes);
                 break;
             case (6):
-                calculateWithoutTurn(calculatorMainTable, defaultData, playersRanges, wonTimes);
+                calculateWithoutTurn(calculatorData, defaultData, playersRanges, wonTimes);
                 break;
             case (8):
-                calculateWithoutRiver(calculatorMainTable, defaultData, playersRanges, wonTimes);
+                calculateWithoutRiver(calculatorData, defaultData, playersRanges, wonTimes);
                 break;
         }
 
-        calculatorMainTable.setEquityPlayer1(new DecimalFormat("#0.0000").format((wonTimes[0] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
-        calculatorMainTable.setEquityPlayer2(new DecimalFormat("#0.0000").format((wonTimes[1] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
-        calculatorMainTable.setDeal(new DecimalFormat("#0.0000").format(wonTimes[2] / countOfBoards));
+        calculatorData.setEquityPlayer1(new DecimalFormat("#0.0000").format((wonTimes[0] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
+        calculatorData.setEquityPlayer2(new DecimalFormat("#0.0000").format((wonTimes[1] / countOfBoards) + (wonTimes[2] / countOfBoards / 2)));
+        calculatorData.setDeal(new DecimalFormat("#0.0000").format(wonTimes[2] / countOfBoards));
 
-        defaultData.getCalculatorMainTables().add(0, calculatorMainTable);
+        defaultData.getCalculatorMainTables().add(0, calculatorData);
 
         countOfBoards = 0;
 
     }
 
-    public void calculateWithoutTurn(CalculatorMainTable calculatorMainTable,
+    public void calculateWithoutTurn(CalculatorData calculatorData,
                                      DefaultData defaultData, Range[] playersRanges,
                                      double[] wonTimes) {
         List<Card> allCards = new LinkedList<>();
         allCards.addAll(defaultData.getCardList());
 
         Card c1 = new Card(String.valueOf(
-                calculatorMainTable.getBoard().charAt(0)),
-                String.valueOf(calculatorMainTable.getBoard().charAt(1)));
+                calculatorData.getBoard().charAt(0)),
+                String.valueOf(calculatorData.getBoard().charAt(1)));
         Card c2 = new Card(String.valueOf(
-                calculatorMainTable.getBoard().charAt(2)),
-                String.valueOf(calculatorMainTable.getBoard().charAt(3)));
+                calculatorData.getBoard().charAt(2)),
+                String.valueOf(calculatorData.getBoard().charAt(3)));
         Card c3 = new Card(String.valueOf(
-                calculatorMainTable.getBoard().charAt(4)),
-                String.valueOf(calculatorMainTable.getBoard().charAt(5)));
+                calculatorData.getBoard().charAt(4)),
+                String.valueOf(calculatorData.getBoard().charAt(5)));
 
         allCards.remove(c1);
         allCards.remove(c2);
@@ -254,24 +242,24 @@ public class Calculate2 {
     }
 
 
-    public void calculateWithoutRiver(CalculatorMainTable calculatorMainTable,
+    public void calculateWithoutRiver(CalculatorData calculatorData,
                                       DefaultData defaultData, Range[] playersRanges,
                                       double[] wonTimes) {
         List<Card> allCards = new LinkedList<>();
         allCards.addAll(defaultData.getCardList());
 
         Card c1 = new Card(String.valueOf(
-                calculatorMainTable.getBoard().charAt(0)),
-                String.valueOf(calculatorMainTable.getBoard().charAt(1)));
+                calculatorData.getBoard().charAt(0)),
+                String.valueOf(calculatorData.getBoard().charAt(1)));
         Card c2 = new Card(String.valueOf(
-                calculatorMainTable.getBoard().charAt(2)),
-                String.valueOf(calculatorMainTable.getBoard().charAt(3)));
+                calculatorData.getBoard().charAt(2)),
+                String.valueOf(calculatorData.getBoard().charAt(3)));
         Card c3 = new Card(String.valueOf(
-                calculatorMainTable.getBoard().charAt(4)),
-                String.valueOf(calculatorMainTable.getBoard().charAt(5)));
+                calculatorData.getBoard().charAt(4)),
+                String.valueOf(calculatorData.getBoard().charAt(5)));
         Card c4 = new Card(String.valueOf(
-                calculatorMainTable.getBoard().charAt(6)),
-                String.valueOf(calculatorMainTable.getBoard().charAt(7)));
+                calculatorData.getBoard().charAt(6)),
+                String.valueOf(calculatorData.getBoard().charAt(7)));
 
         allCards.remove(c1);
         allCards.remove(c2);
@@ -975,6 +963,7 @@ public class Calculate2 {
     }
 
          */
+
 
 
 }

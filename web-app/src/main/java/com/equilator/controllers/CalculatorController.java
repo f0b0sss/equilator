@@ -41,17 +41,52 @@ public class CalculatorController {
         return "calculator";
     }
 
+    @GetMapping("/clear/{id}")
+    @PreAuthorize("hasAuthority('access:user')")
+    public String clear(@ModelAttribute("id") int id) {
+        if (id == 1){
+            defaultData.getCalculatorMainTables().get(0).setRangePlayer1(null);
+        }
+        if (id == 2){
+            defaultData.getCalculatorMainTables().get(0).setRangePlayer2(null);
+        }
+        return "redirect:/calculator";
+    }
+
     @PostMapping("/calculate")
     @PreAuthorize("hasAuthority('access:user')")
     public String calculate(@ModelAttribute("gameInfo") CalculatorMainTable calculatorMainTable) {
-        try{
+        try {
             calculate.calculate(calculatorMainTable);
-        }catch (InvalidInputCards e){
+        } catch (InvalidInputCards e) {
             error = e.getMessage();
             defaultData.getCalculatorMainTables().add(0, calculatorMainTable);
         }
 
         return "redirect:/calculator";
+    }
+
+    @GetMapping("/board")
+    @PreAuthorize("hasAuthority('access:user')")
+    public String selectBoard(Model model) {
+        StringBuilder board = new StringBuilder();
+        String[] array = new String[]{};
+
+        array = defaultData.getCalculatorMainTables().get(0).getBoard().split(",");
+
+        if (array.length != 0) {
+            for (int i = 0; i < array.length; i++) {
+                if (i == array.length - 1) {
+                    board.append("#" + array[i]);
+                } else {
+                    board.append("#" + array[i] + ",");
+                }
+            }
+        }
+
+        model.addAttribute("board", board);
+
+        return "board";
     }
 
     @GetMapping("/statistic")
@@ -63,9 +98,6 @@ public class CalculatorController {
 
         return "statistic";
     }
-
-
-
 
 
 }

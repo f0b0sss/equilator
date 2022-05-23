@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Board</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="~{fragments/template :: link}"></th:block>
+
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+    <script th:inline="javascript">
+        var range = [[${board}]];
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var result = "";
+
+            $('#table_range')
+                .find('td')
+                .removeClass('ui-selected')
+                .end()
+                .find(range)
+                .addClass('ui-selected');
+            $('.ui-selected').each(function () {
+                result += $(this).text() + ',';
+            });
+            $('#board').val(result);
+
+            $('#table_range').bind("mousedown", function (e) {
+                e.metaKey = true;
+            })
+                .selectable({
+                    maxDistance: 1,
+                    filter: 'td,th',
+                    selected: function (event, ui) {
+                        if (!$(ui.selected).hasClass('selected-flag')) {
+                            $(ui.selected).addClass('selected-flag');
+                        } else {
+                            $(ui.selected).removeClass("ui-selected selected-flag");
+                        }
+                    },
+                    stop: function () {
+                        var result = "";
+                        var numbersOfCombs = 0;
+                        var rangePersent = 0.00;
+                        var allCombs = 1326;
+
+                        $('.ui-selected').each(function () {
+                            result += $(this).text() + ',';
+                        });
+                        $('#board').val(result);
+                    },
+                });
+        });
+    </script>
+
+
+
+</head>
+<body>
+<th:block th:insert="~{fragments/template :: #header}"></th:block>
+<th:block th:insert="~{fragments/template :: #menu}"></th:block>
+
+
+<div id="mainContainer">
+    <form th:method="POST" th:action="@{/range-bar/{id}(id=${id})}">
+        Range:
+        <input class="board" readonly type="text" name="board" id="board" value=""/>
+
+        <table id="board_card">
+            <tr>
+                <th id="2h" >2<img src="../img/heart.png"></th>
+                <th id="3h" >3<img src="../img/heart.png"></th>
+                <th id="4h" >4<img src="../img/heart.png"></th>
+                <th id="5h" >5<img src="../img/heart.png"></th>
+                <th id="6h" >6<img src="../img/heart.png"></th>
+                <th id="7h" >7<img src="../img/heart.png"></th>
+                <th id="8h" >8<img src="../img/heart.png"></th>
+                <th id="9h" >9<img src="../img/heart.png"></th>
+                <th id="Th" >T<img src="../img/heart.png"></th>
+                <th id="Jh" >J<img src="../img/heart.png"></th>
+                <th id="Qh" >Q<img src="../img/heart.png"></th>
+                <th id="Kh" >K<img src="../img/heart.png"></th>
+                <th id="Ah" >A<img src="../img/heart.png"></th>
+            </tr>
+            <tr>
+                <th id="2d" >2<img src="../img/diamonds.png"></th>
+                <th id="3d" >3<img src="../img/diamonds.png"></th>
+                <th id="4d" >4<img src="../img/diamonds.png"></th>
+                <th id="5d" >5<img src="../img/diamonds.png"></th>
+                <th id="6d" >6<img src="../img/diamonds.png"></th>
+                <th id="7d" >7<img src="../img/diamonds.png"></th>
+                <th id="8d" >8<img src="../img/diamonds.png"></th>
+                <th id="9d" >9<img src="../img/diamonds.png"></th>
+                <th id="Td" >T<img src="../img/diamonds.png"></th>
+                <th id="Jd" >J<img src="../img/diamonds.png"></th>
+                <th id="Qd" >Q<img src="../img/diamonds.png"></th>
+                <th id="Kd" >K<img src="../img/diamonds.png"></th>
+                <th id="Ad" >A<img src="../img/diamonds.png"></th>
+            </tr>
+            <tr>
+                <th id="2c" >2<img src="../img/clubs.png"></th>
+                <th id="3c" >3<img src="../img/clubs.png"></th>
+                <th id="4c" >4<img src="../img/clubs.png"></th>
+                <th id="5c" >5<img src="../img/clubs.png"></th>
+                <th id="6c" >6<img src="../img/clubs.png"></th>
+                <th id="7c" >7<img src="../img/clubs.png"></th>
+                <th id="8c" >8<img src="../img/clubs.png"></th>
+                <th id="9c" >9<img src="../img/clubs.png"></th>
+                <th id="Tc" >T<img src="../img/clubs.png"></th>
+                <th id="Jc" >J<img src="../img/clubs.png"></th>
+                <th id="Qc" >Q<img src="../img/clubs.png"></th>
+                <th id="Kc" >K<img src="../img/clubs.png"></th>
+                <th id="Ac" >A<img src="../img/clubs.png"></th>
+            </tr>
+            <tr>
+                <th id="2s" >2<img src="../img/spade.png"></th>
+                <th id="3s" >3<img src="../img/spade.png"></th>
+                <th id="4s" >4<img src="../img/spade.png"></th>
+                <th id="5s" >5<img src="../img/spade.png"></th>
+                <th id="6s" >6<img src="../img/spade.png"></th>
+                <th id="7s" >7<img src="../img/spade.png"></th>
+                <th id="8s" >8<img src="../img/spade.png"></th>
+                <th id="9s" >9<img src="../img/spade.png"></th>
+                <th id="Ts" >T<img src="../img/spade.png"></th>
+                <th id="Js" >J<img src="../img/spade.png"></th>
+                <th id="Qs" >Q<img src="../img/spade.png"></th>
+                <th id="Ks" >K<img src="../img/spade.png"></th>
+                <th id="As" >A<img src="../img/spade.png"></th>
+            </tr>
+        </table>
+
+    </form>
+
+
+
+
+</div>
+
+
+<div class="clear"></div>
+<th:block th:insert="~{fragments/template :: #footer}"></th:block>
+
+
+</body>
+</html>

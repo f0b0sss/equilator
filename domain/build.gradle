@@ -26,8 +26,9 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator:7.0.4.Final'
     implementation 'javax.persistence:javax.persistence-api:2.2'
 
-    // https://mvnrepository.com/artifact/codes.derive/foldem
     implementation 'codes.derive:foldem:1.1.4'
+
+
 
 
 
