@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -63,6 +64,11 @@ public class Config {
 
         return classLoaderTemplateResolver;
     }
+
+     @Bean
+    public CommonsMultipartResolver multipartResolver(){
+        return new CommonsMultipartResolver();
+     }
 
 
 }

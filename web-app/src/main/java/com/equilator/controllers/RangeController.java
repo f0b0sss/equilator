@@ -1,6 +1,7 @@
 package com.equilator.controllers;
 
 import DAO.DefaultData;
+import models.calculator.GameInfo;
 import models.calculator.RangeDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import services.CombinationGenerator;
 import services.RangeService;
 import services.UserService;
 
@@ -25,6 +27,10 @@ public class RangeController {
     private RangeService rangeService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CombinationGenerator combinationGenerator;
+    @Autowired
+    private GameInfo gameInfo;
 
     @GetMapping("/range-bar/{id}")
     @PreAuthorize("hasAuthority('access:user')")
@@ -65,6 +71,7 @@ public class RangeController {
         model.addAttribute("rangesDB", rangeDBList);
         model.addAttribute("playerId", id);
         model.addAttribute("newRange", new RangeDB());
+        model.addAttribute("combs", gameInfo.getCombsByCard());
 
         return "range-bar";
     }
@@ -72,9 +79,11 @@ public class RangeController {
     @PostMapping("/range-bar/{id}")
     @PreAuthorize("hasAuthority('access:user')")
     public String setRangeToPLayer(@PathVariable("id") int id,
-                           @RequestParam("playerRange") String playerRange) {
+                                   @RequestParam("playerRange") String playerRange) {
 
-        setRangeToPlayer(playerRange, id);
+        if (playerRange.length() != 0){
+            setRangeToPlayer(playerRange, id);
+        }
 
         return "redirect:/calculator";
     }
@@ -140,6 +149,18 @@ public class RangeController {
         if (id == 2) {
             defaultData.getCalculatorMainTables().get(0).setRangePlayer2(playerRange);
         }
+    }
+
+    @GetMapping("/combinations/{id}")
+    @PreAuthorize("hasAuthority('access:user')")
+    public String combinations(@RequestParam("rangeForCombinator") String playerRange,
+                               @PathVariable("id") int playerId) {
+
+        setRangeToPlayer(playerRange, playerId);
+
+        combinationGenerator.generate(playerRange);
+
+        return "redirect:/range-bar/" + playerId;
     }
 
 }

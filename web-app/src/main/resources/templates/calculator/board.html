@@ -10,31 +10,30 @@
     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
     <script th:inline="javascript">
-        var range = [[${board}]];
-
+        var board = [[${board}]];
     </script>
 
     <script>
         $(document).ready(function () {
             var result = "";
 
-            $('#table_range')
-                .find('td')
+            $('#table_board')
+                .find('th')
                 .removeClass('ui-selected')
                 .end()
-                .find(range)
+                .find(board)
                 .addClass('ui-selected');
-            $('.ui-selected').each(function () {
+            $('.board_cell.ui-selected').each(function () {
                 result += $(this).text() + ',';
             });
             $('#board').val(result);
 
-            $('#table_range').bind("mousedown", function (e) {
+            $('#table_board').bind("mousedown", function (e) {
                 e.metaKey = true;
             })
                 .selectable({
                     maxDistance: 1,
-                    filter: 'td,th',
+                    filter: 'th',
                     selected: function (event, ui) {
                         if (!$(ui.selected).hasClass('selected-flag')) {
                             $(ui.selected).addClass('selected-flag');
@@ -44,13 +43,15 @@
                     },
                     stop: function () {
                         var result = "";
-                        var numbersOfCombs = 0;
-                        var rangePersent = 0.00;
-                        var allCombs = 1326;
-
-                        $('.ui-selected').each(function () {
-                            result += $(this).text() + ',';
+                        $('.board_cell.ui-selected').each(function () {
+                            if ($('.board_cell.ui-selected').length < 6) {
+                                result += $(this).text() + ',';
+                            }else {
+                                alert('You can select max 5 cards');
+                                $(this).parent().alert('close');
+                            }
                         });
+
                         $('#board').val(result);
                     },
                 });
@@ -66,73 +67,73 @@
 
 
 <div id="mainContainer">
-    <form th:method="POST" th:action="@{/range-bar/{id}(id=${id})}">
+    <form th:method="POST" th:action="@{/board}">
         Range:
         <input class="board" readonly type="text" name="board" id="board" value=""/>
 
-        <table id="board_card">
+        <table id="table_board">
             <tr>
-                <th id="2h" >2<img src="../img/heart.png"></th>
-                <th id="3h" >3<img src="../img/heart.png"></th>
-                <th id="4h" >4<img src="../img/heart.png"></th>
-                <th id="5h" >5<img src="../img/heart.png"></th>
-                <th id="6h" >6<img src="../img/heart.png"></th>
-                <th id="7h" >7<img src="../img/heart.png"></th>
-                <th id="8h" >8<img src="../img/heart.png"></th>
-                <th id="9h" >9<img src="../img/heart.png"></th>
-                <th id="Th" >T<img src="../img/heart.png"></th>
-                <th id="Jh" >J<img src="../img/heart.png"></th>
-                <th id="Qh" >Q<img src="../img/heart.png"></th>
-                <th id="Kh" >K<img src="../img/heart.png"></th>
-                <th id="Ah" >A<img src="../img/heart.png"></th>
+                <th id="2h" class="board_cell">2h<img src="../img/heart.png"></th>
+                <th id="3h" class="board_cell">3h<img src="../img/heart.png"></th>
+                <th id="4h" class="board_cell">4h<img src="../img/heart.png"></th>
+                <th id="5h" class="board_cell">5h<img src="../img/heart.png"></th>
+                <th id="6h" class="board_cell">6h<img src="../img/heart.png"></th>
+                <th id="7h" class="board_cell">7h<img src="../img/heart.png"></th>
+                <th id="8h" class="board_cell">8h<img src="../img/heart.png"></th>
+                <th id="9h" class="board_cell">9h<img src="../img/heart.png"></th>
+                <th id="Th" class="board_cell">Th<img src="../img/heart.png"></th>
+                <th id="Jh" class="board_cell">Jh<img src="../img/heart.png"></th>
+                <th id="Qh" class="board_cell">Qh<img src="../img/heart.png"></th>
+                <th id="Kh" class="board_cell">Kh<img src="../img/heart.png"></th>
+                <th id="Ah" class="board_cell">Ah<img src="../img/heart.png"></th>
             </tr>
             <tr>
-                <th id="2d" >2<img src="../img/diamonds.png"></th>
-                <th id="3d" >3<img src="../img/diamonds.png"></th>
-                <th id="4d" >4<img src="../img/diamonds.png"></th>
-                <th id="5d" >5<img src="../img/diamonds.png"></th>
-                <th id="6d" >6<img src="../img/diamonds.png"></th>
-                <th id="7d" >7<img src="../img/diamonds.png"></th>
-                <th id="8d" >8<img src="../img/diamonds.png"></th>
-                <th id="9d" >9<img src="../img/diamonds.png"></th>
-                <th id="Td" >T<img src="../img/diamonds.png"></th>
-                <th id="Jd" >J<img src="../img/diamonds.png"></th>
-                <th id="Qd" >Q<img src="../img/diamonds.png"></th>
-                <th id="Kd" >K<img src="../img/diamonds.png"></th>
-                <th id="Ad" >A<img src="../img/diamonds.png"></th>
+                <th id="2d" class="board_cell" >2d<img src="../img/diamonds.png"></th>
+                <th id="3d" class="board_cell" >3d<img src="../img/diamonds.png"></th>
+                <th id="4d" class="board_cell" >4d<img src="../img/diamonds.png"></th>
+                <th id="5d" class="board_cell" >5d<img src="../img/diamonds.png"></th>
+                <th id="6d" class="board_cell" >6d<img src="../img/diamonds.png"></th>
+                <th id="7d" class="board_cell" >7d<img src="../img/diamonds.png"></th>
+                <th id="8d" class="board_cell" >8d<img src="../img/diamonds.png"></th>
+                <th id="9d" class="board_cell" >9d<img src="../img/diamonds.png"></th>
+                <th id="Td" class="board_cell" >Td<img src="../img/diamonds.png"></th>
+                <th id="Jd" class="board_cell" >Jd<img src="../img/diamonds.png"></th>
+                <th id="Qd" class="board_cell" >Qd<img src="../img/diamonds.png"></th>
+                <th id="Kd" class="board_cell" >Kd<img src="../img/diamonds.png"></th>
+                <th id="Ad" class="board_cell" >Ad<img src="../img/diamonds.png"></th>
             </tr>
             <tr>
-                <th id="2c" >2<img src="../img/clubs.png"></th>
-                <th id="3c" >3<img src="../img/clubs.png"></th>
-                <th id="4c" >4<img src="../img/clubs.png"></th>
-                <th id="5c" >5<img src="../img/clubs.png"></th>
-                <th id="6c" >6<img src="../img/clubs.png"></th>
-                <th id="7c" >7<img src="../img/clubs.png"></th>
-                <th id="8c" >8<img src="../img/clubs.png"></th>
-                <th id="9c" >9<img src="../img/clubs.png"></th>
-                <th id="Tc" >T<img src="../img/clubs.png"></th>
-                <th id="Jc" >J<img src="../img/clubs.png"></th>
-                <th id="Qc" >Q<img src="../img/clubs.png"></th>
-                <th id="Kc" >K<img src="../img/clubs.png"></th>
-                <th id="Ac" >A<img src="../img/clubs.png"></th>
+                <th id="2c" class="board_cell" >2c<img src="../img/clubs.png"></th>
+                <th id="3c" class="board_cell" >3c<img src="../img/clubs.png"></th>
+                <th id="4c" class="board_cell" >4c<img src="../img/clubs.png"></th>
+                <th id="5c" class="board_cell" >5c<img src="../img/clubs.png"></th>
+                <th id="6c" class="board_cell" >6c<img src="../img/clubs.png"></th>
+                <th id="7c" class="board_cell" >7c<img src="../img/clubs.png"></th>
+                <th id="8c" class="board_cell" >8c<img src="../img/clubs.png"></th>
+                <th id="9c" class="board_cell" >9c<img src="../img/clubs.png"></th>
+                <th id="Tc" class="board_cell" >Tc<img src="../img/clubs.png"></th>
+                <th id="Jc" class="board_cell" >Jc<img src="../img/clubs.png"></th>
+                <th id="Qc" class="board_cell" >Qc<img src="../img/clubs.png"></th>
+                <th id="Kc" class="board_cell" >Kc<img src="../img/clubs.png"></th>
+                <th id="Ac" class="board_cell" >Ac<img src="../img/clubs.png"></th>
             </tr>
             <tr>
-                <th id="2s" >2<img src="../img/spade.png"></th>
-                <th id="3s" >3<img src="../img/spade.png"></th>
-                <th id="4s" >4<img src="../img/spade.png"></th>
-                <th id="5s" >5<img src="../img/spade.png"></th>
-                <th id="6s" >6<img src="../img/spade.png"></th>
-                <th id="7s" >7<img src="../img/spade.png"></th>
-                <th id="8s" >8<img src="../img/spade.png"></th>
-                <th id="9s" >9<img src="../img/spade.png"></th>
-                <th id="Ts" >T<img src="../img/spade.png"></th>
-                <th id="Js" >J<img src="../img/spade.png"></th>
-                <th id="Qs" >Q<img src="../img/spade.png"></th>
-                <th id="Ks" >K<img src="../img/spade.png"></th>
-                <th id="As" >A<img src="../img/spade.png"></th>
+                <th id="2s" class="board_cell" >2s<img src="../img/spade.png"></th>
+                <th id="3s" class="board_cell" >3s<img src="../img/spade.png"></th>
+                <th id="4s" class="board_cell" >4s<img src="../img/spade.png"></th>
+                <th id="5s" class="board_cell" >5s<img src="../img/spade.png"></th>
+                <th id="6s" class="board_cell" >6s<img src="../img/spade.png"></th>
+                <th id="7s" class="board_cell" >7s<img src="../img/spade.png"></th>
+                <th id="8s" class="board_cell" >8s<img src="../img/spade.png"></th>
+                <th id="9s" class="board_cell" >9s<img src="../img/spade.png"></th>
+                <th id="Ts" class="board_cell" >Ts<img src="../img/spade.png"></th>
+                <th id="Js" class="board_cell" >Js<img src="../img/spade.png"></th>
+                <th id="Qs" class="board_cell" >Qs<img src="../img/spade.png"></th>
+                <th id="Ks" class="board_cell" >Ks<img src="../img/spade.png"></th>
+                <th id="As" class="board_cell" >As<img src="../img/spade.png"></th>
             </tr>
         </table>
-
+        <input type="submit" value="OK"/>
     </form>
 
 

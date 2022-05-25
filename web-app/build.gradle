@@ -25,6 +25,10 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator:7.0.4.Final'
     implementation 'javax.persistence:javax.persistence-api:2.2'
 
+    // https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+    implementation 'commons-fileupload:commons-fileupload:1.4'
+
+
 
     implementation project(':domain')
 

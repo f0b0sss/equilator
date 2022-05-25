@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Home</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="~{fragments/template :: link}"></th:block>
+
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+
+
+</head>
+<body>
+<th:block th:insert="~{fragments/template :: #header}"></th:block>
+<th:block th:insert="~{fragments/template :: #menu}"></th:block>
+
+
+<div id="mainContainer">
+    <form th:object="${uploadForm}" method="POST"
+          action="" enctype="multipart/form-data">
+        Select file to import: <input th:field="*{fileDatas}" type="file"/>
+        <br />
+        <input type="submit" value="Upload">
+    </form>
+
+</div>
+
+<div class="clear"></div>
+<th:block th:insert="~{fragments/template :: #footer}"></th:block>
+
+
+</body>
+</html>

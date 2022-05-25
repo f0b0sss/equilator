@@ -3,7 +3,7 @@ package config;
 import DAO.DBUtils;
 import DAO.DefaultData;
 import models.Error;
-import models.calculator.CalculatorData;
+import models.UploadForm;
 import models.calculator.CalculatorMainTable;
 import models.calculator.GameInfo;
 import models.calculator.RangeDB;
@@ -11,12 +11,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import repository.RangeRepository;
 import repository.RangeRepositoryImpl;
 import repository.UserRepository;
 import repository.UserRepositoryImpl;
 import services.Calculate;
+import services.CombinationGenerator;
+import services.FileService;
 
 @Configuration
 @ComponentScan("DAO")
@@ -51,14 +52,13 @@ public class DomainConfig {
     }
 
     @Bean
-    @Scope("singleton")
-    public CalculatorData calculatorData(){
-        return new CalculatorData();
+    public Calculate calculate(){
+        return new Calculate(defaultData());
     }
 
     @Bean
-    public Calculate calculate(){
-        return new Calculate(defaultData());
+    public CombinationGenerator combinationGenerator(){
+        return new CombinationGenerator();
     }
 
     @Bean
@@ -74,6 +74,16 @@ public class DomainConfig {
     @Bean
     public RangeDB rangeDB(){
         return new RangeDB();
+    }
+
+    @Bean
+    public FileService saveResult(){
+        return new FileService();
+    }
+
+    @Bean
+    public UploadForm uploadForm(){
+        return new UploadForm();
     }
 
 }

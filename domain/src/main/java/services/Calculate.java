@@ -35,6 +35,8 @@ public class Calculate {
 
     private Map<String, Double> wonTimesByCardP1 = new TreeMap<>();
     private Map<String, Double> wonTimesByCardP2 = new TreeMap<>();
+    private Map<String, Double> wonTimesByRangeP1 = new TreeMap<>();
+    private Map<String, Double> wonTimesByRangeP2 = new TreeMap<>();
     private Map<String, Integer> timesByCard = new TreeMap<>();
 
     public List<String> buildAllGroupHands(String groupHand, String board) {
@@ -118,7 +120,7 @@ public class Calculate {
 
         for (int i = 0; i < rangeArr.length; i++) {
             if (!rangeArr[i].matches(regex)) {
-                throw new InvalidInputCards("invalid format - " + rangeArr[i]);
+                throw new InvalidInputCards("invalid range format - " + rangeArr[i]);
             }
         }
 
@@ -126,7 +128,7 @@ public class Calculate {
             if (rangeArr[i].length() == 4) {
                 if (rangeArr[i].charAt(0) == rangeArr[i].charAt(2) &&
                         rangeArr[i].charAt(1) == rangeArr[i].charAt(3)) {
-                    throw new InvalidInputCards("invalid format - " + rangeArr[i]);
+                    throw new InvalidInputCards("invalid range format - " + rangeArr[i]);
                 }
                 hands.add(rangeArr[i]);
             }
@@ -169,11 +171,13 @@ public class Calculate {
         }
     }
 
-    private void deleteFromRangeSameCardWithBoard(List<String> range, String board) {
+    private void deleteFromRangeSameCardWithBoard(List<String> range, String board,
+                                                  Map<String, Double> wonTimesByRange) {
         for (int i = 0; i < range.size(); ) {
             if (board.contains(range.get(i).substring(0, 2)) || board.contains(range.get(i).substring(2, 4))) {
                 range.remove(range.get(i));
             } else {
+                wonTimesByRange.put(range.get(i), 0.0);
                 i++;
             }
         }
@@ -187,10 +191,15 @@ public class Calculate {
         List<String> range1 = buildRange(calculatorMainTable.getRangePlayer1(), board);
         List<String> range2 = buildRange(calculatorMainTable.getRangePlayer2(), board);
 
-        deleteFromRangeSameCardWithBoard(range1, board);
-        deleteFromRangeSameCardWithBoard(range2, board);
+        deleteFromRangeSameCardWithBoard(range1, board, wonTimesByRangeP1);
+        deleteFromRangeSameCardWithBoard(range2, board, wonTimesByRangeP2);
 
         buildWonTimesByCardMap();
+
+        gameInfo.getEquityByRangeP1().clear();
+        gameInfo.getEquityByRangeP2().clear();
+        gameInfo.getEquityByCardP1().clear();
+        gameInfo.getEquityByCardP2().clear();
 
         switch (calculatorMainTable.getBoard().length()) {
             case (6):
@@ -199,14 +208,15 @@ public class Calculate {
             case (8):
                 calculateWithoutRiver(defaultData, range1, range2, board);
                 break;
+            case (10):
+                calculateWithRiver(range1, range2, board);
+                break;
         }
 
-        double equityP1 = wonTimesByCardP1.values().stream().mapToDouble(Double::doubleValue).sum() / countOfBoards;
-        double equityP2 = wonTimesByCardP2.values().stream().mapToDouble(Double::doubleValue).sum() / countOfBoards;
+        double equityP1 = wonTimesByRangeP1.values().stream().mapToDouble(Double::doubleValue).sum() / range1.size();
+        double equityP2 = wonTimesByRangeP2.values().stream().mapToDouble(Double::doubleValue).sum() / range2.size();
+
         double deal = 1 - equityP2 - equityP1;
-
-
-        //    evaluateEquityByCard(wonTimesByCardP1, gameInfo.getEquityByCardP1());
 
         calculatorMainTable.setEquityPlayer1(new DecimalFormat("#0.0000").format(equityP1 + deal / 2));
         calculatorMainTable.setEquityPlayer2(new DecimalFormat("#0.0000").format(equityP2 + deal / 2));
@@ -217,12 +227,17 @@ public class Calculate {
         allCards.clear();
         wonTimesByCardP1.clear();
         wonTimesByCardP2.clear();
+        wonTimesByRangeP1.clear();
+        wonTimesByRangeP2.clear();
         timesByCard.clear();
     }
 
     private void validateBoard(String board) {
-        if (board.length() > 8 || board.length() < 6 || board.length() == 7) {
-            throw new InvalidInputCards("invalid board - " + board);
+        if (board.length() == 0) {
+            throw new InvalidInputCards("You must enter board");
+        }
+        if (board.length() > 10 || board.length() < 6 || board.length() % 2 != 0) {
+            throw new InvalidInputCards("Invalid board format, enter 3 - 5 cards");
         }
         String regex = "[AKQJT98765432akqjt][hdcs]";
 
@@ -232,50 +247,6 @@ public class Calculate {
             }
         }
     }
-
-    public void calculateWithoutRiver(DefaultData defaultData,
-                                      List<String> range1, List<String> range2, String board) {
-        allCards.addAll(defaultData.getCardsDeck());
-
-        removeOpenCardsFromAllCards(board, allCards);
-
-        for (int j = 0; j < range1.size(); j++) {
-            for (int k = 0; k < range2.size(); k++) {
-                for (int i = 0; i < allCards.size(); i++) {
-                    if (!range1.get(j).contains(allCards.get(i)) &&
-                            !range2.get(k).contains(allCards.get(i))
-                    ) {
-                        int p1 = evaluate(
-                                board + allCards.get(i) + range1.get(j),
-                                range1.get(j));
-
-                        int p2 = evaluate(
-                                board + allCards.get(i) + range2.get(k),
-                                range2.get(k));
-
-                        if (p1 > p2) {
-                            double n = wonTimesByCardP1.get(allCards.get(i));
-                            n += 1;
-                            wonTimesByCardP1.put(allCards.get(i), n);
-                        }
-                        if (p1 < p2) {
-                            double n = wonTimesByCardP2.get(allCards.get(i));
-                            n += 1;
-                            wonTimesByCardP2.put(allCards.get(i), n);
-                        }
-
-                        int t = timesByCard.get(allCards.get(i));
-                        t += 1;
-                        timesByCard.put(allCards.get(i), t);
-
-                        countOfBoards++;
-                    }
-                }
-            }
-        }
-        buildEquityByCard();
-    }
-
 
     public void calculateWithoutTurn(DefaultData defaultData,
                                      List<String> range1, List<String> range2, String board) {
@@ -309,11 +280,19 @@ public class Calculate {
                                     double n = wonTimesByCardP1.get(allCards.get(i));
                                     n += 1;
                                     wonTimesByCardP1.put(allCards.get(i), n);
+
+                                    n = wonTimesByRangeP1.get(range1.get(j));
+                                    n += 1;
+                                    wonTimesByRangeP1.put(range1.get(j), n);
                                 }
                                 if (p1 < p2) {
                                     double n = wonTimesByCardP2.get(allCards.get(i));
                                     n += 1;
                                     wonTimesByCardP2.put(allCards.get(i), n);
+
+                                    n = wonTimesByRangeP2.get(range2.get(k));
+                                    n += 1;
+                                    wonTimesByRangeP2.put(range2.get(k), n);
                                 }
 
                                 int t = timesByCard.get(allCards.get(i));
@@ -327,7 +306,92 @@ public class Calculate {
             }
         }
         buildEquityByCard();
+        buildEquityByRange(wonTimesByRangeP1, range1, range2.size(), 45 * 44, gameInfo.getEquityByRangeP1());
+        buildEquityByRange(wonTimesByRangeP2, range2, range1.size(), 45 * 44, gameInfo.getEquityByRangeP2());
     }
+
+    public void calculateWithoutRiver(DefaultData defaultData,
+                                      List<String> range1, List<String> range2, String board) {
+        allCards.addAll(defaultData.getCardsDeck());
+
+        removeOpenCardsFromAllCards(board, allCards);
+
+        for (int j = 0; j < range1.size(); j++) {
+            for (int k = 0; k < range2.size(); k++) {
+                for (int i = 0; i < allCards.size(); i++) {
+                    if (!range1.get(j).contains(allCards.get(i)) &&
+                            !range2.get(k).contains(allCards.get(i))
+                    ) {
+                        int p1 = evaluate(
+                                board + allCards.get(i) + range1.get(j),
+                                range1.get(j));
+
+                        int p2 = evaluate(
+                                board + allCards.get(i) + range2.get(k),
+                                range2.get(k));
+
+                        if (p1 > p2) {
+                            double n = wonTimesByCardP1.get(allCards.get(i));
+                            n += 1;
+                            wonTimesByCardP1.put(allCards.get(i), n);
+
+                            n = wonTimesByRangeP1.get(range1.get(j));
+                            n += 1;
+                            wonTimesByRangeP1.put(range1.get(j), n);
+                        }
+                        if (p1 < p2) {
+                            double n = wonTimesByCardP2.get(allCards.get(i));
+                            n += 1;
+                            wonTimesByCardP2.put(allCards.get(i), n);
+
+                            n = wonTimesByRangeP2.get(range2.get(k));
+                            n += 1;
+                            wonTimesByRangeP2.put(range2.get(k), n);
+                        }
+
+                        int t = timesByCard.get(allCards.get(i));
+                        t += 1;
+                        timesByCard.put(allCards.get(i), t);
+
+                        countOfBoards++;
+                    }
+                }
+            }
+        }
+        buildEquityByCard();
+        buildEquityByRange(wonTimesByRangeP1, range1, range2.size(), 44, gameInfo.getEquityByRangeP1());
+        buildEquityByRange(wonTimesByRangeP2, range2, range1.size(), 44, gameInfo.getEquityByRangeP2());
+    }
+
+    public void calculateWithRiver(List<String> range1, List<String> range2, String board) {
+
+        for (int j = 0; j < range1.size(); j++) {
+            for (int k = 0; k < range2.size(); k++) {
+
+                int p1 = evaluate(
+                        board + range1.get(j),
+                        range1.get(j));
+
+                int p2 = evaluate(
+                        board + range2.get(k),
+                        range2.get(k));
+
+                if (p1 > p2) {
+                    double n = wonTimesByRangeP1.get(range1.get(j));
+                    n += 1;
+                    wonTimesByRangeP1.put(range1.get(j), n);
+                }
+                if (p1 < p2) {
+                    double n = wonTimesByRangeP2.get(range2.get(k));
+                    n += 1;
+                    wonTimesByRangeP2.put(range2.get(k), n);
+                }
+            }
+        }
+        buildEquityByRange(wonTimesByRangeP1, range1, range2.size(), 1, gameInfo.getEquityByRangeP1());
+        buildEquityByRange(wonTimesByRangeP2, range2, range1.size(), 1, gameInfo.getEquityByRangeP2());
+    }
+
 
     private void buildEquityByCard() {
         for (int i = 0; i < allCards.size(); i++) {
@@ -337,6 +401,15 @@ public class Calculate {
 
             gameInfo.getEquityByCardP1().put(allCards.get(i), String.format("%.2f", eq1 + deal / 2));
             gameInfo.getEquityByCardP2().put(allCards.get(i), String.format("%.2f", eq2 + deal / 2));
+        }
+    }
+
+    private void buildEquityByRange(Map<String, Double> wonTimesByRange, List<String> range,
+                                    int rangeSizeVS, int numberOfBoards, Map<String, String> equityByRange) {
+        for (int i = 0; i < range.size(); i++) {
+            double eq = wonTimesByRange.get(range.get(i)) / (numberOfBoards * rangeSizeVS);
+            wonTimesByRange.put(range.get(i), eq);
+            equityByRange.put(range.get(i), String.format("%.2f", eq));
         }
     }
 

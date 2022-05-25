@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import services.Calculate;
 
 @Controller
@@ -28,6 +29,23 @@ public class CalculatorController {
         this.calculate = calculate;
     }
 
+    @GetMapping("/new")
+    @PreAuthorize("hasAuthority('access:user')")
+    public String newCalc() {
+        defaultData.getCalculatorMainTables().get(0).setRangePlayer1(null);
+        defaultData.getCalculatorMainTables().get(0).setRangePlayer2(null);
+        defaultData.getCalculatorMainTables().get(0).setEquityPlayer1(null);
+        defaultData.getCalculatorMainTables().get(0).setEquityPlayer2(null);
+        defaultData.getCalculatorMainTables().get(0).setBoard(null);
+        gameInfo.getCombsByCard().clear();
+        gameInfo.getEquityByRangeP1().clear();
+        gameInfo.getEquityByRangeP2().clear();
+        gameInfo.getEquityByCardP1().clear();
+        gameInfo.getEquityByCardP2().clear();
+
+        return "redirect:/calculator";
+    }
+
     @GetMapping("/calculator")
     @PreAuthorize("hasAuthority('access:user')")
     public String calculator(Model model) {
@@ -35,6 +53,8 @@ public class CalculatorController {
         model.addAttribute("InvalidInputCards", error);
         model.addAttribute("statsP1", gameInfo.getEquityByCardP1());
         model.addAttribute("statsP2", gameInfo.getEquityByCardP2());
+        model.addAttribute("equityByRangeP1", gameInfo.getEquityByRangeP1());
+        model.addAttribute("equityByRangeP2", gameInfo.getEquityByRangeP2());
 
         error = null;
 
@@ -44,10 +64,10 @@ public class CalculatorController {
     @GetMapping("/clear/{id}")
     @PreAuthorize("hasAuthority('access:user')")
     public String clear(@ModelAttribute("id") int id) {
-        if (id == 1){
+        if (id == 1) {
             defaultData.getCalculatorMainTables().get(0).setRangePlayer1(null);
         }
-        if (id == 2){
+        if (id == 2) {
             defaultData.getCalculatorMainTables().get(0).setRangePlayer2(null);
         }
         return "redirect:/calculator";
@@ -60,7 +80,6 @@ public class CalculatorController {
             calculate.calculate(calculatorMainTable);
         } catch (InvalidInputCards e) {
             error = e.getMessage();
-            defaultData.getCalculatorMainTables().add(0, calculatorMainTable);
         }
 
         return "redirect:/calculator";
@@ -70,16 +89,13 @@ public class CalculatorController {
     @PreAuthorize("hasAuthority('access:user')")
     public String selectBoard(Model model) {
         StringBuilder board = new StringBuilder();
-        String[] array = new String[]{};
 
-        array = defaultData.getCalculatorMainTables().get(0).getBoard().split(",");
-
-        if (array.length != 0) {
-            for (int i = 0; i < array.length; i++) {
-                if (i == array.length - 1) {
-                    board.append("#" + array[i]);
+        if (defaultData.getCalculatorMainTables().get(0).getBoard() != null) {
+            for (int i = 0; i < defaultData.getCalculatorMainTables().get(0).getBoard().length(); i += 2) {
+                if (i + 2 == defaultData.getCalculatorMainTables().get(0).getBoard().length()) {
+                    board.append("#" + defaultData.getCalculatorMainTables().get(0).getBoard().substring(i, i + 2));
                 } else {
-                    board.append("#" + array[i] + ",");
+                    board.append("#" + defaultData.getCalculatorMainTables().get(0).getBoard().substring(i, i + 2) + ",");
                 }
             }
         }
@@ -89,15 +105,24 @@ public class CalculatorController {
         return "board";
     }
 
-    @GetMapping("/statistic")
+    @PostMapping("/board")
+    @PreAuthorize("hasAuthority('access:user')")
+    public String setBoard(@RequestParam("board") String board) {
+
+        defaultData.getCalculatorMainTables().get(0)
+                .setBoard(board.substring(0, board.length() - 1).replaceAll(",", ""));
+
+        return "redirect:/calculator";
+    }
+
+    @GetMapping("/equity-by-hand")
     @PreAuthorize("hasAuthority('access:user')")
     public String statistic(Model model) {
         model.addAttribute("calculatorMainTable", defaultData.getCalculatorMainTables().get(0));
         model.addAttribute("statsP1", gameInfo.getEquityByCardP1());
         model.addAttribute("statsP2", gameInfo.getEquityByCardP2());
 
-        return "statistic";
+        return "equity-by-hand";
     }
-
 
 }

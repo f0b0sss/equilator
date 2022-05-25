@@ -61,6 +61,24 @@ td {
     -ms-user-select: none;
     user-select: none
 }
+.board_cell {
+    width: 34px;
+    height: 34px;
+    text-align: center;
+    font-size: .75em;
+    cursor: pointer;
+    border-style: outset;
+    border-width: 1px;
+    margin: 1px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+.board_cell img{
+    height: auto;
+    width: 10px;
+    position: relative;
+}
 
 .suited {
     background-color: silver;
@@ -88,6 +106,11 @@ td {
     border-color: #acf2ac;
     border-style: inset
 }
+.comb_cell.offsuit.ui-selected {
+    background-color: #90ee90;
+    border-color: #acf2ac;
+    border-style: inset
+}
 
 .range_cell.pocketpair.ui-selected {
     background-color: #90ee90;
@@ -98,6 +121,16 @@ td {
     background-color: #d0d0d0;
     color: white;
 }
+.board_cell.ui-selected {
+    background-color: #90ee90;
+    border-color: #acf2ac;
+    border-style: inset
+}
+
+
+
+
+
 
 
 

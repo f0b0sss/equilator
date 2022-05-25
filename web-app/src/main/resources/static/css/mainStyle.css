@@ -1,7 +1,7 @@
 @import url(reset.css);
 
 body {
-	max-width:1100px;
+	max-width:1000px;
 	border: 1px solid black;
 	margin: 0 auto;
 }
@@ -9,6 +9,7 @@ body {
 .clear{
 	clear: both;
 }
+
 
 #header{
 	height: 50px;
@@ -24,6 +25,21 @@ body {
 #mainContainer{
 	height: auto;
 	border: 1px solid #dd00ff;
+}
+
+.left-cont{
+	width: 530px;
+	float: left;
+}
+.center-cont{
+	width: 220px;
+	float: left;
+	margin-top: 60px;
+}
+.right-cont{
+	width: 160px;
+	float: left;
+	margin-top: 60px;
 }
 
 /* work with ranges table */
@@ -46,10 +62,9 @@ input.equity{
 input.board{
 	width: 100px;
 }
-.list-with-ranges-bard{
-	position: relative;
-	top: -500px;
-	left: 500px;
+.list-with-ranges{
+	border: 1px solid #d6b5fa;
+	width: 140px;
 }
 
 #range-list-table a{
@@ -82,6 +97,58 @@ input.board{
 	width: 25px;
 	height: 15px;
 	text-align: center;
+}
+
+.combs-list-div{
+	border: 1px solid #d6b5fa;
+	width: 180px;;
+}
+
+.combs-list-table td{
+	border: 1px solid black;
+	padding-left: 5px;
+	width: 30px;
+	text-align: center;
+}
+.sortable td{
+	border: 1px solid black;
+	padding-left: 5px;
+	width: 40px;
+	text-align: center;
+}
+
+.equity_by_range td{
+	border: 1px solid black;
+	padding-left: 5px;
+	width: 40px;
+	text-align: center;
+}
+#equity_by_rangeP1{
+	width: 496px;
+	border: 1px solid black;
+	float: left;
+}
+#equity_by_rangeP2{
+	width: 496px;
+	border: 1px solid black;
+	float: left;
+}
+.newCalculatorButton{
+	float: left;
+	padding: 2px;
+	border: 1px solid black;
+	background-color: #9a9a9a;
+}
+.uploadFileButton{
+	float: left;
+	padding: 2px;
+	border: 1px solid black;
+	background-color: #9a9a9a;
+	margin-left: 5px;
+}
+.saveResultButton{
+	float: left;
+	margin-left: 5px;
 }
 
 /*------------------------------*/
@@ -182,45 +249,12 @@ li {
 	width: 10px;
 }
 
+
 #footer{
 	border: 1px solid red;
 	height: 25px;
 }
 
-
-/* enter name to save range */
-#myModal {
-	width: 298px; height: 218px;
-	margin: 0 auto;
-	padding: 18px 9px;
-	border-radius: 4px;
-	background: #fafafa;
-	position: fixed;
-	top: 0; left: 0; right: 0; bottom: 0;
-	margin: auto;
-	display: none;
-	opacity: 0;
-	z-index: 38;
-	text-align: center;
-}
-#myModal #myModal__close {
-	width: 21px; height: 21px;
-	position: absolute;
-	top: 1px; right: 11px;
-	cursor: pointer;
-	display: block;
-	font-size: 29px;
-}
-#myOverlay {
-	z-index: 37;
-	position: fixed;
-	background-color: rgba(0,0,0,.7);
-	width: 100%; height: 100%;
-	top: 0; left: 0;
-	cursor :pointer;
-	display :none;
-}
-/*------------------------------*/
 
 
 
