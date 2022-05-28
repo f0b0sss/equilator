@@ -1,9 +1,9 @@
 package com.equilator.controllers;
 
-import DAO.DefaultData;
-import exceptions.InvalidInputCards;
-import models.calculator.CalculatorMainTable;
-import models.calculator.GameInfo;
+import com.equilator.DAO.DefaultData;
+import com.equilator.exceptions.InvalidInputCards;
+import com.equilator.models.calculator.CalculatorMainTable;
+import com.equilator.models.calculator.GameInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import services.Calculate;
+import com.equilator.services.Calculate;
 
 @Controller
 public class CalculatorController {
@@ -22,6 +22,8 @@ public class CalculatorController {
 
     @Autowired
     private GameInfo gameInfo;
+    @Autowired
+    private CalculatorMainTable calculatorMainTable;
 
     @Autowired
     public CalculatorController(DefaultData defaultData, Calculate calculate) {
@@ -75,7 +77,7 @@ public class CalculatorController {
 
     @PostMapping("/calculate")
     @PreAuthorize("hasAuthority('access:user')")
-    public String calculate(@ModelAttribute("gameInfo") CalculatorMainTable calculatorMainTable) {
+    public String calculate(@ModelAttribute("calculatorMainTable") CalculatorMainTable calculatorMainTable) {
         try {
             calculate.calculate(calculatorMainTable);
         } catch (InvalidInputCards e) {
@@ -109,8 +111,11 @@ public class CalculatorController {
     @PreAuthorize("hasAuthority('access:user')")
     public String setBoard(@RequestParam("board") String board) {
 
-        defaultData.getCalculatorMainTables().get(0)
-                .setBoard(board.substring(0, board.length() - 1).replaceAll(",", ""));
+        if (board.isEmpty()){
+            calculatorMainTable.setBoard(null);
+        }else {
+            calculatorMainTable.setBoard(board.substring(0, board.length() - 1).replaceAll(",", ""));
+        }
 
         return "redirect:/calculator";
     }

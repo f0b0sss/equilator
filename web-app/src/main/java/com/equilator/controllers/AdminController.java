@@ -1,11 +1,11 @@
 package com.equilator.controllers;
 
-import models.user.User;
+import com.equilator.models.user.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import services.UserService;
+import com.equilator.services.UserService;
 
 @Controller
 public class AdminController {

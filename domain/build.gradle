@@ -19,7 +19,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework:spring-tx:5.3.19'
 
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.postgresql:postgresql:42.3.3'
 
@@ -34,6 +34,16 @@ dependencies {
 
     implementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // https://mvnrepository.com/artifact/io.quarkus/quarkus-junit5
+    testImplementation 'io.quarkus:quarkus-junit5:2.9.1.Final'
+    // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.5.1'
+
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    runtimeOnly('com.h2database:h2:2.1.212')
+ //   testImplementation 'com.h2database:h2:2.1.212'
+
+
 
 }
 

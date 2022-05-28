@@ -1,8 +1,8 @@
 package com.equilator.controllers;
 
-import exceptions.UserAlreadyExistException;
-import models.Error;
-import models.user.User;
+import com.equilator.exceptions.UserAlreadyExistException;
+import com.equilator.models.Error;
+import com.equilator.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import services.UserService;
+import com.equilator.services.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +32,6 @@ public class AccountController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private Error error;
 
     private final UserService userService;
 

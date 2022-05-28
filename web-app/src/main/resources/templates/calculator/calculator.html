@@ -48,12 +48,12 @@
         <form th:method="POST" th:action="@{/calculate}" th:object="${calculatorMainTable}">
 
             <a th:href="@{/range-bar/1}">Player1</a>
-            <input class="range" type="text" readonly th:field="*{rangePlayer1}" id="rangePlayer1"/>
+            <input class="range" type="text"   th:field="*{rangePlayer1}" id="rangePlayer1"/>
             <input class="equity" type="text" readonly th:field="*{equityPlayer1}" id="equityPlayer1"/>
             <a th:href="@{/clear/1}">Clear</a>
             <br>
             <a th:href="@{/range-bar/2}">Player2</a>
-            <input class="range" type="text" readonly th:field="*{rangePlayer2}" id="rangePlayer2"/>
+            <input class="range" type="text"  th:field="*{rangePlayer2}" id="rangePlayer2"/>
             <input class="equity" type="text" readonly th:field="*{equityPlayer2}" id="equityPlayer2"/>
             <a th:href="@{/clear/2}">Clear</a>
             <br>

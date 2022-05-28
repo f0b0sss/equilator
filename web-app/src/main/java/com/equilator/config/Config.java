@@ -1,8 +1,5 @@
 package com.equilator.config;
 
-import config.DatabaseConfig;
-import config.DomainConfig;
-import config.SecurityConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
