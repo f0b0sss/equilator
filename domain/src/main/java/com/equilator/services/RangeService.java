@@ -2,14 +2,12 @@ package com.equilator.services;
 
 import com.equilator.exceptions.RangeNotFoundException;
 import com.equilator.models.calculator.RangeDB;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.equilator.repository.RangeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class RangeService {
 
     @Autowired
@@ -33,6 +31,4 @@ public class RangeService {
     public void deleteRangeById(int id) {
         rangeRepository.deleteRangeById(id);
     }
-
-
 }

@@ -1,5 +1,7 @@
 package com.equilator.config;
 
+import com.equilator.models.UploadForm;
+import com.equilator.services.FileService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -10,8 +12,19 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
-@Import({SecurityConfig.class, DomainConfig.class, DatabaseConfig.class})
+@Import({SecurityConfig.class, Beans.class, DatabaseConfig.class})
 public class Config {
+
+
+    @Bean
+    public FileService saveResult(){
+        return new FileService();
+    }
+
+    @Bean
+    public UploadForm uploadForm(){
+        return new UploadForm();
+    }
 
     @Bean
     public SpringSecurityDialect springSecurityDialect() {

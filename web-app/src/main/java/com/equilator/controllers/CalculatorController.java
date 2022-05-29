@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import com.equilator.services.Calculate;
 
 @Controller
+@RequestMapping("/calculator")
 public class CalculatorController {
     private final DefaultData defaultData;
     private final Calculate calculate;
@@ -45,7 +43,7 @@ public class CalculatorController {
         gameInfo.getEquityByCardP1().clear();
         gameInfo.getEquityByCardP2().clear();
 
-        return "redirect:/calculator";
+        return "redirect:/calculator/calculator";
     }
 
     @GetMapping("/calculator")
@@ -60,7 +58,7 @@ public class CalculatorController {
 
         error = null;
 
-        return "calculator";
+        return "calculator/calculator";
     }
 
     @GetMapping("/clear/{id}")
@@ -72,7 +70,7 @@ public class CalculatorController {
         if (id == 2) {
             defaultData.getCalculatorMainTables().get(0).setRangePlayer2(null);
         }
-        return "redirect:/calculator";
+        return "redirect:/calculator/calculator";
     }
 
     @PostMapping("/calculate")
@@ -84,7 +82,7 @@ public class CalculatorController {
             error = e.getMessage();
         }
 
-        return "redirect:/calculator";
+        return "redirect:/calculator/calculator";
     }
 
     @GetMapping("/board")
@@ -104,7 +102,7 @@ public class CalculatorController {
 
         model.addAttribute("board", board);
 
-        return "board";
+        return "calculator/board";
     }
 
     @PostMapping("/board")
@@ -117,7 +115,7 @@ public class CalculatorController {
             calculatorMainTable.setBoard(board.substring(0, board.length() - 1).replaceAll(",", ""));
         }
 
-        return "redirect:/calculator";
+        return "redirect:/calculator/calculator";
     }
 
     @GetMapping("/equity-by-hand")
@@ -127,7 +125,7 @@ public class CalculatorController {
         model.addAttribute("statsP1", gameInfo.getEquityByCardP1());
         model.addAttribute("statsP2", gameInfo.getEquityByCardP2());
 
-        return "equity-by-hand";
+        return "calculator/equity-by-hand";
     }
 
 }

@@ -16,9 +16,9 @@
 
     <table class="admin_table_all_users">
         <tr>
-            <th class="colum_user_title"><a th:href="@{/main/{sort}(sort='email')}">Email</a></th>
-            <th class="colum_user_title"><a th:href="@{/main/{sort}(sort='role')}">Role</a></th>
-            <th class="colum_user_title"><a th:href="@{/main/{sort}(sort='status')}">Status</a></th>
+            <th class="colum_user_title"><a th:href="@{/admin/main/{sort}(sort='email')}">Email</a></th>
+            <th class="colum_user_title"><a th:href="@{/admin/main/{sort}(sort='role')}">Role</a></th>
+            <th class="colum_user_title"><a th:href="@{/admin/main/{sort}(sort='status')}">Status</a></th>
             <th class="colum_user_title">Info</th>
         </tr>
         <div th:each="user : ${users}">
@@ -35,7 +35,7 @@
                     <th th:text="${user.getStatus()}" class="color_status_banned" ></th>
                 </div>
 
-                <th> <a th:href="@{/user-info/{id}(id=${user.getId()})}">Info</a></th>
+                <th> <a th:href="@{/admin/user-info/{id}(id=${user.getId()})}">Info</a></th>
 
             </tr>
         </div>

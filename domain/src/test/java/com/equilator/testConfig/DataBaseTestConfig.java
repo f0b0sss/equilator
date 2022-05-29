@@ -6,6 +6,8 @@ import com.equilator.repository.RangeRepository;
 import com.equilator.repository.RangeRepositoryImpl;
 import com.equilator.repository.UserRepository;
 import com.equilator.repository.UserRepositoryImpl;
+import com.equilator.services.RangeService;
+import com.equilator.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -24,6 +28,11 @@ public class DataBaseTestConfig {
 
     @Autowired
     private Environment env;
+
+    @Bean
+    protected PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
 
     @Bean
     public DataSource dataSource() {
@@ -47,8 +56,18 @@ public class DataBaseTestConfig {
     }
 
     @Bean
+    public UserService userService(){
+        return new UserService();
+    }
+
+    @Bean
     public UserRepository userRepository(){
-        return new UserRepositoryImpl(dbUtils());
+        return new UserRepositoryImpl();
+    }
+
+    @Bean
+    public JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate(dataSource());
     }
 
     @Bean
@@ -56,10 +75,9 @@ public class DataBaseTestConfig {
         return new RangeRepositoryImpl(dbUtils());
     }
 
-
     @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
+    public RangeService rangeService(){
+        return new RangeService();
     }
 
 }

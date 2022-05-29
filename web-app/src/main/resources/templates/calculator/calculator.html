@@ -18,13 +18,13 @@
 <div id="mainContainer">
     <div class="optionButtonCalculator">
         <div class="newCalculatorButton">
-            <a href="/new">New</a>
+            <a href="/calculator/new">New</a>
         </div>
         <div class="uploadFileButton">
-            <a href="/uploadFile">Import file</a>
+            <a href="/calculator/uploadFile">Import file</a>
         </div>
         <div class="saveResultButton">
-            <form th:method="POST" th:action="@{/save-result}">
+            <form th:method="POST" th:action="@{/calculator/save-result}">
                 <input hidden type="text" name="fileName" id="fileName" value=""/>
                 <input type="submit" onclick="saveResult()" value="Save Result"/>
                 <script>
@@ -45,22 +45,22 @@
     <div>
         <span style="color: red" th:text="${InvalidInputCards}"></span>
 
-        <form th:method="POST" th:action="@{/calculate}" th:object="${calculatorMainTable}">
+        <form th:method="POST" th:action="@{/calculator/calculate}" th:object="${calculatorMainTable}">
 
-            <a th:href="@{/range-bar/1}">Player1</a>
+            <a th:href="@{/calculator/range-bar/1}">Player1</a>
             <input class="range" type="text"   th:field="*{rangePlayer1}" id="rangePlayer1"/>
             <input class="equity" type="text" readonly th:field="*{equityPlayer1}" id="equityPlayer1"/>
-            <a th:href="@{/clear/1}">Clear</a>
+            <a th:href="@{/calculator/clear/1}">Clear</a>
             <br>
-            <a th:href="@{/range-bar/2}">Player2</a>
+            <a th:href="@{/calculator/range-bar/2}">Player2</a>
             <input class="range" type="text"  th:field="*{rangePlayer2}" id="rangePlayer2"/>
             <input class="equity" type="text" readonly th:field="*{equityPlayer2}" id="equityPlayer2"/>
-            <a th:href="@{/clear/2}">Clear</a>
+            <a th:href="@{/calculator/clear/2}">Clear</a>
             <br>
-            <a th:href="@{/board}">Board</a>
+            <a th:href="@{/calculator/board}">Board</a>
             <input type="text" readonly th:field="*{board}" id="board"/>
             <div th:if="not ${equityByRangeP1.isEmpty()}">
-                <a class="equityNextCardButton" href="/equity-by-hand">Equity next card</a>
+                <a class="equityNextCardButton" href="/calculator/equity-by-hand">Equity next card</a>
             </div>
             <br>
             <input class="board" type="submit" value="Calculate"/>

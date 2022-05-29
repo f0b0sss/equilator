@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
+@RequestMapping("/calculator")
 public class RangeController {
     private String error;
 
@@ -73,7 +74,7 @@ public class RangeController {
         model.addAttribute("newRange", new RangeDB());
         model.addAttribute("combs", gameInfo.getCombsByCard());
 
-        return "range-bar";
+        return "calculator/range-bar";
     }
 
     @PostMapping("/range-bar/{id}")
@@ -85,7 +86,7 @@ public class RangeController {
             setRangeToPlayer(playerRange, id);
         }
 
-        return "redirect:/calculator";
+        return "redirect:/calculator/calculator";
     }
 
     @GetMapping("/clear-range-bar/{id}")
@@ -94,7 +95,7 @@ public class RangeController {
 
         setRangeToPlayer(null, id);
 
-        return "redirect:/range-bar/" + id;
+        return "redirect:/calculator/range-bar/" + id;
     }
 
     @GetMapping("/range/rangeId/{rangeId}/playerId/{playerId}")
@@ -104,7 +105,7 @@ public class RangeController {
 
         setRangeToPlayer(rangeService.getRangeById(rangeId).getRange(), playerId);
 
-        return "redirect:/range-bar/" + playerId;
+        return "redirect:/calculator/range-bar/" + playerId;
     }
 
     @PostMapping("/save-range/{id}")
@@ -114,7 +115,7 @@ public class RangeController {
                             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            return "redirect:/range-bar/" + id;
+            return "redirect:/calculator/range-bar/" + id;
         }
 
         long accountId = userService.getUserByEmail(SecurityContextHolder
@@ -127,7 +128,7 @@ public class RangeController {
 
         setRangeToPlayer(rangeDB.getRange(), id);
 
-        return "redirect:/range-bar/" + id;
+        return "redirect:/calculator/range-bar/" + id;
     }
 
     @DeleteMapping("/delete-range/rangeId/{rangeId}/playerId/{playerId}")
@@ -139,7 +140,7 @@ public class RangeController {
 
         setRangeToPlayer(null, playerId);
 
-        return "redirect:/range-bar/" + playerId;
+        return "redirect:/calculator/range-bar/" + playerId;
     }
 
     private void setRangeToPlayer(String playerRange, int id) {
@@ -160,7 +161,7 @@ public class RangeController {
 
         combinationGenerator.generate(playerRange);
 
-        return "redirect:/range-bar/" + playerId;
+        return "redirect:/calculator/range-bar/" + playerId;
     }
 
 }

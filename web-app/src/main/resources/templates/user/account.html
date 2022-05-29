@@ -40,7 +40,7 @@
                     <th th:text="${user.getStatus()}" class="color_status_banned" ></th>
                 </div>
 
-                <th> <a th:href="@{/edit/{id}(id=${user.getId()})}">Edit</a></th>
+                <th> <a th:href="@{/user/edit/{id}(id=${user.getId()})}">Edit</a></th>
             </tr>
     </table>
 

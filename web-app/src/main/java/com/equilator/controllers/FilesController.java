@@ -7,13 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import com.equilator.services.FileService;
 
 @Controller
+@RequestMapping("/calculator")
 public class FilesController {
     @Autowired
     private FileService fileService;
@@ -31,7 +29,7 @@ public class FilesController {
     public String uploadOneFileHandler(Model model) {
         model.addAttribute("uploadForm", uploadForm);
 
-        return "uploadFile";
+        return "calculator/uploadFile";
     }
 
     @PostMapping("/uploadFile")
@@ -40,9 +38,9 @@ public class FilesController {
             fileService.openFile(uploadForm);
         } catch (NullPointerException e){
             e.getMessage();
-            return "redirect:/uploadFile";
+            return "redirect:/calculator/uploadFile";
         }
 
-        return "redirect:/calculator";
+        return "redirect:/calculator/calculator";
     }
 }

@@ -1,8 +1,12 @@
 package com.equilator.controllers;
 
+import com.equilator.exceptions.InvalidOldPasswordException;
 import com.equilator.exceptions.UserAlreadyExistException;
 import com.equilator.models.Error;
 import com.equilator.models.user.User;
+import com.equilator.services.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,14 +19,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.equilator.services.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+
 @Controller
+@RequestMapping("/user")
 public class AccountController {
+    private static Logger logger = LogManager.getLogger(AccountController.class);
 
     @Autowired
     private HttpServletRequest request;
@@ -33,12 +39,8 @@ public class AccountController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    private final UserService userService;
-
-
-    public AccountController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/registration")
     public String showRegistrationForm(@ModelAttribute("user") User user) {
@@ -60,14 +62,14 @@ public class AccountController {
 
         authenticateUserAndSetSession(user, request);
 
-        return "redirect:/account";
+        return "redirect:/user/account";
     }
 
     @GetMapping("/account")
     public String account(Model model) {
         model.addAttribute("user", userService.getUserByEmail(
                 SecurityContextHolder.getContext().getAuthentication().getName()));
-        return "account";
+        return "user/account";
     }
 
     public void authWithHttpServletRequest(User user, HttpServletRequest request) {
@@ -97,7 +99,7 @@ public class AccountController {
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("user", userService.getUserById(id));
 
-        return "/edit";
+        return "/user/edit";
     }
 
     @PatchMapping("/edit/{id}")
@@ -106,12 +108,12 @@ public class AccountController {
                          @PathVariable("id") int id) {
 
         if (bindingResult.hasErrors()) {
-            return "/edit";
+            return "user/edit";
         }
 
         userService.updateUser(id, user);
 
-        return "redirect:/account";
+        return "redirect:/user/account";
     }
 
     @GetMapping("/password/{id}")
@@ -119,7 +121,7 @@ public class AccountController {
         model.addAttribute("user", userService.getUserById(id));
         model.addAttribute("error", new Error());
 
-        return "/password";
+        return "/user/password";
     }
 
     @PatchMapping("/password/{id}")
@@ -127,24 +129,19 @@ public class AccountController {
                              @RequestParam("old_password") String old_password,
                              @RequestParam("new_password") String new_password,
                              @PathVariable("id") int id) {
-
-        if (!isOldPassCorrect(old_password, id)){
-            bindingResult.rejectValue("password", "user.password", "Invalid Old Password");
-            return "/password";
-        }
         if (bindingResult.hasErrors()) {
             bindingResult.rejectValue("password", "user.password", "New password must be min 3 symbols");
-            return "/password";
+            return "/user/password";
         }
 
-        userService.updatePassword(new_password, passwordEncoder, id);
+        try {
+            userService.updatePassword(old_password, new_password, passwordEncoder, id);
+        }catch (InvalidOldPasswordException e){
+            bindingResult.rejectValue("password", "user.password", e.getMessage());
+            return "/user/password";
+        }
 
-        return "redirect:/account";
-    }
-
-    private boolean isOldPassCorrect(String old_password, int id) {
-
-        return passwordEncoder.matches(old_password, userService.getUserById(id).getPassword());
+        return "redirect:/user/account";
     }
 
 

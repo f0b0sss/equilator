@@ -1,6 +1,8 @@
 package com.equilator.services;
 
+import com.equilator.exceptions.InvalidOldPasswordException;
 import com.equilator.exceptions.UserAlreadyExistException;
+import com.equilator.exceptions.UserNotFoundException;
 import com.equilator.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,12 +34,12 @@ public class UserService implements UserDetailsService {
 
     public User getUserById(int id) {
         Optional<User> user = Optional.ofNullable(userRepository.getUserById(id));
-        return user.orElse(null);
+        return user.orElseThrow(() -> new UserNotFoundException("User with this id does not exist"));
     }
 
     public User getUserByEmail(String email) {
         Optional<User> user = Optional.ofNullable(userRepository.getUserByEmail(email));
-        return user.orElse(null);
+        return user.orElseThrow(() -> new UserNotFoundException("User with this email does not exist"));
     }
 
 
@@ -64,8 +66,17 @@ public class UserService implements UserDetailsService {
         userRepository.updateUser(id, user);
     }
 
-    public void updatePassword(String new_password, PasswordEncoder passwordEncoder, int id) {
+    public void updatePassword(String old_password, String new_password, PasswordEncoder passwordEncoder, int id) {
+
+        if (!isOldPassCorrect(old_password, id, passwordEncoder)){
+            throw new InvalidOldPasswordException("Invalid Old Password");
+        }
+
         String pass = passwordEncoder.encode(new_password);
         userRepository.updatePassword(pass, id);
+    }
+
+    private boolean isOldPassCorrect(String old_password, int id, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(old_password, userRepository.getUserById(id).getPassword());
     }
 }

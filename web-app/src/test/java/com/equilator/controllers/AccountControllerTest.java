@@ -1,54 +1,53 @@
 package com.equilator.controllers;
 
-import com.equilator.DAO.DBUtils;
-import com.equilator.config.Config;
-import com.equilator.models.user.User;
+
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.context.annotation.Import;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import com.equilator.repository.UserRepository;
-import com.equilator.services.UserService;
 
-//@WebMvcTest(AccountController.class)
-//@SpringBootTest(classes = {UserService.class, UserRepositoryImpl.class, DBUtils.class, MockMvc.class,
-//   DefaultData.class, JdbcTemplate.class
-//})
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest
-@AutoConfigureMockMvc
-@Import({Config.class})
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration
+@WebAppConfiguration
 class AccountControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserService userService;
-    @Autowired
-    DBUtils dbUtils;
-    //  @Autowired
-    //   JdbcTemplate jdbcTemplate;
+    MockMvc mockMvc;
+/*
+    @BeforeEach
+    void init(){
+        mockMvc = MockMvcBuilders.standaloneSetup(AccountController.class).build();
+    }
+
+ */
+
+    @Test
+    void fdjdhf() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/")
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void updatePass() {
+
+    }
 
 
     @Test
     void showRegistrationForm() throws Exception {
-        mockMvc.perform(
-                        MockMvcRequestBuilders.get("/registration")
-                )
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(MockMvcResultMatchers.view().name("/registration"))
-                .andExpect(MockMvcResultMatchers.model().attribute("user", new User()));
-    }
-
-    @Test
-    void showRegistrationForm1() throws Exception {
+        mockMvc.perform(get("/registration"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("registration"));
 
     }
+
+
 }

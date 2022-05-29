@@ -1,8 +1,3 @@
-insert  into users values (
-                              1, 'superadmin@mail.com', 'Dmytro1', 'Zimin1', '$2a$12$BMCe7.ytHFwyLxkOIYAmXOmit3GqLTZ90kDH5VAgId30Y/a6KMVNq', 'SUPERADMIN','ACTIVE'
-                          );
-
-
 insert  into ranges values (
                                1, 0, 'ep', 'AA,KK,QQ,JJ,TT,99,88,77,66,55,AKo,AQo,KQo,AJo,AKs,AQs,AJs,ATs,A5s,A4s,A3s,A2s,KQs,KJs,KTs,QJs,QTs,JTs'
                            );

@@ -14,7 +14,7 @@
 
 <div id="mainContainer">
 
-    <form th:method="PATCH" th:action="@{/edit/{id}(id=${user.getId()})}" th:object="${user}">
+    <form th:method="PATCH" th:action="@{/user/edit/{id}(id=${user.getId()})}" th:object="${user}">
         <label for="email">Email: </label>
         <input type="text" th:field="*{email}" id="email"/>
         <div style="color: red" th:if="${#fields.hasErrors('email') }" th:errors="*{email}">email error</div>
@@ -36,7 +36,7 @@
 
         <input type="submit" value="Update"/>
     </form>
-    <a th:href="@{/password/{id}(id=${user.getId()})}">Edit Password</a>
+    <a th:href="@{/user/password/{id}(id=${user.getId()})}">Edit Password</a>
 
 
 

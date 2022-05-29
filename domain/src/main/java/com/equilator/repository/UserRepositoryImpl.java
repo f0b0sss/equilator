@@ -2,17 +2,15 @@ package com.equilator.repository;
 
 import com.equilator.DAO.DBUtils;
 import com.equilator.models.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class UserRepositoryImpl implements UserRepository{
 
-    private final DBUtils dbUtils;
-
-    public UserRepositoryImpl(DBUtils dbUtils) {
-        this.dbUtils = dbUtils;
-    }
+    @Autowired
+    private DBUtils dbUtils;
 
     @Override
     public List<User> getAllUsers(String order) {

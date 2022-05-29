@@ -15,7 +15,7 @@
     <ul>
         <li><a href="/index">Home</a></li>
         <div sec:authorize="isAuthenticated()">
-            <li><a href="/calculator">Calculator</a></li>
+            <li><a href="/calculator/calculator">Calculator</a></li>
         </div>
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
@@ -24,10 +24,10 @@
         </div>
 
         <div sec:authorize="isAuthenticated()">
-            <li><a href="/account">Account</a></li>
+            <li><a href="/user/account">Account</a></li>
         </div>
         <div sec:authorize="hasAuthority('access:admin')">
-            <li><a href="/main">Admin</a></li>
+            <li><a href="/admin/main">Admin</a></li>
         </div>
         <div sec:authorize="isAuthenticated()">
             <li><a href="/logout">Logout</a></li>

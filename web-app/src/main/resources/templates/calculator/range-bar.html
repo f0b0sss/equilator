@@ -150,7 +150,7 @@
 
 <div id="mainContainer">
     <div class="left-cont">
-        <form th:method="POST" th:action="@{/range-bar/{id}(id=${id})}">
+        <form th:method="POST" th:action="@{/calculator/range-bar/{id}(id=${id})}">
             Range:
             <input class="range" readonly type="text" name="playerRange" id="playerRange" value=""/>
             <br>
@@ -365,8 +365,8 @@
             </table>
             <br>
             <input type="submit" value="OK"/>
-            <a class="buttonClass" th:href="@{/calculator}">Cancel</a>
-            <a class="buttonClass" th:href="@{/clear-range-bar/{id}(id=${id})}">Clear</a>
+            <a class="buttonClass" th:href="@{/calculator/calculator}">Cancel</a>
+            <a class="buttonClass" th:href="@{/calculator/clear-range-bar/{id}(id=${id})}">Clear</a>
         </form>
     </div>
 
@@ -380,7 +380,7 @@
                 </tr>
             </table>
             <br>
-            <form th:method="GET" th:action="@{/combinations/{id}(id=${id})}" th:object="${newRange}">
+            <form th:method="GET" th:action="@{/calculator/combinations/{id}(id=${id})}" th:object="${newRange}">
                 <input type="text" hidden name="rangeForCombinator" id="rangeForCombinator" value=""/>
                 <input type="text" hidden name="allcombs" id="allcombs" value=""/>
                 <input type="submit" value="Show Combination by card"/>
@@ -396,13 +396,13 @@
                 <div th:each="range : ${rangesDB}">
                     <tr>
                         <th>
-                            <a th:href="@{/range/rangeId/{rangeId}/playerId/{playerId}(rangeId=${range.id}, playerId=${id})}"
+                            <a th:href="@{/calculator/range/rangeId/{rangeId}/playerId/{playerId}(rangeId=${range.id}, playerId=${id})}"
                                th:text="${range.name}"></a>
                         </th>
                         <th class="del">
                             <div th:if="${range.playerId != 0}">
                                 <form th:method="DELETE"
-                                      th:action="@{/delete-range/rangeId/{rangeId}/playerId/{playerId}(rangeId=${range.id}, playerId=${id})}">
+                                      th:action="@{/calculator/delete-range/rangeId/{rangeId}/playerId/{playerId}(rangeId=${range.id}, playerId=${id})}">
                                     <input type="submit" value="Del"/>
                                 </form>
                             </div>
@@ -411,7 +411,7 @@
                 </div>
             </table>
             <br>
-            <form th:method="POST" th:action="@{/save-range/{id}(id=${id})}" th:object="${newRange}">
+            <form th:method="POST" th:action="@{/calculator/save-range/{id}(id=${id})}" th:object="${newRange}">
                 <input hidden type="text" th:field="*{range}" name="newRange" id="newRange" value=""/>
                 <input hidden type="text" th:field="*{name}" name="nameNewRange" id="nameNewRange" value=""/>
                 <input type="submit" onclick="saveNewRange()" value="Save"/>

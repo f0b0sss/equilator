@@ -14,7 +14,7 @@
 
 <div id="mainContainer">
 
-    <form th:method="PATCH" th:action="@{/user-info/{id}(id=${user.getId()})}" th:object="${user}">
+    <form th:method="PATCH" th:action="@{/admin/user-info/{id}(id=${user.getId()})}" th:object="${user}">
         <input type="text" disabled th:field="*{firstname}"/>
         <input type="text" hidden th:field="*{firstname}"/>
         <br>
@@ -97,14 +97,14 @@
     <br>
 
     <div th:if="${#strings.equals(user.role, 'USER')}">
-        <form th:method="DELETE" th:action="@{/user-info/{id}(id=${user.getId()})}">
+        <form th:method="DELETE" th:action="@{/admin/user-info/{id}(id=${user.getId()})}">
             <input type="submit" value="Delete user">
         </form>
     </div>
 
     <div sec:authorize="hasAuthority('access:superadmin')">
         <div th:if="${#strings.equals(user.role, 'ADMIN')}">
-            <form th:method="DELETE" th:action="@{/user-info/{id}(id=${user.getId()})}">
+            <form th:method="DELETE" th:action="@{/admin/user-info/{id}(id=${user.getId()})}">
                 <input type="submit" value="Delete admin">
             </form>
         </div>

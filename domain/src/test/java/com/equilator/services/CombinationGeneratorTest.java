@@ -17,6 +17,7 @@ class CombinationGeneratorTest {
 
     @Test
     void generate_getSixCombs_whenTwoCardsEquel() {
+
         String hand = "22";
 
         combinationGenerator.generate(hand);
