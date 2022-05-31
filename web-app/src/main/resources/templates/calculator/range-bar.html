@@ -105,7 +105,7 @@
 <th:block th:insert="~{fragments/template :: #menu}"></th:block>
 
 
-<div id="mainContainer">
+<div class="mainContainer-range-bar">
     <div class="left-cont">
         <form th:method="POST" th:action="@{/calculator/range-bar/{id}(id=${id})}">
             Range:
@@ -319,7 +319,8 @@
         </form>
     </div>
 
-    <div class="center-cont">
+    <div class="right-cont">
+
         <div class="combs-list-div">
             <p class="range-list-title">Combinations by card</p>
             <table class="combs-list-table">
@@ -335,10 +336,6 @@
                 <input type="submit" class="buttongrey" value="Show Combination by card"/>
             </form>
         </div>
-
-    </div>
-
-    <div class="right-cont">
         <div class="list-with-ranges">
             <p class="range-list-title">Saved Ranges</p>
             <table id="range-list-table">
@@ -384,6 +381,7 @@
             </form>
         </div>
     </div>
+
 </div>
 
 

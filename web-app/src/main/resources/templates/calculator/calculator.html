@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
-    <!-- <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script> -->
+   <!-- <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script> -->
 
 
 </head>
@@ -17,6 +17,7 @@
 <th:block th:insert="~{fragments/template :: #menu}"></th:block>
 
 <div id="mainContainer">
+
     <div class="optionButtonCalculator">
 
         <form th:method="POST" th:action="@{/calculator/save-result}">
@@ -64,10 +65,12 @@
             </div>
         </form>
     </div>
-    <div class="equity_by_range" th:if="not ${equityByRangeP1.isEmpty()}">
-        <div class="equity_by_rangePlayer">
-            Player1
+    <div class="clear"></div>
+
+    <div class="equity_by_range_container" th:if="not ${equityByRangeP1.isEmpty()}">
+        <div class="equity_by_range1">
             <table class="sortable">
+                Player1
                 <tr>
                     <th>Hand</th>
                     <th>Equity</th>
@@ -78,9 +81,9 @@
                 </tr>
             </table>
         </div>
-        <div class="equity_by_rangePlayer">
-            Player2
+        <div class="equity_by_range2">
             <table class="sortable">
+                Player2
                 <tr>
                     <th>Hand</th>
                     <th>Equity</th>
@@ -93,8 +96,8 @@
         </div>
     </div>
 
-</div>
 
+</div>
 
 <div class="clear"></div>
 <th:block th:insert="~{fragments/template :: #footer}"></th:block>

@@ -13,6 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/calculator")
 public class CalculatorController {
@@ -58,8 +62,10 @@ public class CalculatorController {
         model.addAttribute("InvalidInputCards", error);
         model.addAttribute("statsP1", gameInfo.getEquityByCardP1());
         model.addAttribute("statsP2", gameInfo.getEquityByCardP2());
-        model.addAttribute("equityByRangeP1", gameInfo.getEquityByRangeP1());
-        model.addAttribute("equityByRangeP2", gameInfo.getEquityByRangeP2());
+        model.addAttribute("equityByRangeP1", gameInfo.getEquityByRangeP1().entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toList()));
+        model.addAttribute("equityByRangeP2", gameInfo.getEquityByRangeP2().entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toList()));
 
         error = null;
 

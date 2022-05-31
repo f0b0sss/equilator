@@ -67,7 +67,8 @@
 
 
 <div id="mainContainer">
-    <form th:method="POST" th:action="@{/calculator/board}">
+
+    <form class="select-board" th:method="POST" th:action="@{/calculator/board}">
         Range:
         <input class="board" readonly type="text" name="board" id="board" value=""/>
 
@@ -133,7 +134,7 @@
                 <th id="As" class="board_cell" >As<img src="../img/spade.png"></th>
             </tr>
         </table>
-        <input type="submit" value="OK"/>
+        <input class="buttongrey" type="submit" value="OK"/>
     </form>
 
 
