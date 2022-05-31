@@ -96,33 +96,33 @@ td {
 }
 
 .range_cell.suited.ui-selected {
-    background-color: #90ee90;
+    background-color: #58D68D;
     border-color: #acf2ac;
     border-style: inset
 }
 
 .range_cell.offsuit.ui-selected {
-    background-color: #90ee90;
+    background-color: #58D68D;
     border-color: #acf2ac;
     border-style: inset
 }
 .comb_cell.offsuit.ui-selected {
-    background-color: #90ee90;
+    background-color: #58D68D;
     border-color: #acf2ac;
     border-style: inset
 }
 
 .range_cell.pocketpair.ui-selected {
-    background-color: #90ee90;
+    background-color: #58D68D;
     border-color: #acf2ac;
     border-style: inset
 }
 .ui-selecting{
-    background-color: #d0d0d0;
-    color: white;
+    background-color: #F5EEF8;
+    color: black;
 }
 .board_cell.ui-selected {
-    background-color: #90ee90;
+    background-color: #58D68D;
     border-color: #acf2ac;
     border-style: inset
 }

@@ -34,7 +34,7 @@
         <input type="text" th:field="*{password}" id="password"/>
         <div style="color: red" th:if="${#fields.hasErrors('password') }" th:errors="*{password}">password error</div>
 
-        <input type="submit" value="Create"/>
+        <input class="buttongrey" type="submit" value="Create"/>
 
     </form>
 

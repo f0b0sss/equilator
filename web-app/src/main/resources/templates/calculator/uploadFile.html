@@ -20,9 +20,9 @@
 <div id="mainContainer">
     <form th:object="${uploadForm}" method="POST"
           action="" enctype="multipart/form-data">
-        Select file to import: <input th:field="*{fileDatas}" type="file"/>
+        Select file to import: <input th:field="*{fileDatas}" class="buttongrey" type="file"/>
         <br />
-        <input type="submit" value="Upload">
+        <input class="buttongrey" type="submit" value="Upload">
     </form>
 
 </div>

@@ -9,16 +9,18 @@
 </head>
 <body>
 
-<div id="header">HEADER</div>
+<div id="header">Poker Evaluator</div>
 
+
+<div>
 <div id="menu">
     <ul>
         <li><a href="/index">Home</a></li>
         <div sec:authorize="isAuthenticated()">
             <li><a href="/calculator/calculator">Calculator</a></li>
         </div>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
+  <!--      <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li> -->
         <div sec:authorize="!isAuthenticated()">
             <li><a href="/login">Login</a></li>
         </div>
@@ -37,7 +39,7 @@
 </div>
 
 
-<div id="footer">FOOTER</div>
+<div id="footer">Evaluator</div>
 
 </body>
 </html>

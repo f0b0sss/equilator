@@ -3,6 +3,8 @@ package com.equilator.services;
 import com.equilator.DAO.DefaultData;
 import com.equilator.models.UploadForm;
 import com.equilator.models.calculator.GameInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FileService {
+    private static Logger logger = LogManager.getLogger(FileService.class);
 
     @Autowired
     private GameInfo gameInfo;
@@ -30,6 +33,7 @@ public class FileService {
         try {
             file.createNewFile();
         } catch (IOException e) {
+            logger.error("Creating new file");
             e.printStackTrace();
         }
 
@@ -37,9 +41,11 @@ public class FileService {
         try {
             writer = new FileWriter(file);
         } catch (IOException e) {
+            logger.error("Creating new stream to write in file");
             e.printStackTrace();
         }
 
+        logger.debug("Start write export data");
         writer.write("rangePlayer1=" + defaultData.getCalculatorMainTables().get(0).getRangePlayer1() + "\n");
         writer.write("rangePlayer2=" + defaultData.getCalculatorMainTables().get(0).getRangePlayer2() + "\n");
         writer.write("board=" + defaultData.getCalculatorMainTables().get(0).getBoard() + "\n");
@@ -52,12 +58,16 @@ public class FileService {
 
         writer.flush();
         writer.close();
+
+        logger.debug("Close write stream");
     }
 
     public ResponseEntity<InputStreamResource> safe(String fileName) {
         try {
+            logger.info("Start create file with export data");
             createResult(fileName);
         } catch (IOException e) {
+            logger.warn(e.getMessage());
             e.printStackTrace();
         }
 
@@ -69,6 +79,7 @@ public class FileService {
         try {
             resource = new InputStreamResource(new FileInputStream(file));
         } catch (FileNotFoundException e) {
+            logger.error("Not found created file to save");
             e.printStackTrace();
         }
 
@@ -89,6 +100,7 @@ public class FileService {
 
         if (filename != null && filename.length() > 0) {
             try {
+                logger.debug("Copy Information from import file to stream");
                 File serverFile = new File(String.valueOf(uploadRootDir));
 
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
@@ -96,6 +108,7 @@ public class FileService {
                 stream.close();
                 uploadedFiles.add(serverFile);
             } catch (Exception e) {
+                logger.error("When copy information from import file to stream");
                 failedFiles.add(filename);
             }
         }
@@ -104,6 +117,7 @@ public class FileService {
         BufferedReader reader = null;
 
         try {
+            logger.debug("Start upload data from file to application");
             fis = new FileInputStream(uploadRootDir);
             reader = new BufferedReader(new InputStreamReader(fis));
             String line = reader.readLine();
@@ -142,10 +156,13 @@ public class FileService {
                 line = reader.readLine();
             }
         } catch (FileNotFoundException e) {
+            logger.error("Not created temp file in system");
             e.printStackTrace();
         } catch (IOException e) {
+            logger.error("When add data from temp file to system");
             e.printStackTrace();
         }catch (NullPointerException e){
+            logger.error("Export file is blank");
             e.printStackTrace();
         }
         finally {
@@ -153,12 +170,14 @@ public class FileService {
                 reader.close();
                 fis.close();
             } catch (IOException e) {
+                logger.error("When close stream from read file");
                 e.printStackTrace();
             }
         }
     }
 
     private Map<String, String> getImportMapData(String line, int cutReadLine, int endKeyData, int startValueData) {
+        logger.debug("Import data to right cell");
         Map<String, String> map = new LinkedHashMap<>();
         String n = line.substring(cutReadLine);
         String[] arr = n.substring(1, n.length() - 1).split(", ");

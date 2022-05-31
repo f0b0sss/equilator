@@ -3,6 +3,8 @@ package com.equilator.services;
 
 import com.equilator.models.user.Status;
 import com.equilator.models.user.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class SecurityUser implements UserDetails {
+    private static Logger logger = LogManager.getLogger(SecurityUser.class);
 
     private final String username;
     private final String password;
@@ -64,6 +67,7 @@ public class SecurityUser implements UserDetails {
     }
 
     public static UserDetails fromUser(User user) {
+        logger.debug("Create UserDetails object");
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(),
                 user.getStatus().equals(Status.ACTIVE),

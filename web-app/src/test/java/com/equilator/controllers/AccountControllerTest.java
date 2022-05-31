@@ -1,32 +1,32 @@
 package com.equilator.controllers;
 
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration
-@WebAppConfiguration
+//@ExtendWith(SpringExtension.class)
+//@ContextConfiguration
+//@WebAppConfiguration
+@SpringBootTest
 class AccountControllerTest {
 
+
+
+
+
+
+
+
+
+
+
+    /*
     MockMvc mockMvc;
-/*
+
     @BeforeEach
     void init(){
         mockMvc = MockMvcBuilders.standaloneSetup(AccountController.class).build();
     }
 
- */
 
     @Test
     void fdjdhf() throws Exception {
@@ -48,6 +48,8 @@ class AccountControllerTest {
                 .andExpect(view().name("registration"));
 
     }
+
+     */
 
 
 }

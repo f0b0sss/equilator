@@ -3,6 +3,11 @@ package com.equilator.controllers;
 import com.equilator.DAO.DefaultData;
 import com.equilator.models.calculator.GameInfo;
 import com.equilator.models.calculator.RangeDB;
+import com.equilator.services.CombinationGenerator;
+import com.equilator.services.RangeService;
+import com.equilator.services.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,9 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.equilator.services.CombinationGenerator;
-import com.equilator.services.RangeService;
-import com.equilator.services.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/calculator")
 public class RangeController {
-    private String error;
+    private static Logger logger = LogManager.getLogger(RangeController.class);
 
     @Autowired
     private DefaultData defaultData;
@@ -36,6 +38,7 @@ public class RangeController {
     @GetMapping("/range-bar/{id}")
     @PreAuthorize("hasAuthority('access:user')")
     public String range(@ModelAttribute("id") int id,Model model) {
+        logger.debug("Open range bar page");
 
         StringBuilder playerRange = new StringBuilder();
         String[] array = new String[]{};
@@ -51,6 +54,7 @@ public class RangeController {
             }
         }
 
+        logger.debug("Show range selected if it was");
         if (array.length != 0) {
             for (int i = 0; i < array.length; i++) {
                 if (i == array.length - 1) {
@@ -81,8 +85,8 @@ public class RangeController {
     @PreAuthorize("hasAuthority('access:user')")
     public String setRangeToPLayer(@PathVariable("id") int id,
                                    @RequestParam("playerRange") String playerRange) {
-
         if (playerRange.length() != 0){
+            logger.info("Set selected range to player" + id);
             setRangeToPlayer(playerRange, id);
         }
 
@@ -92,7 +96,7 @@ public class RangeController {
     @GetMapping("/clear-range-bar/{id}")
     @PreAuthorize("hasAuthority('access:user')")
     public String clear(@ModelAttribute("id") int id) {
-
+        logger.info("Clear range player" + id);
         setRangeToPlayer(null, id);
 
         return "redirect:/calculator/range-bar/" + id;
@@ -103,6 +107,7 @@ public class RangeController {
     public String openRange(@PathVariable("rangeId") int rangeId,
                             @PathVariable("playerId") int playerId, Model model) {
 
+        logger.debug("Open saved range from list");
         setRangeToPlayer(rangeService.getRangeById(rangeId).getRange(), playerId);
 
         return "redirect:/calculator/range-bar/" + playerId;
@@ -115,6 +120,7 @@ public class RangeController {
                             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
+            logger.warn("Error when save new range. Not entered name or not selected range");
             return "redirect:/calculator/range-bar/" + id;
         }
 
@@ -128,6 +134,8 @@ public class RangeController {
 
         setRangeToPlayer(rangeDB.getRange(), id);
 
+        logger.info("Successful save personal range for authorized user");
+
         return "redirect:/calculator/range-bar/" + id;
     }
 
@@ -135,6 +143,7 @@ public class RangeController {
     @PreAuthorize("hasAuthority('access:user')")
     public String deleteRange(@PathVariable("rangeId") int rangeId,
                               @PathVariable("playerId") int playerId) {
+        logger.info("Deleted personal saved range");
 
         rangeService.deleteRangeById(rangeId);
 
@@ -144,6 +153,7 @@ public class RangeController {
     }
 
     private void setRangeToPlayer(String playerRange, int id) {
+        logger.debug("Set range to select player");
         if (id == 1) {
             defaultData.getCalculatorMainTables().get(0).setRangePlayer1(playerRange);
         }
@@ -156,6 +166,8 @@ public class RangeController {
     @PreAuthorize("hasAuthority('access:user')")
     public String combinations(@RequestParam("rangeForCombinator") String playerRange,
                                @PathVariable("id") int playerId) {
+
+        logger.info("Show combinations by card");
 
         setRangeToPlayer(playerRange, playerId);
 

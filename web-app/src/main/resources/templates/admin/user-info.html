@@ -60,7 +60,7 @@
                 </fieldset>
             </div>
             <div th:if="${!#strings.equals(user.role, 'SUPERADMIN')}">
-                <input type="submit" value="Update"/>
+                <input class="buttongrey"  type="submit" value="Update"/>
             </div>
         </div>
 
@@ -91,21 +91,21 @@
                     <label for="admin">ADMIN</label>
                 </div>
             </fieldset>
-            <input type="submit" value="Update"/>
+            <input type="submit" class="buttongrey"  value="Update"/>
         </div>
     </form>
     <br>
 
     <div th:if="${#strings.equals(user.role, 'USER')}">
         <form th:method="DELETE" th:action="@{/admin/user-info/{id}(id=${user.getId()})}">
-            <input type="submit" value="Delete user">
+            <input type="submit" class="buttongrey"  value="Delete user">
         </form>
     </div>
 
     <div sec:authorize="hasAuthority('access:superadmin')">
         <div th:if="${#strings.equals(user.role, 'ADMIN')}">
             <form th:method="DELETE" th:action="@{/admin/user-info/{id}(id=${user.getId()})}">
-                <input type="submit" value="Delete admin">
+                <input type="submit" class="buttongrey"  value="Delete admin">
             </form>
         </div>
     </div>

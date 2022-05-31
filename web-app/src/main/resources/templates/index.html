@@ -9,6 +9,30 @@
     <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
+    <!--
+    <script>
+        var lipsum = document.getElementsByTagName("div")[0].innerHTML;
+
+        lipsum = lipsum.replace(/[aeiou]/gi, function(x) {
+            return "<span class='" + x + "'>&ensp;</span>";
+        });
+
+        document.getElementsByTagName("div")[0].innerHTML = lipsum;
+    </script>  -->
+
+    <script type="text/javascript">
+
+        var txt = document.getElementById('text');
+        var html = txt.innerHTML;
+
+        html = html.replace('е', '<img src="letter_e.jpg" alt="" />');
+
+        txt.innerHTML = html;
+
+    </script>
+
+
+
 
 
 </head>
@@ -17,10 +41,6 @@
 <th:block th:insert="~{fragments/template :: #menu}"></th:block>
 
 
-<div id="mainContainer">
-    MAIN PAGE
-
-</div>
 
 
 <div class="clear"></div>

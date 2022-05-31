@@ -99,49 +99,6 @@
                 });
         });
     </script>
-<!--
-    <script>
-        $('#theParentList').selectable({
-            filter: 'li div',
-            selecting: function (event, ui) {
-                if ($(ui.selecting).parent().hasClass('range_cell')) {
-                    //this is a level-1 item, so select all of it's children
-                    var ch = $(ui.selecting).parent().find('.level-2 .ui-selectee');
-                    $(ch).not(".ui-selected").addClass("ui-selecting");
-                } else {
-                    //this is a level-2 item, so check to see if all of it's siblings are also selected
-                    var sibs = $(ui.selecting).parent().siblings().find('.ui-selectee');
-                    var notSelected = 0;
-                    for (var i = 0; i < sibs.length; i++) {
-                        if ($(sibs[i]).hasClass('ui-selected') || $(sibs[i]).hasClass('ui-selecting')) {
-                            notSelected = notSelected
-                        } else {
-                            notSelected = notSelected + 1;
-                        }
-                    }
-                    if (notSelected === 0) { //all siblings are selected, so select their level-1 parent as well
-                        $(ui.selecting).parent().parent().parent().find('>:first-child').not(".ui-selected").addClass("ui-selecting");
-                    }
-                    //otherwise, just select as usual
-                }
-            },
-            unselected: function (event, ui) {
-                if ($(ui.unselected).parent().hasClass('level-1')) {
-                    //unselect all of it's children
-                    $(ui.unselected).parent().children().each(function () {
-                        $(this).find('.ui-selectee').removeClass('ui-selected').addClass('ui-unselected');
-                    });
-                } else {
-                    //this is a level-2 item, so we need to deselect its level-1 parent
-                    $(ui.unselected).parents('li.level-1').find(">:first-child").removeClass('ui-selected');
-                }
-            }
-        });
-
-    </script>
-    -->
-
-
 </head>
 <body>
 <th:block th:insert="~{fragments/template :: #header}"></th:block>
@@ -161,14 +118,6 @@
             <table id="table_range">
                 <tr>
                     <td id="AA" class="range_cell pocketpair">AA</td>
-                    <!--
-                    <select size="4" multiple>
-                        <option class="comb_cell">AsAh</option>
-                        <option class="comb_cell">AsAd</option>
-                        <option class="comb_cell">AsAc</option>
-                        <option class="comb_cell">AhAd</option>
-                    </select> -->
-
                     <td id="AKs" class="range_cell suited">AKs</td>
                     <td id="AQs" class="range_cell suited">AQs</td>
                     <td id="AJs" class="range_cell suited">AJs</td>
@@ -364,9 +313,9 @@
                 </tr>
             </table>
             <br>
-            <input type="submit" value="OK"/>
-            <a class="buttonClass" th:href="@{/calculator/calculator}">Cancel</a>
-            <a class="buttonClass" th:href="@{/calculator/clear-range-bar/{id}(id=${id})}">Clear</a>
+            <input type="submit" class="buttongrey" value="OK"/>
+            <a class="buttongrey" th:href="@{/calculator/calculator}">Cancel</a>
+            <a class="buttongrey" th:href="@{/calculator/clear-range-bar/{id}(id=${id})}">Clear</a>
         </form>
     </div>
 
@@ -383,7 +332,7 @@
             <form th:method="GET" th:action="@{/calculator/combinations/{id}(id=${id})}" th:object="${newRange}">
                 <input type="text" hidden name="rangeForCombinator" id="rangeForCombinator" value=""/>
                 <input type="text" hidden name="allcombs" id="allcombs" value=""/>
-                <input type="submit" value="Show Combination by card"/>
+                <input type="submit" class="buttongrey" value="Show Combination by card"/>
             </form>
         </div>
 
@@ -414,7 +363,7 @@
             <form th:method="POST" th:action="@{/calculator/save-range/{id}(id=${id})}" th:object="${newRange}">
                 <input hidden type="text" th:field="*{range}" name="newRange" id="newRange" value=""/>
                 <input hidden type="text" th:field="*{name}" name="nameNewRange" id="nameNewRange" value=""/>
-                <input type="submit" onclick="saveNewRange()" value="Save"/>
+                <input type="submit" onclick="saveNewRange()" class="buttongrey" value="Save"/>
                 <span style="color: red" th:text="${error}"></span>
 
                 <script>
@@ -434,16 +383,7 @@
                 </script>
             </form>
         </div>
-
     </div>
-
-
-
-
-
-
-
-
 </div>
 
 

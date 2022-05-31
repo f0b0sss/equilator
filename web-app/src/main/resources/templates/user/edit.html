@@ -34,9 +34,9 @@
         <input type="text" hidden th:field="*{status}" id="status"/>
         <input type="text" hidden th:field="*{password}" id="password"/>
 
-        <input type="submit" value="Update"/>
+        <input class="buttongrey" type="submit" value="Update"/>
     </form>
-    <a th:href="@{/user/password/{id}(id=${user.getId()})}">Edit Password</a>
+    <a class="buttongrey" th:href="@{/user/password/{id}(id=${user.getId()})}">Edit Password</a>
 
 
 

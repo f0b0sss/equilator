@@ -179,7 +179,7 @@ class UserServiceTest {
     void updatePassword() {
         String newPass = "2222";
 
-        userService.updatePassword("superadmin", newPass, passwordEncoder, 1);
+        userService.updatePassword("admin", newPass, passwordEncoder, 1);
 
         assertTrue(passwordEncoder.matches(newPass, userService.getUserById(1).getPassword()));
     }

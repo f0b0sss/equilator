@@ -4,6 +4,8 @@ import com.equilator.DAO.DefaultData;
 import com.equilator.exceptions.InvalidInputCards;
 import com.equilator.models.calculator.CalculatorMainTable;
 import com.equilator.models.calculator.GameInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.DecimalFormat;
@@ -11,6 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Calculate {
+    private static Logger logger = LogManager.getLogger(Calculate.class);
 
     private final DefaultData defaultData;
 
@@ -40,6 +43,7 @@ public class Calculate {
     private Map<String, Integer> timesByCard = new TreeMap<>();
 
     private List<String> buildAllGroupHands(String groupHand, String board) {
+        logger.debug("buildAllGroupHands");
         List<String> hands = new ArrayList<>();
 
         for (int b = 0; b + 1 < board.length(); b++) {
@@ -53,11 +57,11 @@ public class Calculate {
                 }
             }
         }
-
         return hands;
     }
 
     private List<String> buildSuitedGroupHands(String groupHand, String board) {
+        logger.debug("buildSuitedGroupHands");
         List<String> hands = new ArrayList<>();
 
         for (int b = 0; b + 1 < board.length(); b++) {
@@ -74,6 +78,7 @@ public class Calculate {
     }
 
     private List<String> buildOffsuitedGroupHands(String groupHand, String board) {
+        logger.debug("buildOffsuitedGroupHands");
         List<String> hands = new ArrayList<>();
 
         for (int b = 0; b + 1 < board.length(); b++) {
@@ -94,6 +99,7 @@ public class Calculate {
     }
 
     private List<String> buildPocketPairGroupHands(String groupHand, String board) {
+        logger.debug("buildPocketPairGroupHands");
         List<String> hands = new ArrayList<>();
 
         for (int b = 0; b + 1 < board.length(); b++) {
@@ -107,12 +113,11 @@ public class Calculate {
                 }
             }
         }
-
-
         return hands;
     }
 
     private List<String> buildGroup(String[] rangeArr, String board) {
+        logger.debug("buildGroup");
         List<String> hands = new ArrayList<>();
 
         String regex = "[AKQJT98765432akqjt][hdcs][AKQJT98765432akqjt][hdcs]" +
@@ -123,7 +128,6 @@ public class Calculate {
                 throw new InvalidInputCards("invalid range format - " + rangeArr[i]);
             }
         }
-
         for (int i = 0; i < rangeArr.length; i++) {
             if (rangeArr[i].length() == 4) {
                 if (rangeArr[i].charAt(0) == rangeArr[i].charAt(2) &&
@@ -152,6 +156,7 @@ public class Calculate {
     }
 
     private List<String> buildRange(String range, String board) {
+        logger.debug("Build range");
         List<String> groups = new ArrayList<>();
 
         if (range == null){
@@ -166,6 +171,7 @@ public class Calculate {
     }
 
     private void buildWonTimesByCardMap() {
+        logger.debug("buildWonTimesByCardMap");
         for (int i = 0; i < suit.length; i++) {
             for (int j = 0; j < cards.length; j++) {
                 wonTimesByCardP1.put(cards[j] + suit[i], 0.0);
@@ -177,6 +183,7 @@ public class Calculate {
 
     private void deleteFromRangeSameCardWithBoard(List<String> range, String board,
                                                   Map<String, Double> wonTimesByRange) {
+        logger.debug("deleteFromRangeSameCardWithBoard");
         for (int i = 0; i < range.size(); ) {
             if (board.contains(range.get(i).substring(0, 2)) || board.contains(range.get(i).substring(2, 4))) {
                 range.remove(range.get(i));
@@ -207,12 +214,15 @@ public class Calculate {
 
         switch (calculatorMainTable.getBoard().length()) {
             case (6):
+                logger.debug("select calculate with flop cards");
                 calculateWithoutTurn(defaultData, range1, range2, board);
                 break;
             case (8):
+                logger.debug("select calculate with turn cards");
                 calculateWithoutRiver(defaultData, range1, range2, board);
                 break;
             case (10):
+                logger.debug("select calculate with river cards");
                 calculateWithRiver(range1, range2, board);
                 break;
         }
@@ -237,6 +247,7 @@ public class Calculate {
     }
 
     private void validateBoard(String board) {
+        logger.debug("Validate board");
         List<String> list = new ArrayList<>();
 
         if (board == null || board.isEmpty() || board.isBlank()) {
@@ -268,6 +279,8 @@ public class Calculate {
 
         removeOpenCardsFromAllCards(board, allCards);
 
+        logger.debug("start calculation with flop");
+
         for (int j = 0; j < range1.size(); j++) {
             for (int k = 0; k < range2.size(); k++) {
 
@@ -280,12 +293,6 @@ public class Calculate {
                                     !range1.get(j).contains(allCards.get(i2)) &&
                                     !range2.get(k).contains(allCards.get(i2))
                             ) {
-                              //  System.out.println("===========");
-                              //  System.out.println(board + " " + allCards.get(i) + " " +  allCards.get(i2));
-                              //
-                              //  System.out.println(range1.get(j));
-                              //  System.out.println(range2.get(k));
-
                                 int p1 = evaluate(
                                         board + allCards.get(i) + allCards.get(i2) + range1.get(j),
                                         range1.get(j));
@@ -294,9 +301,7 @@ public class Calculate {
                                         board + allCards.get(i) + allCards.get(i2) + range2.get(k),
                                         range2.get(k));
 
-
                                 if (p1 > p2) {
-                             //         System.out.println("won1 - " + p1);
                                     double n = wonTimesByCardP1.get(allCards.get(i));
                                     n += 1;
                                     wonTimesByCardP1.put(allCards.get(i), n);
@@ -306,7 +311,6 @@ public class Calculate {
                                     wonTimesByRangeP1.put(range1.get(j), n);
                                 }
                                 if (p1 < p2) {
-                              //        System.out.println("won2 - " + p2);
                                     double n = wonTimesByCardP2.get(allCards.get(i));
                                     n += 1;
                                     wonTimesByCardP2.put(allCards.get(i), n);
@@ -337,6 +341,8 @@ public class Calculate {
 
         removeOpenCardsFromAllCards(board, allCards);
 
+        logger.debug("start calculation with turn");
+
         for (int j = 0; j < range1.size(); j++) {
             for (int k = 0; k < range2.size(); k++) {
                 for (int i = 0; i < allCards.size(); i++) {
@@ -350,8 +356,6 @@ public class Calculate {
                         int p2 = evaluate(
                                 board + allCards.get(i) + range2.get(k),
                                 range2.get(k));
-
-
 
                         if (p1 > p2) {
 
@@ -388,6 +392,7 @@ public class Calculate {
     }
 
     private void calculateWithRiver(List<String> range1, List<String> range2, String board) {
+        logger.debug("start calculation with river");
 
         for (int j = 0; j < range1.size(); j++) {
             for (int k = 0; k < range2.size(); k++) {

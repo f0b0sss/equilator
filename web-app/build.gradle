@@ -40,8 +40,16 @@ dependencies {
 
     implementation project(':domain')
 
-    testImplementation 'org.springframework.security:spring-security-test'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    // https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.6.0'
+
+    testImplementation 'org.springframework.security:spring-security-test:5.7.1'
+
+
 
 }
 

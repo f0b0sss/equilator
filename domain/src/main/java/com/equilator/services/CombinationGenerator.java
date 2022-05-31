@@ -1,16 +1,20 @@
 package com.equilator.services;
 
 import com.equilator.models.calculator.GameInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CombinationGenerator {
+    private static Logger logger = LogManager.getLogger(CombinationGenerator.class);
     @Autowired
     private GameInfo gameInfo;
 
     private Map<String, Integer> setCombsTableTemplate() {
+        logger.debug("Fill table with blank values");
         Map<String, Integer> map = new LinkedHashMap<>();
 
         map.put("suited", 0);
@@ -40,6 +44,7 @@ public class CombinationGenerator {
     }
 
     public void generate(String range) {
+        logger.debug("Start generate combination list");
         gameInfo.getCombsByCard().putAll(setCombsTableTemplate());
 
         String[] splitRange = range.split(",");
