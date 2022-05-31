@@ -1,28 +1,16 @@
 package com.equilator.controllers;
 
 import com.equilator.config.TestControllerConfig;
-import com.equilator.models.user.User;
 import com.equilator.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 
 @ExtendWith(SpringExtension.class)
@@ -46,7 +34,7 @@ class AdminControllerTest {
         // this.dbUtils = new DBUtils();
         // this.jdbcTemplate = new JdbcTemplate();
     }
-
+/*
     @Test
  //   @WithMockUser(authorities = "access:superadmin")
  //   @WithMockUser(roles = "SUPERADMIN")
@@ -59,19 +47,12 @@ class AdminControllerTest {
 
          when(userService.getUserById(1)).thenReturn(user);
 
-        System.out.println(userService.getUserById(1));
-
         mockMvc.perform(get("/admin/user-info/1").with(user("Dmytro").roles("SUPERADMIN").password("admin")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML));
     }
 
-    @Test
-    void shouldCreateMockMvc() {
-        //   assertNotNull(userService);
-        System.out.println(userService.getAllUsers("email"));
-
-    }
+ */
 
 }
 
