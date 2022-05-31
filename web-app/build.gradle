@@ -25,7 +25,7 @@ dependencies {
    // implementation 'org.hibernate.validator:hibernate-validator:7.0.4.Final'
     implementation 'javax.persistence:javax.persistence-api:2.2'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
-    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
