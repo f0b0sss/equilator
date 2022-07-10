@@ -31,7 +31,6 @@ public class Calculate {
     private Map<String, Integer> madeHandWithRank = new HashMap<>(7);
     private Map<String, Integer> kickersWithRank = new HashMap<>(7);
     private boolean wasFindCombination = false;
-    private int countOfBoards;
     private int sumOfPoints;
 
     private List<String> allCards = new LinkedList<>();
@@ -237,13 +236,70 @@ public class Calculate {
 
         defaultData.getCalculatorMainTables().add(0, calculatorMainTable);
 
-        countOfBoards = 0;
         allCards.clear();
         wonTimesByCardP1.clear();
         wonTimesByCardP2.clear();
         wonTimesByRangeP1.clear();
         wonTimesByRangeP2.clear();
         timesByCard.clear();
+
+
+        /*
+
+        Thread startCalcThread = new Thread(() -> {
+            System.out.println("start 1");
+            switch (calculatorMainTable.getBoard().length()) {
+                case (6):
+                    logger.debug("select calculate with flop cards");
+                    calculateWithoutTurn(defaultData, range1, range2, board);
+                    break;
+                case (8):
+                    logger.debug("select calculate with turn cards");
+                    calculateWithoutRiver(defaultData, range1, range2, board);
+                    break;
+                case (10):
+                    logger.debug("select calculate with river cards");
+                    calculateWithRiver(range1, range2, board);
+                    break;
+            }
+            System.out.println("end 1");
+        });
+
+        Thread showResultThread = new Thread(() -> {
+            System.out.println("start 2");
+            while (startCalcThread.isAlive()){
+                double equityP1 = wonTimesByRangeP1.values().stream().mapToDouble(Double::doubleValue).sum() / range1.size();
+                double equityP2 = wonTimesByRangeP2.values().stream().mapToDouble(Double::doubleValue).sum() / range2.size();
+
+                double deal = 1 - equityP2 - equityP1;
+
+                calculatorMainTable.setEquityPlayer1(new DecimalFormat("#0.0000").format(equityP1 + deal / 2));
+                calculatorMainTable.setEquityPlayer2(new DecimalFormat("#0.0000").format(equityP2 + deal / 2));
+
+                defaultData.getCalculatorMainTables().add(0, calculatorMainTable);
+                System.out.println("end 2");
+            }
+        });
+
+        try {
+            startCalcThread.start();
+            showResultThread.start();
+            startCalcThread.join();
+            showResultThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (startCalcThread.isInterrupted()){
+            allCards.clear();
+            wonTimesByCardP1.clear();
+            wonTimesByCardP2.clear();
+            wonTimesByRangeP1.clear();
+            wonTimesByRangeP2.clear();
+            timesByCard.clear();
+        }
+
+         */
     }
 
     private void validateBoard(String board) {
@@ -269,7 +325,6 @@ public class Calculate {
         if (list.stream().distinct().collect(Collectors.toList()).size() * 2 != board.length()){
             throw new InvalidInputCards("You entered two same cards");
         }
-
     }
 
     private void calculateWithoutTurn(DefaultData defaultData,
@@ -325,7 +380,6 @@ public class Calculate {
                                 timesByCard.put(allCards.get(i), t);
                             }
                         }
-                        countOfBoards++;
                     }
                 }
             }
@@ -380,8 +434,6 @@ public class Calculate {
                         int t = timesByCard.get(allCards.get(i));
                         t += 1;
                         timesByCard.put(allCards.get(i), t);
-
-                        countOfBoards++;
                     }
                 }
             }

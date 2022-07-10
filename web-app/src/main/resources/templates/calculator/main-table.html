@@ -1,0 +1,735 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Main Table</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="~{fragments/template :: link}"></th:block>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            /*
+            var result1 = "";
+            var numbersOfCombs1 = 0;
+            var rangePersent1 = 0.00;
+            var allCombs1 = 1326;
+
+            $('#table_range1')
+                .find('td')
+                .removeClass('ui-selected')
+                .end()
+                .find(range)
+                .addClass('ui-selected');
+            $('.range_cell.pocketpair.ui-selected').each(function () {
+                result1 += $(this).text() + ',';
+                numbersOfCombs1 += 6;
+                rangePersent1 = numbersOfCombs1 / allCombs1 * 100;
+            });
+            $('.range_cell.offsuit.ui-selected').each(function () {
+                result1 += $(this).text() + ',';
+                numbersOfCombs1 += 12;
+                rangePersent1 = numbersOfCombs1 / allCombs1 * 100;
+            });
+            $('.range_cell.suited.ui-selected').each(function () {
+                result1 += $(this).text() + ',';
+                numbersOfCombs1 += 4;
+                rangePersent1 = numbersOfCombs1 / allCombs1 * 100;
+            });
+            $('.comb_cell.ui-selected').each(function () {
+                result1 += $(this).text() + ',';
+                numbersOfCombs1 += 1;
+                rangePersent1 = numbersOfCombs1 / allCombs1 * 100;
+            });
+            $('#playerRange1').val(result1);
+            $('#newRange1').val(result1);
+            $('#rangeForCombinator1').val(result1);
+            $('#numbersOfCombs1').val(numbersOfCombs1);
+            $('#rangePersent1').val(rangePersent1.toFixed(2));
+
+             */
+
+            $('#table_range1').bind("mousedown", function (e) {
+                e.metaKey = true;
+            })
+                .selectable({
+                    maxDistance: 1,
+                    filter: 'td',
+
+                    selected: function (event, ui) {
+                        if (!$(ui.selected).hasClass('selected-flag')) {
+                            $(ui.selected).addClass('selected-flag');
+                        } else {
+                            $(ui.selected).removeClass("ui-selected selected-flag");
+                        }
+                    },
+                    stop: function () {
+                        var result1 = "";
+                        var numbersOfCombs1 = 0;
+                        var rangePersent1 = 0.00;
+                        var allCombs1 = 1326;
+
+                        $('.range_cell.pocketpair.ui-selected').each(function () {
+                            result1 += $(this).text() + ',';
+                            numbersOfCombs1 += 6;
+                            rangePersent1 = numbersOfCombs1 / allCombs1 * 100;
+                        });
+                        $('.range_cell.offsuit.ui-selected').each(function () {
+                            result1 += $(this).text() + ',';
+                            numbersOfCombs1 += 12;
+                            rangePersent1 = numbersOfCombs1 / allCombs1 * 100;
+                        });
+                        $('.range_cell.suited.ui-selected').each(function () {
+                            result1 += $(this).text() + ',';
+                            numbersOfCombs1 += 4;
+                            rangePersent1 = numbersOfCombs1 / allCombs1 * 100;
+                        });
+                        $('.comb_cell.ui-selected').each(function () {
+                            result1 += $(this).text() + ',';
+                            numbersOfCombs1 += 1;
+                            rangePersent1 = numbersOfCombs1 / allCombs1 * 100;
+                        });
+
+                        $('#playerRange1').val(result1);
+                        $('#newRange1').val(result1);
+                        $('#rangeForCombinator1').val(result1);
+                        $('#numbersOfCombs1').val(numbersOfCombs1);
+                        $('#rangePersent1').val(rangePersent1.toFixed(2));
+                    },
+                });
+
+      /*      var result2 = "";
+            var numbersOfCombs2 = 0;
+            var rangePersent2 = 0.00;
+            var allCombs2 = 1326;
+
+            $('#table_range2')
+                .find('td')
+                .removeClass('ui-selected')
+                .end()
+                .find(range)
+                .addClass('ui-selected');
+            $('.range_cell.pocketpair.ui-selected').each(function () {
+                result2 += $(this).text() + ',';
+                numbersOfCombs2 += 6;
+                rangePersent2 = numbersOfCombs2 / allCombs2 * 100;
+            });
+            $('.range_cell.offsuit.ui-selected').each(function () {
+                result2 += $(this).text() + ',';
+                numbersOfCombs2 += 12;
+                rangePersent2 = numbersOfCombs2 / allCombs2 * 100;
+            });
+            $('.range_cell.suited.ui-selected').each(function () {
+                result2 += $(this).text() + ',';
+                numbersOfCombs2 += 4;
+                rangePersent2 = numbersOfCombs2 / allCombs2 * 100;
+            });
+            $('.comb_cell.ui-selected').each(function () {
+                result2 += $(this).text() + ',';
+                numbersOfCombs2 += 1;
+                rangePersent2 = numbersOfCombs2 / allCombs2 * 100;
+            });
+            $('#playerRange2').val(result2);
+            $('#newRange2').val(result2);
+            $('#rangeForCombinator2').val(result2);
+            $('#numbersOfCombs2').val(numbersOfCombs2);
+            $('#rangePersent2').val(rangePersent2.toFixed(2));
+            
+       */
+
+            $('#table_range2').bind("mousedown", function (e) {
+                e.metaKey = true;
+            })
+                .selectable({
+                    maxDistance: 1,
+                    filter: 'td',
+
+                    selected: function (event, ui) {
+                        if (!$(ui.selected).hasClass('selected-flag')) {
+                            $(ui.selected).addClass('selected-flag');
+                        } else {
+                            $(ui.selected).removeClass("ui-selected selected-flag");
+                        }
+                    },
+                    stop: function () {
+                        var result2 = "";
+                        var numbersOfCombs2 = 0;
+                        var rangePersent2 = 0.00;
+                        var allCombs2 = 1326;
+
+                        $('.range_cell.pocketpair.ui-selected').each(function () {
+                            result2 += $(this).text() + ',';
+                            numbersOfCombs2 += 6;
+                            rangePersent2 = numbersOfCombs2 / allCombs2 * 100;
+                        });
+                        $('.range_cell.offsuit.ui-selected').each(function () {
+                            result2 += $(this).text() + ',';
+                            numbersOfCombs2 += 12;
+                            rangePersent2 = numbersOfCombs2 / allCombs2 * 100;
+                        });
+                        $('.range_cell.suited.ui-selected').each(function () {
+                            result2 += $(this).text() + ',';
+                            numbersOfCombs2 += 4;
+                            rangePersent2 = numbersOfCombs2 / allCombs2 * 100;
+                        });
+                        $('.comb_cell.ui-selected').each(function () {
+                            result2 += $(this).text() + ',';
+                            numbersOfCombs2 += 1;
+                            rangePersent2 = numbersOfCombs2 / allCombs2 * 100;
+                        });
+
+                        $('#playerRange2').val(result2);
+                        $('#newRange2').val(result2);
+                        $('#rangeForCombinator2').val(result2);
+                        $('#numbersOfCombs2').val(numbersOfCombs2);
+                        $('#rangePersent2').val(rangePersent2.toFixed(2));
+                    },
+                });
+        });
+    </script>
+
+
+
+</head>
+<body>
+<th:block th:insert="~{fragments/template :: #header}"></th:block>
+<th:block th:insert="~{fragments/template :: #menu}"></th:block>
+
+<div id="mainContainer">
+
+    <div class="optionButtonCalculator">
+
+        <form th:method="POST" th:action="@{/calculator/save-result}">
+            <input hidden type="text" name="fileName" id="fileName" value=""/>
+            <a class="buttongrey" href="/calculator/new">New</a>
+            <a class="buttongrey" href="/calculator/uploadFile">Import file</a>
+            <input type="submit" onclick="saveResult()" class="buttongrey" value="Save Result"/>
+            <script>
+                function saveResult() {
+                    do {
+                        let fileName = prompt("Enter file name");
+
+                        $('#fileName').val(fileName)
+                    } while (!document.getElementById('fileName').value)
+                }
+            </script>
+        </form>
+    </div>
+
+    <div class="clear"></div>
+
+    <div>
+        <span style="color: red" th:text="${InvalidInputCards}"></span>
+
+        <form class="calculatorMainTable" th:method="POST" th:action="@{/calculator/calculate}"
+              th:object="${calculatorMainTable}">
+
+            <a class="buttonpurple" th:href="@{/calculator/range-bar/1}">Player1</a>
+            <input class="range" type="text" th:field="*{rangePlayer1}" id="rangePlayer1"/>
+            <input class="equity" type="text" readonly th:field="*{equityPlayer1}" id="equityPlayer1"/>
+            <a class="buttonpurple" th:href="@{/calculator/clear/1}">Clear</a>
+            <br>
+            <a class="buttonpurple" th:href="@{/calculator/range-bar/2}">Player2</a>
+            <input class="range" type="text" th:field="*{rangePlayer2}" id="rangePlayer2"/>
+            <input class="equity" type="text" readonly th:field="*{equityPlayer2}" id="equityPlayer2"/>
+            <a class="buttonpurple" th:href="@{/calculator/clear/2}">Clear</a>
+            <br>
+            <a class="buttonpurple" th:href="@{/calculator/board}">Board</a>
+            <input type="text" readonly th:field="*{board}" id="board"/>
+            <br>
+            <input class="buttongreen" type="submit" value="Calculate"/>
+
+            <div th:if="not ${equityByRangeP1.isEmpty()}">
+                <a class="buttongrey" href="/calculator/equity-by-hand">Equity next card</a>
+            </div>
+        </form>
+    </div>
+    <div class="clear"></div>
+
+    <div class="equity_by_range_container" th:if="not ${equityByRangeP1.isEmpty()}">
+        <div class="equity_by_range1">
+            <table class="sortable">
+                Player1
+                <tr>
+                    <th>Hand</th>
+                    <th>Equity</th>
+                </tr>
+                <tr th:each="entry, stat : ${equityByRangeP1}">
+                    <td class="cards" th:text="${entry.key}">Hand</td>
+                    <td th:text="${entry.value}">Equity</td>
+                </tr>
+            </table>
+        </div>
+        <div class="equity_by_range2">
+            <table class="sortable">
+                Player2
+                <tr>
+                    <th>Hand</th>
+                    <th>Equity</th>
+                </tr>
+                <tr th:each="entry, stat : ${equityByRangeP2}">
+                    <td class="cards" th:text="${entry.key}"></td>
+                    <td th:text="${entry.value}">Equity</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<form th:method="POST" th:action="@{/calculator/range-bar/{id}(id=${id})}">
+    Range:
+    <input class="range" readonly type="text" name="playerRange1" id="playerRange1" value=""/>
+    <br>
+    <input class="percent" readonly type="text" name="rangePersent1" id="rangePersent1" value=""/>%
+
+    <input class="combs" readonly type="text" name="numbersOfCombs1" id="numbersOfCombs1" value=""/> combs
+
+    <table id="table_range1">
+        <tr>
+            <td id="AA" class="range_cell pocketpair">AA</td>
+            <td id="AKs" class="range_cell suited">AKs</td>
+            <td id="AQs" class="range_cell suited">AQs</td>
+            <td id="AJs" class="range_cell suited">AJs</td>
+            <td id="ATs" class="range_cell suited">ATs</td>
+            <td id="A9s" class="range_cell suited">A9s</td>
+            <td id="A8s" class="range_cell suited">A8s</td>
+            <td id="A7s" class="range_cell suited">A7s</td>
+            <td id="A6s" class="range_cell suited">A6s</td>
+            <td id="A5s" class="range_cell suited">A5s</td>
+            <td id="A4s" class="range_cell suited">A4s</td>
+            <td id="A3s" class="range_cell suited">A3s</td>
+            <td id="A2s" class="range_cell suited">A2s</td>
+        </tr>
+        <tr>
+            <td id="AKo" class="range_cell offsuit">AKo</td>
+            <td id="KK" class="range_cell pocketpair">KK</td>
+            <td id="KQs" class="range_cell suited">KQs</td>
+            <td id="KJs" class="range_cell suited">KJs</td>
+            <td id="KTs" class="range_cell suited">KTs</td>
+            <td id="K9s" class="range_cell suited">K9s</td>
+            <td id="K8s" class="range_cell suited">K8s</td>
+            <td id="K7s" class="range_cell suited">K7s</td>
+            <td id="K6s" class="range_cell suited">K6s</td>
+            <td id="K5s" class="range_cell suited">K5s</td>
+            <td id="K4s" class="range_cell suited">K4s</td>
+            <td id="K3s" class="range_cell suited">K3s</td>
+            <td id="K2s" class="range_cell suited">K2s</td>
+        </tr>
+        <tr>
+            <td id="AQo" class="range_cell offsuit">AQo</td>
+            <td id="KQo" class="range_cell offsuit">KQo</td>
+            <td id="QQ" class="range_cell pocketpair">QQ</td>
+            <td id="QJs" class="range_cell suited">QJs</td>
+            <td id="QTs" class="range_cell suited">QTs</td>
+            <td id="Q9s" class="range_cell suited">Q9s</td>
+            <td id="Q8s" class="range_cell suited">Q8s</td>
+            <td id="Q7s" class="range_cell suited">Q7s</td>
+            <td id="Q6s" class="range_cell suited">Q6s</td>
+            <td id="Q5s" class="range_cell suited">Q5s</td>
+            <td id="Q4s" class="range_cell suited">Q4s</td>
+            <td id="Q3s" class="range_cell suited">Q3s</td>
+            <td id="Q2s" class="range_cell suited">Q2s</td>
+        </tr>
+        <tr>
+            <td id="AJo" class="range_cell offsuit">AJo</td>
+            <td id="KJo" class="range_cell offsuit">KJo</td>
+            <td id="QJo" class="range_cell offsuit">QJo</td>
+            <td id="JJ" class="range_cell pocketpair">JJ</td>
+            <td id="JTs" class="range_cell suited">JTs</td>
+            <td id="J9s" class="range_cell suited">J9s</td>
+            <td id="J8s" class="range_cell suited">J8s</td>
+            <td id="J7s" class="range_cell suited">J7s</td>
+            <td id="J6s" class="range_cell suited">J6s</td>
+            <td id="J5s" class="range_cell suited">J5s</td>
+            <td id="J4s" class="range_cell suited">J4s</td>
+            <td id="J3s" class="range_cell suited">J3s</td>
+            <td id="J2s" class="range_cell suited">J2s</td>
+        </tr>
+        <tr>
+            <td id="ATo" class="range_cell offsuit">ATo</td>
+            <td id="KTo" class="range_cell offsuit">KTo</td>
+            <td id="QTo" class="range_cell offsuit">QTo</td>
+            <td id="JTo" class="range_cell offsuit">JTo</td>
+            <td id="TT" class="range_cell pocketpair">TT</td>
+            <td id="T9s" class="range_cell suited">T9s</td>
+            <td id="T8s" class="range_cell suited">T8s</td>
+            <td id="T7s" class="range_cell suited">T7s</td>
+            <td id="T6s" class="range_cell suited">T6s</td>
+            <td id="T5s" class="range_cell suited">T5s</td>
+            <td id="T4s" class="range_cell suited">T4s</td>
+            <td id="T3s" class="range_cell suited">T3s</td>
+            <td id="T2s" class="range_cell suited">T2s</td>
+        </tr>
+        <tr>
+            <td id="A9o" class="range_cell offsuit">A9o</td>
+            <td id="K9o" class="range_cell offsuit">K9o</td>
+            <td id="Q9o" class="range_cell offsuit">Q9o</td>
+            <td id="J9o" class="range_cell offsuit">J9o</td>
+            <td id="T9o" class="range_cell offsuit">T9o</td>
+            <td id="99" class="range_cell pocketpair">99</td>
+            <td id="98s" class="range_cell suited">98s</td>
+            <td id="97s" class="range_cell suited">97s</td>
+            <td id="96s" class="range_cell suited">96s</td>
+            <td id="95s" class="range_cell suited">95s</td>
+            <td id="94s" class="range_cell suited">94s</td>
+            <td id="93s" class="range_cell suited">93s</td>
+            <td id="92s" class="range_cell suited">92s</td>
+        </tr>
+        <tr>
+            <td id="A8o" class="range_cell offsuit">A8o</td>
+            <td id="K8o" class="range_cell offsuit">K8o</td>
+            <td id="Q8o" class="range_cell offsuit">Q8o</td>
+            <td id="J8o" class="range_cell offsuit">J8o</td>
+            <td id="T8o" class="range_cell offsuit">T8o</td>
+            <td id="98o" class="range_cell offsuit">98o</td>
+            <td id="88" class="range_cell pocketpair">88</td>
+            <td id="87s" class="range_cell suited">87s</td>
+            <td id="86s" class="range_cell suited">86s</td>
+            <td id="85s" class="range_cell suited">85s</td>
+            <td id="84s" class="range_cell suited">84s</td>
+            <td id="83s" class="range_cell suited">83s</td>
+            <td id="82s" class="range_cell suited">82s</td>
+        </tr>
+        <tr>
+            <td id="A7o" class="range_cell offsuit">A7o</td>
+            <td id="K7o" class="range_cell offsuit">K7o</td>
+            <td id="Q7o" class="range_cell offsuit">Q7o</td>
+            <td id="J7o" class="range_cell offsuit">J7o</td>
+            <td id="T7o" class="range_cell offsuit">T7o</td>
+            <td id="97o" class="range_cell offsuit">97o</td>
+            <td id="87o" class="range_cell offsuit">87o</td>
+            <td id="77" class="range_cell pocketpair">77</td>
+            <td id="76s" class="range_cell suited">76s</td>
+            <td id="75s" class="range_cell suited">75s</td>
+            <td id="74s" class="range_cell suited">74s</td>
+            <td id="73s" class="range_cell suited">73s</td>
+            <td id="72s" class="range_cell suited">72s</td>
+        </tr>
+        <tr>
+            <td id="A6o" class="range_cell offsuit">A6o</td>
+            <td id="K6o" class="range_cell offsuit">K6o</td>
+            <td id="Q6o" class="range_cell offsuit">Q6o</td>
+            <td id="J6o" class="range_cell offsuit">J6o</td>
+            <td id="T6o" class="range_cell offsuit">T6o</td>
+            <td id="96o" class="range_cell offsuit">96o</td>
+            <td id="86o" class="range_cell offsuit">86o</td>
+            <td id="76o" class="range_cell offsuit">76o</td>
+            <td id="66" class="range_cell pocketpair">66</td>
+            <td id="65s" class="range_cell suited">65s</td>
+            <td id="64s" class="range_cell suited">64s</td>
+            <td id="63s" class="range_cell suited">63s</td>
+            <td id="62s" class="range_cell suited">62s</td>
+        </tr>
+        <tr>
+            <td id="A5o" class="range_cell offsuit">A5o</td>
+            <td id="K5o" class="range_cell offsuit">K5o</td>
+            <td id="Q5o" class="range_cell offsuit">Q5o</td>
+            <td id="J5o" class="range_cell offsuit">J5o</td>
+            <td id="T5o" class="range_cell offsuit">T5o</td>
+            <td id="95o" class="range_cell offsuit">95o</td>
+            <td id="85o" class="range_cell offsuit">85o</td>
+            <td id="75o" class="range_cell offsuit">75o</td>
+            <td id="65o" class="range_cell offsuit">65o</td>
+            <td id="55" class="range_cell pocketpair">55</td>
+            <td id="54s" class="range_cell suited">54s</td>
+            <td id="53s" class="range_cell suited">53s</td>
+            <td id="52s" class="range_cell suited">52s</td>
+        </tr>
+        <tr>
+            <td id="A4o" class="range_cell offsuit">A4o</td>
+            <td id="K4o" class="range_cell offsuit">K4o</td>
+            <td id="Q4o" class="range_cell offsuit">Q4o</td>
+            <td id="J4o" class="range_cell offsuit">J4o</td>
+            <td id="T4o" class="range_cell offsuit">T4o</td>
+            <td id="94o" class="range_cell offsuit">94o</td>
+            <td id="84o" class="range_cell offsuit">84o</td>
+            <td id="74o" class="range_cell offsuit">74o</td>
+            <td id="64o" class="range_cell offsuit">64o</td>
+            <td id="54o" class="range_cell offsuit">54o</td>
+            <td id="44" class="range_cell pocketpair">44</td>
+            <td id="43s" class="range_cell suited">43s</td>
+            <td id="42s" class="range_cell suited">42s</td>
+        </tr>
+        <tr>
+            <td id="A3o" class="range_cell offsuit">A3o</td>
+            <td id="K3o" class="range_cell offsuit">K3o</td>
+            <td id="Q3o" class="range_cell offsuit">Q3o</td>
+            <td id="J3o" class="range_cell offsuit">J3o</td>
+            <td id="T3o" class="range_cell offsuit">T3o</td>
+            <td id="93o" class="range_cell offsuit">93o</td>
+            <td id="83o" class="range_cell offsuit">83o</td>
+            <td id="73o" class="range_cell offsuit">73o</td>
+            <td id="63o" class="range_cell offsuit">63o</td>
+            <td id="53o" class="range_cell offsuit">53o</td>
+            <td id="43o" class="range_cell offsuit">43o</td>
+            <td id="33" class="range_cell pocketpair">33</td>
+            <td id="32s" class="range_cell suited">32s</td>
+        </tr>
+        <tr>
+            <td id="A2o" class="range_cell offsuit">A2o</td>
+            <td id="K2o" class="range_cell offsuit">K2o</td>
+            <td id="Q2o" class="range_cell offsuit">Q2o</td>
+            <td id="J2o" class="range_cell offsuit">J2o</td>
+            <td id="T2o" class="range_cell offsuit">T2o</td>
+            <td id="92o" class="range_cell offsuit">92o</td>
+            <td id="82o" class="range_cell offsuit">82o</td>
+            <td id="72o" class="range_cell offsuit">72o</td>
+            <td id="62o" class="range_cell offsuit">62o</td>
+            <td id="52o" class="range_cell offsuit">52o</td>
+            <td id="42o" class="range_cell offsuit">42o</td>
+            <td id="32o" class="range_cell offsuit">32o</td>
+            <td id="22" class="range_cell pocketpair">22</td>
+        </tr>
+    </table>
+    <br>
+    <input type="submit" class="buttongrey" value="OK"/>
+    <a class="buttongrey" th:href="@{/calculator/calculator}">Cancel</a>
+    <a class="buttongrey" th:href="@{/calculator/clear-range-bar/{id}(id=${id})}">Clear</a>
+</form>
+
+<form th:method="POST" th:action="@{/calculator/range-bar/{id}(id=${id})}">
+    Range:
+    <input class="range" readonly type="text" name="playerRange2" id="playerRange2" value=""/>
+    <br>
+    <input class="percent" readonly type="text" name="rangePersent2" id="rangePersent2" value=""/>%
+
+    <input class="combs" readonly type="text" name="numbersOfCombs2" id="numbersOfCombs2" value=""/> combs
+
+    <table id="table_range2">
+        <tr>
+            <td class="range_cell pocketpair">AA</td>
+            <td  class="range_cell suited">AKs</td>
+            <td  class="range_cell suited">AQs</td>
+            <td  class="range_cell suited">AJs</td>
+            <td  class="range_cell suited">ATs</td>
+            <td  class="range_cell suited">A9s</td>
+            <td  class="range_cell suited">A8s</td>
+            <td  class="range_cell suited">A7s</td>
+            <td  class="range_cell suited">A6s</td>
+            <td  class="range_cell suited">A5s</td>
+            <td  class="range_cell suited">A4s</td>
+            <td  class="range_cell suited">A3s</td>
+            <td  class="range_cell suited">A2s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">AKo</td>
+            <td class="range_cell pocketpair">KK</td>
+            <td  class="range_cell suited">KQs</td>
+            <td  class="range_cell suited">KJs</td>
+            <td  class="range_cell suited">KTs</td>
+            <td  class="range_cell suited">K9s</td>
+            <td  class="range_cell suited">K8s</td>
+            <td  class="range_cell suited">K7s</td>
+            <td  class="range_cell suited">K6s</td>
+            <td  class="range_cell suited">K5s</td>
+            <td  class="range_cell suited">K4s</td>
+            <td  class="range_cell suited">K3s</td>
+            <td  class="range_cell suited">K2s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">AQo</td>
+            <td  class="range_cell offsuit">KQo</td>
+            <td class="range_cell pocketpair">QQ</td>
+            <td  class="range_cell suited">QJs</td>
+            <td  class="range_cell suited">QTs</td>
+            <td  class="range_cell suited">Q9s</td>
+            <td  class="range_cell suited">Q8s</td>
+            <td  class="range_cell suited">Q7s</td>
+            <td  class="range_cell suited">Q6s</td>
+            <td  class="range_cell suited">Q5s</td>
+            <td  class="range_cell suited">Q4s</td>
+            <td  class="range_cell suited">Q3s</td>
+            <td  class="range_cell suited">Q2s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">AJo</td>
+            <td  class="range_cell offsuit">KJo</td>
+            <td  class="range_cell offsuit">QJo</td>
+            <td class="range_cell pocketpair">JJ</td>
+            <td  class="range_cell suited">JTs</td>
+            <td  class="range_cell suited">J9s</td>
+            <td  class="range_cell suited">J8s</td>
+            <td  class="range_cell suited">J7s</td>
+            <td  class="range_cell suited">J6s</td>
+            <td  class="range_cell suited">J5s</td>
+            <td  class="range_cell suited">J4s</td>
+            <td  class="range_cell suited">J3s</td>
+            <td  class="range_cell suited">J2s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">ATo</td>
+            <td  class="range_cell offsuit">KTo</td>
+            <td  class="range_cell offsuit">QTo</td>
+            <td  class="range_cell offsuit">JTo</td>
+            <td class="range_cell pocketpair">TT</td>
+            <td  class="range_cell suited">T9s</td>
+            <td  class="range_cell suited">T8s</td>
+            <td  class="range_cell suited">T7s</td>
+            <td  class="range_cell suited">T6s</td>
+            <td  class="range_cell suited">T5s</td>
+            <td  class="range_cell suited">T4s</td>
+            <td  class="range_cell suited">T3s</td>
+            <td  class="range_cell suited">T2s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">A9o</td>
+            <td  class="range_cell offsuit">K9o</td>
+            <td  class="range_cell offsuit">Q9o</td>
+            <td  class="range_cell offsuit">J9o</td>
+            <td  class="range_cell offsuit">T9o</td>
+            <td class="range_cell pocketpair">99</td>
+            <td  class="range_cell suited">98s</td>
+            <td  class="range_cell suited">97s</td>
+            <td  class="range_cell suited">96s</td>
+            <td  class="range_cell suited">95s</td>
+            <td  class="range_cell suited">94s</td>
+            <td  class="range_cell suited">93s</td>
+            <td  class="range_cell suited">92s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">A8o</td>
+            <td  class="range_cell offsuit">K8o</td>
+            <td  class="range_cell offsuit">Q8o</td>
+            <td  class="range_cell offsuit">J8o</td>
+            <td  class="range_cell offsuit">T8o</td>
+            <td  class="range_cell offsuit">98o</td>
+            <td class="range_cell pocketpair">88</td>
+            <td  class="range_cell suited">87s</td>
+            <td  class="range_cell suited">86s</td>
+            <td  class="range_cell suited">85s</td>
+            <td  class="range_cell suited">84s</td>
+            <td  class="range_cell suited">83s</td>
+            <td  class="range_cell suited">82s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">A7o</td>
+            <td  class="range_cell offsuit">K7o</td>
+            <td  class="range_cell offsuit">Q7o</td>
+            <td  class="range_cell offsuit">J7o</td>
+            <td  class="range_cell offsuit">T7o</td>
+            <td  class="range_cell offsuit">97o</td>
+            <td  class="range_cell offsuit">87o</td>
+            <td class="range_cell pocketpair">77</td>
+            <td  class="range_cell suited">76s</td>
+            <td  class="range_cell suited">75s</td>
+            <td  class="range_cell suited">74s</td>
+            <td  class="range_cell suited">73s</td>
+            <td  class="range_cell suited">72s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">A6o</td>
+            <td  class="range_cell offsuit">K6o</td>
+            <td  class="range_cell offsuit">Q6o</td>
+            <td  class="range_cell offsuit">J6o</td>
+            <td  class="range_cell offsuit">T6o</td>
+            <td  class="range_cell offsuit">96o</td>
+            <td  class="range_cell offsuit">86o</td>
+            <td  class="range_cell offsuit">76o</td>
+            <td class="range_cell pocketpair">66</td>
+            <td  class="range_cell suited">65s</td>
+            <td  class="range_cell suited">64s</td>
+            <td  class="range_cell suited">63s</td>
+            <td  class="range_cell suited">62s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">A5o</td>
+            <td  class="range_cell offsuit">K5o</td>
+            <td  class="range_cell offsuit">Q5o</td>
+            <td  class="range_cell offsuit">J5o</td>
+            <td  class="range_cell offsuit">T5o</td>
+            <td  class="range_cell offsuit">95o</td>
+            <td  class="range_cell offsuit">85o</td>
+            <td  class="range_cell offsuit">75o</td>
+            <td  class="range_cell offsuit">65o</td>
+            <td class="range_cell pocketpair">55</td>
+            <td  class="range_cell suited">54s</td>
+            <td  class="range_cell suited">53s</td>
+            <td  class="range_cell suited">52s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">A4o</td>
+            <td  class="range_cell offsuit">K4o</td>
+            <td  class="range_cell offsuit">Q4o</td>
+            <td  class="range_cell offsuit">J4o</td>
+            <td  class="range_cell offsuit">T4o</td>
+            <td  class="range_cell offsuit">94o</td>
+            <td  class="range_cell offsuit">84o</td>
+            <td  class="range_cell offsuit">74o</td>
+            <td  class="range_cell offsuit">64o</td>
+            <td  class="range_cell offsuit">54o</td>
+            <td class="range_cell pocketpair">44</td>
+            <td  class="range_cell suited">43s</td>
+            <td  class="range_cell suited">42s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">A3o</td>
+            <td  class="range_cell offsuit">K3o</td>
+            <td  class="range_cell offsuit">Q3o</td>
+            <td  class="range_cell offsuit">J3o</td>
+            <td  class="range_cell offsuit">T3o</td>
+            <td  class="range_cell offsuit">93o</td>
+            <td  class="range_cell offsuit">83o</td>
+            <td  class="range_cell offsuit">73o</td>
+            <td  class="range_cell offsuit">63o</td>
+            <td  class="range_cell offsuit">53o</td>
+            <td  class="range_cell offsuit">43o</td>
+            <td class="range_cell pocketpair">33</td>
+            <td  class="range_cell suited">32s</td>
+        </tr>
+        <tr>
+            <td  class="range_cell offsuit">A2o</td>
+            <td  class="range_cell offsuit">K2o</td>
+            <td  class="range_cell offsuit">Q2o</td>
+            <td  class="range_cell offsuit">J2o</td>
+            <td  class="range_cell offsuit">T2o</td>
+            <td  class="range_cell offsuit">92o</td>
+            <td  class="range_cell offsuit">82o</td>
+            <td  class="range_cell offsuit">72o</td>
+            <td  class="range_cell offsuit">62o</td>
+            <td  class="range_cell offsuit">52o</td>
+            <td  class="range_cell offsuit">42o</td>
+            <td  class="range_cell offsuit">32o</td>
+            <td class="range_cell pocketpair">22</td>
+        </tr>
+    </table>
+    <br>
+    <input type="submit" class="buttongrey" value="OK"/>
+    <a class="buttongrey" th:href="@{/calculator/calculator}">Cancel</a>
+    <a class="buttongrey" th:href="@{/calculator/clear-range-bar/{id}(id=${id})}">Clear</a>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="clear"></div>
+<th:block th:insert="~{fragments/template :: #footer}"></th:block>
+
+
+</body>
+<script>
+    document.querySelectorAll('.cards').forEach(card => card.innerHTML = card.innerHTML
+        .replaceAll('d', '&#9830;')
+        .replaceAll('s', '&#9824;')
+        .replaceAll('c', '&#9827;')
+        .replaceAll('h', '&#9829;')
+    )
+</script>
+
+
+</html>
